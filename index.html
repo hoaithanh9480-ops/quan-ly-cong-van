@@ -1030,6 +1030,7 @@ document.getElementById('import-file-den').addEventListener('change', (e) => {
             <div class="menu-item" data-target="tong-hop-screen">
                 <i class="fas fa-chart-bar"></i> Tổng hợp
             </div>
+        <button id="sidebar-logout-btn" class="btn btn-danger" style="margin-top:auto;"><i class="fas fa-sign-out-alt"></i> Đăng xuất</button>
         </div>
 
         <div class="content-container">
@@ -1700,7 +1701,25 @@ document.getElementById('import-file-den').addEventListener('change', (e) => {
                 });
         }
 
-        // ========== FIREBASE REALTIME DATABASE ==========
+        
+// ========== XỬ LÝ ĐĂNG XUẤT (SIDEBAR) ==========
+const sidebarLogoutBtn = document.getElementById("sidebar-logout-btn");
+if (sidebarLogoutBtn) {
+  sidebarLogoutBtn.addEventListener("click", () => {
+    showLoading();
+    auth.signOut()
+      .then(() => {
+        hideLoading();
+        alert("Đã đăng xuất!");
+      })
+      .catch((error) => {
+        hideLoading();
+        alert("Lỗi đăng xuất: " + error.message);
+      });
+  });
+}
+
+// ========== FIREBASE REALTIME DATABASE ==========
         // Hàm lấy tất cả dữ liệu
         function loadAllData() {
             showLoading();
