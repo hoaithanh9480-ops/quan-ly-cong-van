@@ -2272,6 +2272,19 @@ function registerUser() {
     });
 }
 
+
+// ========== XỬ LÝ ĐĂNG XUẤT ==========
+document.getElementById("logout-btn").addEventListener("click", logoutUser);
+function logoutUser() {
+  firebase.auth().signOut().then(() => {
+    alert("Đã đăng xuất!");
+    document.getElementById("main-screen").style.display = "none";
+    document.getElementById("login-screen").style.display = "block";
+  }).catch(error => {
+    alert("Lỗi đăng xuất: " + error.message);
+  });
+}
+
 // ========== KHỞI TẠO ỨNG DỤNG ==========
         function initApp() {
             loadOptionsFromFirebase();
