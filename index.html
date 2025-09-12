@@ -592,6 +592,103 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        /* ========== RESPONSIVE CHO MOBILE ========== */
+        @media (max-width: 768px) {
+            body {
+                zoom: 1;
+                padding: 10px;
+            }
+            
+            .login-container, .main-layout {
+                width: 100%;
+                max-width: 100%;
+                border-radius: 0;
+            }
+            
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid #ddd;
+            }
+            
+            .content-container {
+                margin-left: 0;
+            }
+            
+            .form-container {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .data-table {
+                font-size: 12px;
+                overflow-x: auto;
+                display: block;
+            }
+            
+            .data-table th, .data-table td {
+                padding: 6px 8px;
+            }
+            
+            .action-btn {
+                padding: 3px 6px;
+                font-size: 11px;
+                margin-bottom: 2px;
+            }
+            
+            .tong-hop-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .search-filters {
+                grid-template-columns: 1fr;
+                gap: 10px;
+                padding: 10px;
+            }
+            
+            /* Hiển thị đầy đủ form trên mobile */
+            .form-group {
+                margin-bottom: 15px;
+            }
+            
+            input, select, textarea {
+                font-size: 16px; /* Ngăn chặn zoom trên iOS */
+            }
+        }
+
+        /* Menu mobile */
+        @media (max-width: 480px) {
+            .menu-item {
+                padding: 12px;
+                font-size: 14px;
+            }
+            
+            .menu-item i {
+                font-size: 18px;
+            }
+            
+            .main-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .user-info {
+                margin-bottom: 10px;
+            }
+            
+            /* Đảm bảo form hiển thị đầy đủ */
+            .form-container {
+                gap: 8px;
+            }
+            
+            .form-group {
+                margin-bottom: 12px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1734,6 +1831,17 @@
             }
         }
         
+        // Kiểm tra thiết bị mobile
+        function isMobileDevice() {
+            return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
+        }
+
+        // Tự động điều chỉnh giao diện trên mobile
+        if (isMobileDevice()) {
+            document.body.style.zoom = "1";
+            document.querySelector('.login-container').style.padding = "20px 15px";
+        }    
+
         // Lọc bảng
         function filterTable(input, tableId) {
             const filter = input.value.toUpperCase();
