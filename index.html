@@ -8,11 +8,257 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Thêm Firebase SDK -->
     <!-- Firebase App (the core Firebase SDK) -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js">
+// ========== IMPORT/EXPORT FILE MẪU ==========
+document.getElementById('download-template-di').addEventListener('click', () => {
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.aoa_to_sheet([['Năm','Số VB','Tên VB','Ngày ký','Người ký','Nơi ban hành','Nội dung']]);
+  XLSX.utils.book_append_sheet(wb, ws, 'CongVanDi');
+  XLSX.writeFile(wb, 'CongVanDi_Mau.xlsx');
+});
+
+document.getElementById('import-btn-di').addEventListener('click', () => {
+  document.getElementById('import-file-di').click();
+});
+document.getElementById('import-file-di').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (evt) => {
+    const data = new Uint8Array(evt.target.result);
+    const wb = XLSX.read(data, {type:'array'});
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(ws,{header:1});
+    rows.slice(1).forEach(row => {
+      if(row.length >= 6){
+        const newItem = {
+          nam: row[0]||'',
+          soVb: row[1]||'',
+          tenVb: row[2]||'',
+          ngayKy: row[3]||'',
+          nguoiKy: row[4]||'',
+          noiBanHanh: row[5]||'',
+          noiDung: row[6]||''
+        };
+        database.ref('congVanDi').push(newItem);
+      }
+    });
+    alert('Đã import công văn đi thành công!');
+  };
+  reader.readAsArrayBuffer(file);
+});
+
+document.getElementById('download-template-den').addEventListener('click', () => {
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.aoa_to_sheet([['Năm','Số đến','Người nhận','Ngày nhận','Số CV','Tên VB','Ngày ký','Người ký','Nơi ban hành','Số tờ','Nội dung']]);
+  XLSX.utils.book_append_sheet(wb, ws, 'CongVanDen');
+  XLSX.writeFile(wb, 'CongVanDen_Mau.xlsx');
+});
+
+document.getElementById('import-btn-den').addEventListener('click', () => {
+  document.getElementById('import-file-den').click();
+});
+document.getElementById('import-file-den').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (evt) => {
+    const data = new Uint8Array(evt.target.result);
+    const wb = XLSX.read(data, {type:'array'});
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(ws,{header:1});
+    rows.slice(1).forEach(row => {
+      if(row.length >= 10){
+        const newItem = {
+          nam: row[0]||'',
+          soDen: row[1]||'',
+          nguoiNhan: row[2]||'',
+          ngayNhan: row[3]||'',
+          soCvDen: row[4]||'',
+          tenVbDen: row[5]||'',
+          ngayKyDen: row[6]||'',
+          nguoiKyDen: row[7]||'',
+          noiBanHanhDen: row[8]||'',
+          soTo: row[9]||'',
+          noiDungDen: row[10]||''
+        };
+        database.ref('congVanDen').push(newItem);
+      }
+    });
+    alert('Đã import công văn đến thành công!');
+  };
+  reader.readAsArrayBuffer(file);
+});
+
+</script>
 <!-- Firebase Authentication -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js">
+// ========== IMPORT/EXPORT FILE MẪU ==========
+document.getElementById('download-template-di').addEventListener('click', () => {
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.aoa_to_sheet([['Năm','Số VB','Tên VB','Ngày ký','Người ký','Nơi ban hành','Nội dung']]);
+  XLSX.utils.book_append_sheet(wb, ws, 'CongVanDi');
+  XLSX.writeFile(wb, 'CongVanDi_Mau.xlsx');
+});
+
+document.getElementById('import-btn-di').addEventListener('click', () => {
+  document.getElementById('import-file-di').click();
+});
+document.getElementById('import-file-di').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (evt) => {
+    const data = new Uint8Array(evt.target.result);
+    const wb = XLSX.read(data, {type:'array'});
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(ws,{header:1});
+    rows.slice(1).forEach(row => {
+      if(row.length >= 6){
+        const newItem = {
+          nam: row[0]||'',
+          soVb: row[1]||'',
+          tenVb: row[2]||'',
+          ngayKy: row[3]||'',
+          nguoiKy: row[4]||'',
+          noiBanHanh: row[5]||'',
+          noiDung: row[6]||''
+        };
+        database.ref('congVanDi').push(newItem);
+      }
+    });
+    alert('Đã import công văn đi thành công!');
+  };
+  reader.readAsArrayBuffer(file);
+});
+
+document.getElementById('download-template-den').addEventListener('click', () => {
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.aoa_to_sheet([['Năm','Số đến','Người nhận','Ngày nhận','Số CV','Tên VB','Ngày ký','Người ký','Nơi ban hành','Số tờ','Nội dung']]);
+  XLSX.utils.book_append_sheet(wb, ws, 'CongVanDen');
+  XLSX.writeFile(wb, 'CongVanDen_Mau.xlsx');
+});
+
+document.getElementById('import-btn-den').addEventListener('click', () => {
+  document.getElementById('import-file-den').click();
+});
+document.getElementById('import-file-den').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (evt) => {
+    const data = new Uint8Array(evt.target.result);
+    const wb = XLSX.read(data, {type:'array'});
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(ws,{header:1});
+    rows.slice(1).forEach(row => {
+      if(row.length >= 10){
+        const newItem = {
+          nam: row[0]||'',
+          soDen: row[1]||'',
+          nguoiNhan: row[2]||'',
+          ngayNhan: row[3]||'',
+          soCvDen: row[4]||'',
+          tenVbDen: row[5]||'',
+          ngayKyDen: row[6]||'',
+          nguoiKyDen: row[7]||'',
+          noiBanHanhDen: row[8]||'',
+          soTo: row[9]||'',
+          noiDungDen: row[10]||''
+        };
+        database.ref('congVanDen').push(newItem);
+      }
+    });
+    alert('Đã import công văn đến thành công!');
+  };
+  reader.readAsArrayBuffer(file);
+});
+
+</script>
 <!-- Firebase Realtime Database -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js">
+// ========== IMPORT/EXPORT FILE MẪU ==========
+document.getElementById('download-template-di').addEventListener('click', () => {
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.aoa_to_sheet([['Năm','Số VB','Tên VB','Ngày ký','Người ký','Nơi ban hành','Nội dung']]);
+  XLSX.utils.book_append_sheet(wb, ws, 'CongVanDi');
+  XLSX.writeFile(wb, 'CongVanDi_Mau.xlsx');
+});
+
+document.getElementById('import-btn-di').addEventListener('click', () => {
+  document.getElementById('import-file-di').click();
+});
+document.getElementById('import-file-di').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (evt) => {
+    const data = new Uint8Array(evt.target.result);
+    const wb = XLSX.read(data, {type:'array'});
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(ws,{header:1});
+    rows.slice(1).forEach(row => {
+      if(row.length >= 6){
+        const newItem = {
+          nam: row[0]||'',
+          soVb: row[1]||'',
+          tenVb: row[2]||'',
+          ngayKy: row[3]||'',
+          nguoiKy: row[4]||'',
+          noiBanHanh: row[5]||'',
+          noiDung: row[6]||''
+        };
+        database.ref('congVanDi').push(newItem);
+      }
+    });
+    alert('Đã import công văn đi thành công!');
+  };
+  reader.readAsArrayBuffer(file);
+});
+
+document.getElementById('download-template-den').addEventListener('click', () => {
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.aoa_to_sheet([['Năm','Số đến','Người nhận','Ngày nhận','Số CV','Tên VB','Ngày ký','Người ký','Nơi ban hành','Số tờ','Nội dung']]);
+  XLSX.utils.book_append_sheet(wb, ws, 'CongVanDen');
+  XLSX.writeFile(wb, 'CongVanDen_Mau.xlsx');
+});
+
+document.getElementById('import-btn-den').addEventListener('click', () => {
+  document.getElementById('import-file-den').click();
+});
+document.getElementById('import-file-den').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (evt) => {
+    const data = new Uint8Array(evt.target.result);
+    const wb = XLSX.read(data, {type:'array'});
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(ws,{header:1});
+    rows.slice(1).forEach(row => {
+      if(row.length >= 10){
+        const newItem = {
+          nam: row[0]||'',
+          soDen: row[1]||'',
+          nguoiNhan: row[2]||'',
+          ngayNhan: row[3]||'',
+          soCvDen: row[4]||'',
+          tenVbDen: row[5]||'',
+          ngayKyDen: row[6]||'',
+          nguoiKyDen: row[7]||'',
+          noiBanHanhDen: row[8]||'',
+          soTo: row[9]||'',
+          noiDungDen: row[10]||''
+        };
+        database.ref('congVanDen').push(newItem);
+      }
+    });
+    alert('Đã import công văn đến thành công!');
+  };
+  reader.readAsArrayBuffer(file);
+});
+
+</script>
     <style>
         /* CSS giữ nguyên như trước */
         * {
@@ -690,6 +936,7 @@
             }
         }
     </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
     <div class="login-container">
@@ -901,6 +1148,9 @@
                 </div>
                 
                 <div class="form-buttons">
+                    <button class="btn btn-secondary" id="download-template-di">Tải file mẫu</button>
+                    <input type="file" id="import-file-di" style="display:none" accept=".xlsx"/>
+                    <button class="btn btn-primary" id="import-btn-di">Import</button>
                     <button class="btn btn-secondary" id="reset-cvdi-btn">Làm mới</button>
                     <button class="btn btn-primary" id="save-cvdi-btn">Lưu công văn</button>
                     <button class="btn btn-update" id="update-cvdi-btn">Cập nhật</button>
@@ -1019,6 +1269,9 @@
                 </div>
                 
                 <div class="form-buttons">
+                    <button class="btn btn-secondary" id="download-template-den">Tải file mẫu</button>
+                    <input type="file" id="import-file-den" style="display:none" accept=".xlsx"/>
+                    <button class="btn btn-primary" id="import-btn-den">Import</button>
                     <button class="btn btn-secondary" id="reset-cvden-btn">Làm mới</button>
                     <button class="btn btn-primary" id="save-cvden-btn">Lưu công văn</button>
                     <button class="btn btn-update" id="update-cvden-btn">Cập nhật</button>
@@ -1959,11 +2212,47 @@
     option.textContent = newValue.trim();
     select.appendChild(option);
     select.value = newValue.trim();
+    // Save to Firebase
+    database.ref('options/' + selectId).push(newValue.trim());
   }
+}
+
+  const select = document.getElementById(selectId);
+  const newValue = prompt("Nhập giá trị mới:");
+  if (newValue && newValue.trim() !== "") {
+    const option = document.createElement("option");
+    option.value = newValue.trim();
+    option.textContent = newValue.trim();
+    select.appendChild(option);
+    select.value = newValue.trim();
+  }
+}
+
+
+// ========== LOAD OPTIONS TỪ FIREBASE ==========
+function loadOptionsFromFirebase() {
+  const optionFields = ['ten-vb','nguoi-ky','noi-ban-hanh','nguoi-nhan','ten-vb-den','nguoi-ky-den','noi-ban-hanh-den'];
+  optionFields.forEach(field => {
+    database.ref('options/' + field).on('value', snapshot => {
+      const select = document.getElementById(field);
+      if (!select) return;
+      while (select.options.length > 1) {
+        select.remove(1);
+      }
+      snapshot.forEach(child => {
+        const val = child.val();
+        const option = document.createElement('option');
+        option.value = val;
+        option.textContent = val;
+        select.appendChild(option);
+      });
+    });
+  });
 }
 
 // ========== KHỞI TẠO ỨNG DỤNG ==========
         function initApp() {
+            loadOptionsFromFirebase();
             // Tải dữ liệu vào các select
             loadYearsToSelect();
             loadTenVBsToSelect();
@@ -2251,7 +2540,89 @@
                 });
             });
         });
-    </script>
+    
+// ========== IMPORT/EXPORT FILE MẪU ==========
+document.getElementById('download-template-di').addEventListener('click', () => {
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.aoa_to_sheet([['Năm','Số VB','Tên VB','Ngày ký','Người ký','Nơi ban hành','Nội dung']]);
+  XLSX.utils.book_append_sheet(wb, ws, 'CongVanDi');
+  XLSX.writeFile(wb, 'CongVanDi_Mau.xlsx');
+});
+
+document.getElementById('import-btn-di').addEventListener('click', () => {
+  document.getElementById('import-file-di').click();
+});
+document.getElementById('import-file-di').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (evt) => {
+    const data = new Uint8Array(evt.target.result);
+    const wb = XLSX.read(data, {type:'array'});
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(ws,{header:1});
+    rows.slice(1).forEach(row => {
+      if(row.length >= 6){
+        const newItem = {
+          nam: row[0]||'',
+          soVb: row[1]||'',
+          tenVb: row[2]||'',
+          ngayKy: row[3]||'',
+          nguoiKy: row[4]||'',
+          noiBanHanh: row[5]||'',
+          noiDung: row[6]||''
+        };
+        database.ref('congVanDi').push(newItem);
+      }
+    });
+    alert('Đã import công văn đi thành công!');
+  };
+  reader.readAsArrayBuffer(file);
+});
+
+document.getElementById('download-template-den').addEventListener('click', () => {
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.aoa_to_sheet([['Năm','Số đến','Người nhận','Ngày nhận','Số CV','Tên VB','Ngày ký','Người ký','Nơi ban hành','Số tờ','Nội dung']]);
+  XLSX.utils.book_append_sheet(wb, ws, 'CongVanDen');
+  XLSX.writeFile(wb, 'CongVanDen_Mau.xlsx');
+});
+
+document.getElementById('import-btn-den').addEventListener('click', () => {
+  document.getElementById('import-file-den').click();
+});
+document.getElementById('import-file-den').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (evt) => {
+    const data = new Uint8Array(evt.target.result);
+    const wb = XLSX.read(data, {type:'array'});
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(ws,{header:1});
+    rows.slice(1).forEach(row => {
+      if(row.length >= 10){
+        const newItem = {
+          nam: row[0]||'',
+          soDen: row[1]||'',
+          nguoiNhan: row[2]||'',
+          ngayNhan: row[3]||'',
+          soCvDen: row[4]||'',
+          tenVbDen: row[5]||'',
+          ngayKyDen: row[6]||'',
+          nguoiKyDen: row[7]||'',
+          noiBanHanhDen: row[8]||'',
+          soTo: row[9]||'',
+          noiDungDen: row[10]||''
+        };
+        database.ref('congVanDen').push(newItem);
+      }
+    });
+    alert('Đã import công văn đến thành công!');
+  };
+  reader.readAsArrayBuffer(file);
+});
+
+</script>
 </body>
 
 </html>
