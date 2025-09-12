@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hệ Thống Quản Lý Công Văn</title>
-    <base href="/quan-ly-cong-van/">
+    <base href="/quan-ly-cong-van/"> <!-- THÊM DÒNG NÀY -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Thêm Firebase SDK -->
     <!-- Firebase App (the core Firebase SDK) -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <!-- Firebase Authentication -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <!-- Firebase Realtime Database -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<!-- Firebase Authentication -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<!-- Firebase Realtime Database -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <style>
         /* CSS giữ nguyên như trước */
         * {
@@ -671,452 +671,458 @@
                 font-size: 18px;
             }
             
-            .logo h2 {
-                font-size: 18px;
+            .main-header {
+                flex-direction: column;
+                gap: 10px;
             }
             
-            .logo p {
-                font-size: 12px;
+            .user-info {
+                margin-bottom: 10px;
             }
             
-            .btn {
-                padding: 10px 15px;
-                font-size: 14px;
+            /* Đảm bảo form hiển thị đầy đủ */
+            .form-container {
+                gap: 8px;
+            }
+            
+            .form-group {
+                margin-bottom: 12px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Màn hình đăng nhập -->
-    <div id="login-screen" class="login-container">
-        <div class="login-header">
-            <h1>Hệ Thống Quản Lý Công Văn</h1>
-            <p>Đăng nhập để truy cập hệ thống</p>
-        </div>
-        <div class="login-form">
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" placeholder="Nhập email của bạn">
-                <div class="error-message" id="email-error"></div>
+    <div class="login-container">
+        <div id="login-screen" class="content-section active">
+            <div class="login-header">
+                <h1>HỆ THỐNG QUẢN Lý CÔNG VĂN</h1>
+                <p>Đăng nhập để tiếp tục</p>
             </div>
-            <div class="form-group">
-                <label for="password">Mật khẩu</label>
-                <input type="password" id="password" placeholder="Nhập mật khẩu">
-                <div class="error-message" id="password-error"></div>
-            </div>
-            <button class="btn btn-primary" id="login-btn" style="width: 100%;">Đăng nhập</button>
-            <div class="register-link">
-                Chưa có tài khoản? <a href="#" id="register-link">Đăng ký ngay</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Màn hình đăng ký -->
-    <div id="register-screen" class="login-container">
-        <div class="login-header">
-            <h1>Đăng ký tài khoản</h1>
-            <p>Tạo tài khoản mới để sử dụng hệ thống</p>
-        </div>
-        <div class="login-form">
-            <div class="form-group">
-                <label for="reg-name">Họ và tên</label>
-                <input type="text" id="reg-name" placeholder="Nhập họ và tên">
-                <div class="error-message" id="reg-name-error"></div>
-            </div>
-            <div class="form-group">
-                <label for="reg-email">Email</label>
-                <input type="email" id="reg-email" placeholder="Nhập email của bạn">
-                <div class="error-message" id="reg-email-error"></div>
-            </div>
-            <div class="form-group">
-                <label for="reg-password">Mật khẩu</label>
-                <input type="password" id="reg-password" placeholder="Nhập mật khẩu (ít nhất 6 ký tự)">
-                <div class="error-message" id="reg-password-error"></div>
-            </div>
-            <div class="form-group">
-                <label for="reg-confirm-password">Xác nhận mật khẩu</label>
-                <input type="password" id="reg-confirm-password" placeholder="Nhập lại mật khẩu">
-                <div class="error-message" id="reg-confirm-password-error"></div>
-            </div>
-            <button class="btn btn-primary" id="register-btn" style="width: 100%;">Đăng ký</button>
-            <div class="register-link">
-                Đã có tài khoản? <a href="#" id="back-to-login">Quay lại đăng nhập</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Giao diện chính của ứng dụng -->
-    <div id="main-screen" class="main-layout">
-        <div class="sidebar">
-            <div class="logo">
-                <h2>Hệ Thống Quản Lý Công Văn</h2>
-                <p id="user-email">user@example.com</p>
-            </div>
-            <div class="menu-item active" data-target="dashboard">
-                <i class="fas fa-tachometer-alt"></i>
-                <span>Bảng điều khiển</span>
-            </div>
-            <div class="menu-item" data-target="cong-van-di">
-                <i class="fas fa-paper-plane"></i>
-                <span>Công văn đi</span>
-            </div>
-            <div class="menu-item" data-target="cong-van-den">
-                <i class="fas fa-envelope"></i>
-                <span>Công văn đến</span>
-            </div>
-            <div class="menu-item" data-target="tong-hop">
-                <i class="fas fa-chart-bar"></i>
-                <span>Tổng hợp & Báo cáo</span>
+            
+            <div class="login-form">
+                <div class="form-group">
+                    <label for="username">Tên đăng nhập</label>
+                    <input type="text" id="username" placeholder="Nhập tên đăng nhập">
+                    <div class="error-message" id="username-error"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Mật khẩu</label>
+                    <input type="password" id="password" placeholder="Nhập mật khẩu">
+                    <div class="error-message" id="password-error"></div>
+                </div>
+                
+                <button class="btn btn-primary" id="login-btn">Đăng nhập</button>
+                
+                <div class="register-link">
+                    Chưa có tài khoản?
+                    <a href="#" id="show-register">Đăng ký ngay</a>
+                </div>
             </div>
         </div>
         
+        <div id="register-screen" class="content-section">
+            <div class="login-header">
+                <h1>ĐĂNG Ký TÀI KHOẢN</h1>
+                <p>Tạo tài khoản mới để sử dụng hệ thống</p>
+            </div>
+            
+            <div class="login-form">
+                <div class="form-group">
+                    <label for="reg-fullname">Họ và tên</label>
+                    <input type="text" id="reg-fullname" placeholder="Nhập họ và tên">
+                    <div class="error-message" id="reg-fullname-error"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="reg-username">Tên đăng nhập</label>
+                    <input type="text" id="reg-username" placeholder="Nhập tên đăng nhập">
+                    <div class="error-message" id="reg-username-error"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="reg-password">Mật khẩu</label>
+                    <input type="password" id="reg-password" placeholder="Nhập mật khẩu">
+                    <div class="error-message" id="reg-password-error"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="reg-confirm">Xác nhận mật khẩu</label>
+                    <input type="password" id="reg-confirm" placeholder="Nhập lại mật khẩu">
+                    <div class="error-message" id="reg-confirm-error"></div>
+                </div>
+                
+                <button class="btn btn-primary" id="register-btn">Đăng ký</button>
+                
+                <div class="register-link">
+                    Đã có tài khoản?
+                    <a href="#" id="show-login">Đăng nhập</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-layout">
+        <div class="sidebar" id="sidebar">
+            <div class="logo">
+                <h2>HỆ THỐNG</h2>
+                <p>QUẢN Lý CÔNG VĂN</p>
+            </div>
+            <div class="menu-item active" data-target="main-screen">
+                <i class="fas fa-home"></i> Trang chủ
+            </div>
+            <div class="menu-item" data-target="cong-van-di-screen">
+                <i class="fas fa-arrow-up"></i> Công văn đi
+            </div>
+            <div class="menu-item" data-target="cong-van-den-screen">
+                <i class="fas fa-arrow-down"></i> Công văn đến
+            </div>
+            <div class="menu-item" data-target="tim-kiem-screen">
+                <i class="fas fa-search"></i> Tra cứu
+            </div>
+            <div class="menu-item" data-target="tong-hop-screen">
+                <i class="fas fa-chart-bar"></i> Tổng hợp
+            </div>
+        </div>
+
         <div class="content-container">
-            <div class="main-header">
-                <h1 id="page-title">Bảng điều khiển</h1>
-                <div class="user-info">
-                    <span id="user-display-name">Người dùng</span>
-                    <button class="logout-btn" id="logout-btn">
-                        <i class="fas fa-sign-out-alt"></i> Đăng xuất
-                    </button>
+            <div class="loading" id="loading">
+                <div class="loading-spinner"></div>
+                <p>Đang tải dữ liệu...</p>
+            </div>
+
+            <div id="main-screen" class="content-section active">
+                <div class="main-header">
+                    <h1>QUẢN Lý CÔNG Văn</h1>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <div class="user-info">
+                            <img src="https://ui-avatars.com/api/?name=User&background=random" alt="User">
+                            <span id="user-display">Người dùng</span>
+                        </div>
+                        <button class="logout-btn" id="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="tong-hop-container">
+                    <div class="tong-hop-header">
+                        <h2>TỔNG HỢP CÔNG VĂN ĐI - ĐẾN</h2>
+                    </div>
+                    
+                    <div class="tong-hop-grid">
+                        <div class="tong-hop-card">
+                            <h3>CÔNG VĂN ĐI</h3>
+                            <div id="tong-hop-di-content">
+                                <!-- Nội dung sẽ được cập nhật bằng JavaScript -->
+                            </div>
+                        </div>
+                        
+                        <div class="tong-hop-card">
+                            <h3>CÔNG VĂN ĐẾN</h3>
+                            <div id="tong-hop-den-content">
+                                <!-- Nội dung sẽ được cập nhật bằng JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tong-hop-total">
+                        <div>TỔNG CỘNG: <span id="tong-cong-di">0</span> công văn đi - <span id="tong-cong-den">0</span> công văn đến</div>
+                    </div>
                 </div>
             </div>
             
-            <!-- Nội dung chính -->
-            <div id="content">
-                <!-- Bảng điều khiển -->
-                <div id="dashboard" class="content-section active">
-                    <h2>Chào mừng bạn đến với hệ thống</h2>
-                    <p>Đây là hệ thống quản lý công văn đến và công văn đi.</p>
-                    
-                    <div class="menu-grid">
-                        <div class="menu-card" data-target="cong-van-di">
-                            <i class="fas fa-paper-plane"></i>
-                            <h3>Công văn đi</h3>
-                            <p>Quản lý các công văn được gửi đi từ đơn vị</p>
-                        </div>
-                        <div class="menu-card" data-target="cong-van-den">
-                            <i class="fas fa-envelope"></i>
-                            <h3>Công văn đến</h3>
-                            <p>Quản lý các công văn nhận được từ bên ngoài</p>
-                        </div>
-                        <div class="menu-card" data-target="tong-hop">
-                            <i class="fas fa-chart-bar"></i>
-                            <h3>Tổng hợp & Báo cáo</h3>
-                            <p>Xem báo cáo tổng hợp và thống kê</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Công văn đi -->
-                <div id="cong-van-di" class="content-section">
-                    <div class="screen-header">
-                        <h2>Quản lý công văn đi</h2>
-                        <button class="back-btn" data-target="dashboard">
-                            <i class="fas fa-arrow-left"></i> Quay lại
-                        </button>
-                    </div>
-                    
-                    <div class="search-filters">
-                        <div class="form-group">
-                            <label>Tìm kiếm</label>
-                            <input type="text" id="search-cong-van-di" class="filter-input" placeholder="Tìm theo số, trích yếu...">
-                        </div>
-                        <div class="form-group">
-                            <label>Ngày bắt đầu</label>
-                            <input type="date" id="start-date-di" class="filter-input">
-                        </div>
-                        <div class="form-group">
-                            <label>Ngày kết thúc</label>
-                            <input type="date" id="end-date-di" class="filter-input">
-                        </div>
-                        <div class="form-group">
-                            <label>&nbsp;</label>
-                            <button class="btn btn-primary" id="search-btn-di">Tìm kiếm</button>
-                        </div>
-                    </div>
-                    
-                    <button class="btn btn-primary" id="add-cong-van-di">
-                        <i class="fas fa-plus"></i> Thêm công văn đi
+            <!-- Công văn đi -->
+            <div id="cong-van-di-screen" class="content-section">
+                <div class="screen-header">
+                    <h2><i class="fas fa-arrow-up"></i> QUẢN Lý CÔNG VĂN ĐI</h2>
+                    <button class="back-btn" data-target="main-screen">
+                        <i class="fas fa-arrow-left"></i> Quay lại
                     </button>
-                    
-                    <form id="cong-van-di-form" style="display: none; margin-top: 20px;">
-                        <div class="form-container">
-                            <div class="form-group">
-                                <label for="so-cong-van-di">Số công văn</label>
-                                <input type="text" id="so-cong-van-di" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="ngay-ban-hanh-di">Ngày ban hành</label>
-                                <input type="date" id="ngay-ban-hanh-di" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="ten-van-ban-di">Tên văn bản</label>
-                                <div class="input-group">
-                                    <select id="ten-van-ban-di" required>
-                                        <option value="">-- Chọn tên văn bản --</option>
-                                    </select>
-                                    <button type="button" class="btn btn-primary btn-sm" id="add-ten-van-ban-di">+</button>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="nguoi-ky-di">Người ký</label>
-                                <div class="input-group">
-                                    <select id="nguoi-ky-di" required>
-                                        <option value="">-- Chọn người ký --</option>
-                                    </select>
-                                    <button type="button" class="btn btn-primary btn-sm" id="add-nguoi-ky-di">+</button>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="noi-ban-hanh-di">Nơi ban hành</label>
-                                <div class="input-group">
-                                    <select id="noi-ban-hanh-di" required>
-                                        <option value="">-- Chọn nơi ban hành --</option>
-                                    </select>
-                                    <button type="button" class="btn btn-primary btn-sm" id="add-noi-ban-hanh-di">+</button>
-                                </div>
-                            </div>
-                            <div class="form-group-full">
-                                <label for="trich-yeu-di">Trích yếu</label>
-                                <textarea id="trich-yeu-di" required></textarea>
-                            </div>
-                        </div>
-                        <div class="form-buttons">
-                            <button type="button" class="btn btn-secondary" id="cancel-cong-van-di">Hủy</button>
-                            <button type="submit" class="btn btn-primary">Lưu</button>
-                            <button type="button" class="btn btn-update" id="update-cong-van-di">Cập nhật</button>
-                        </div>
-                    </form>
-                    
-                    <div class="loading">
-                        <div class="loading-spinner"></div>
-                        <p>Đang tải dữ liệu...</p>
-                    </div>
-                    
-                    <table class="data-table" id="cong-van-di-table">
-                        <thead>
-                            <tr>
-                                <th>Số CV</th>
-                                <th>Ngày BH</th>
-                                <th>Tên văn bản</th>
-                                <th>Người ký</th>
-                                <th>Nơi BH</th>
-                                <th>Trích yếu</th>
-                                <th>Thao tác</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
-                        </tbody>
-                    </table>
                 </div>
                 
-                <!-- Công văn đến -->
-                <div id="cong-van-den" class="content-section">
-                    <div class="screen-header">
-                        <h2>Quản lý công văn đến</h2>
-                        <button class="back-btn" data-target="dashboard">
-                            <i class="fas fa-arrow-left"></i> Quay lại
-                        </button>
+                <div class="form-container">
+                    <div class="form-group">
+                        <label for="nam">Năm</label>
+                        <select id="nam">
+                            <option value="">Chọn năm</option>
+                        </select>
                     </div>
                     
-                    <div class="search-filters">
-                        <div class="form-group">
-                            <label>Tìm kiếm</label>
-                            <input type="text" id="search-cong-van-den" class="filter-input" placeholder="Tìm theo số, trích yếu...">
-                        </div>
-                        <div class="form-group">
-                            <label>Ngày bắt đầu</label>
-                            <input type="date" id="start-date-den" class="filter-input">
-                        </div>
-                        <div class="form-group">
-                            <label>Ngày kết thúc</label>
-                            <input type="date" id="end-date-den" class="filter-input">
-                        </div>
-                        <div class="form-group">
-                            <label>&nbsp;</label>
-                            <button class="btn btn-primary" id="search-btn-den">Tìm kiếm</button>
-                        </div>
+                    <div class="form-group">
+                        <label for="so-vb">Số công văn</label>
+                        <input type="text" id="so-vb" placeholder="Nhập số công văn">
                     </div>
                     
-                    <button class="btn btn-primary" id="add-cong-van-den">
-                        <i class="fas fa-plus"></i> Thêm công văn đến
+                    <div class="form-group">
+                        <label for="ten-vb">Tên văn bản</label>
+                        <input type="text" id="ten-vb" placeholder="Nhập tên văn bản">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ngay-ky">Ngày ký</label>
+                        <input type="date" id="ngay-ky">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="nguoi-ky">Người ký</label>
+                        <input type="text" id="nguoi-ky" placeholder="Nhập tên người ký">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="noi-ban-hanh">Nơi ban hành</label>
+                        <input type="text" id="noi-ban-hanh" placeholder="Nhập nơi ban hành">
+                    </div>
+                    
+                    <div class="form-group form-group-full">
+                        <label for="noi-dung">Nội dung</label>
+                        <textarea id="noi-dung" placeholder="Nhập nội dung công văn"></textarea>
+                    </div>
+                    
+                    <div class="form-group form-group-full">
+                        <label for="file-dinh-kem">File đính kèm</label>
+                        <input type="file" id="file-dinh-kem">
+                    </div>
+                </div>
+                
+                <div class="form-buttons">
+                    <button class="btn btn-secondary" id="reset-cvdi-btn">Làm mới</button>
+                    <button class="btn btn-primary" id="save-cvdi-btn">Lưu công văn</button>
+                    <button class="btn btn-update" id="update-cvdi-btn">Cập nhật</button>
+                </div>
+                
+                <table class="data-table" id="cvdi-table">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Năm</th>
+                            <th>Số VB</th>
+                            <th>Tên VB</th>
+                            <th>Ngày ký</th>
+                            <th>Người ký</th>
+                            <th>Nơi ban hành</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Công văn đến -->
+            <div id="cong-van-den-screen" class="content-section">
+                <div class="screen-header">
+                    <h2><i class="fas fa-arrow-down"></i> QUẢN Lý CÔNG VĂN ĐẾN</h2>
+                    <button class="back-btn" data-target="main-screen">
+                        <i class="fas fa-arrow-left"></i> Quay lại
                     </button>
-                    
-                    <form id="cong-van-den-form" style="display: none; margin-top: 20px;">
-                        <div class="form-container">
-                            <div class="form-group">
-                                <label for="so-cong-van-den">Số công văn</label>
-                                <input type="text" id="so-cong-van-den" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="ngay-ban-hanh-den">Ngày ban hành</label>
-                                <input type="date" id="ngay-ban-hanh-den" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="nguoi-gui">Người/Nơi gửi</label>
-                                <input type="text" id="nguoi-gui" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="ten-van-ban-den">Tên văn bản</label>
-                                <div class="input-group">
-                                    <select id="ten-van-ban-den" required>
-                                        <option value="">-- Chọn tên văn bản --</option>
-                                    </select>
-                                    <button type="button" class="btn btn-primary btn-sm" id="add-ten-van-ban-den">+</button>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="nguoi-ky-den">Người ký</label>
-                                <div class="input-group">
-                                    <select id="nguoi-ky-den" required>
-                                        <option value="">-- Chọn người ký --</option>
-                                    </select>
-                                    <button type="button" class="btn btn-primary btn-sm" id="add-nguoi-ky-den">+</button>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="noi-ban-hanh-den">Nơi ban hành</label>
-                                <div class="input-group">
-                                    <select id="noi-ban-hanh-den" required>
-                                        <option value="">-- Chọn nơi ban hành --</option>
-                                    </select>
-                                    <button type="button" class="btn btn-primary btn-sm" id="add-noi-ban-hanh-den">+</button>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="nguoi-nhan">Người nhận</label>
-                                <div class="input-group">
-                                    <select id="nguoi-nhan" required>
-                                        <option value="">-- Chọn người nhận --</option>
-                                    </select>
-                                    <button type="button" class="btn btn-primary btn-sm" id="add-nguoi-nhan">+</button>
-                                </div>
-                            </div>
-                            <div class="form-group-full">
-                                <label for="trich-yeu-den">Trích yếu</label>
-                                <textarea id="trich-yeu-den" required></textarea>
-                            </div>
-                        </div>
-                        <div class="form-buttons">
-                            <button type="button" class="btn btn-secondary" id="cancel-cong-van-den">Hủy</button>
-                            <button type="submit" class="btn btn-primary">Lưu</button>
-                            <button type="button" class="btn btn-update" id="update-cong-van-den">Cập nhật</button>
-                        </div>
-                    </form>
-                    
-                    <div class="loading">
-                        <div class="loading-spinner"></div>
-                        <p>Đang tải dữ liệu...</p>
-                    </div>
-                    
-                    <table class="data-table" id="cong-van-den-table">
-                        <thead>
-                            <tr>
-                                <th>Số CV</th>
-                                <th>Ngày BH</th>
-                                <th>Người gửi</th>
-                                <th>Tên văn bản</th>
-                                <th>Người ký</th>
-                                <th>Nơi BH</th>
-                                <th>Người nhận</th>
-                                <th>Trích yếu</th>
-                                <th>Thao tác</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
-                        </tbody>
-                    </table>
                 </div>
                 
-                <!-- Tổng hợp & Báo cáo -->
-                <div id="tong-hop" class="content-section">
-                    <div class="screen-header">
-                        <h2>Tổng hợp & Báo cáo</h2>
-                        <button class="back-btn" data-target="dashboard">
-                            <i class="fas fa-arrow-left"></i> Quay lại
-                        </button>
+                <div class="form-container">
+                    <div class="form-group">
+                        <label for="nam-den">Năm</label>
+                        <select id="nam-den">
+                            <option value="">Chọn năm</option>
+                        </select>
                     </div>
                     
-                    <div class="tong-hop-container">
-                        <div class="tong-hop-header">
-                            <h2>Thống kê công văn</h2>
-                            <p>Tổng hợp số liệu công văn đến và công văn đi</p>
-                        </div>
-                        
-                        <div class="tong-hop-grid">
-                            <div class="tong-hop-card">
-                                <h3>Công văn đi</h3>
-                                <div class="tong-hop-item">
-                                    <span>Tổng số công văn đi:</span>
-                                    <span id="tong-cong-van-di">0</span>
-                                </div>
-                                <div class="tong-hop-item">
-                                    <span>Công văn đi tháng này:</span>
-                                    <span id="cong-van-di-thang">0</span>
-                                </div>
-                                <div class="tong-hop-item">
-                                    <span>Công văn đi tuần này:</span>
-                                    <span id="cong-van-di-tuan">0</span>
-                                </div>
-                                <div class="tong-hop-item">
-                                    <span>Công văn đi hôm nay:</span>
-                                    <span id="cong-van-di-hom-nay">0</span>
-                                </div>
-                            </div>
-                            
-                            <div class="tong-hop-card">
-                                <h3>Công văn đến</h3>
-                                <div class="tong-hop-item">
-                                    <span>Tổng số công văn đến:</span>
-                                    <span id="tong-cong-van-den">0</span>
-                                </div>
-                                <div class="tong-hop-item">
-                                    <span>Công văn đến tháng này:</span>
-                                    <span id="cong-van-den-thang">0</span>
-                                </div>
-                                <div class="tong-hop-item">
-                                    <span>Công văn đến tuần này:</span>
-                                    <span id="cong-van-den-tuan">0</span>
-                                </div>
-                                <div class="tong-hop-item">
-                                    <span>Công văn đến hôm nay:</span>
-                                    <span id="cong-van-den-hom-nay">0</span>
-                                </div>
+                    <div class="form-group">
+                        <label for="so-den">Số đến</label>
+                        <input type="text" id="so-den" placeholder="Nhập số đến">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="nguoi-nhan">Người nhận</label>
+                        <input type="text" id="nguoi-nhan" placeholder="Nhập tên người nhận">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ngay-nhan">Ngày nhận</label>
+                        <input type="date" id="ngay-nhan">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="so-cv-den">Số công văn</label>
+                        <input type="text" id="so-cv-den" placeholder="Nhập số công văn">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ten-vb-den">Tên văn bản</label>
+                        <input type="text" id="ten-vb-den" placeholder="Nhập tên VB đến">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ngay-ky-den">Ngày ký</label>
+                        <input type="date" id="ngay-ky-den">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="nguoi-ky-den">Người ký</label>
+                        <input type="text" id="nguoi-ky-den" placeholder="Nhập tên người ký">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="noi-ban-hanh-den">Nơi ban hành</label>
+                        <input type="text" id="noi-ban-hanh-den" placeholder="Nhập nơi ban hành">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="so-to">Số tờ</label>
+                        <input type="number" id="so-to" placeholder="Nhập số tờ">
+                    </div>
+                    
+                    <div class="form-group form-group-full">
+                        <label for="noi-dung-den">Nội dung</label>
+                        <textarea id="noi-dung-den" placeholder="Nhập nội dung công văn"></textarea>
+                    </div>
+                    
+                    <div class="form-group form-group-full">
+                        <label for="file-dinh-kem-den">File đính kèm</label>
+                        <input type="file" id="file-dinh-kem-den">
+                    </div>
+                </div>
+                
+                <div class="form-buttons">
+                    <button class="btn btn-secondary" id="reset-cvden-btn">Làm mới</button>
+                    <button class="btn btn-primary" id="save-cvden-btn">Lưu công văn</button>
+                    <button class="btn btn-update" id="update-cvden-btn">Cập nhật</button>
+                </div>
+                
+                <table class="data-table" id="cvden-table">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Năm</th>
+                            <th>Số đến</th>
+                            <th>Người nhận</th>
+                            <th>Ngày nhận</th>
+                            <th>Số CV</th>
+                            <th>Tên VB</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Tra cứu -->
+            <div id="tim-kiem-screen" class="content-section">
+                <div class="screen-header">
+                    <h2><i class="fas fa-search"></i> TRA CỨU CÔNG VĂN</h2>
+                    <button class="back-btn" data-target="main-screen">
+                        <i class="fas fa-arrow-left"></i> Quay lại
+                    </button>
+                </div>
+                
+                <div class="search-filters">
+                    <div class="form-group">
+                        <label>Loại công văn</label>
+                        <select id="loai-cong-van">
+                            <option value="cong-van-di">Công văn đi</option>
+                            <option value="cong-van-den">Công văn đến</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-buttons">
+                    <button class="btn btn-primary" id="show-all-btn">Hiển thị tất cả</button>
+                </div>
+                
+                <table class="data-table" id="timkiem-cvdi-table">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Năm<br><input type="text" class="col-filter" data-col="1" placeholder=" Lọc năm"></th>
+                            <th>Số VB<br><input type="text" class="col-filter" data-col="2" placeholder=" Lọc số VB"></th>
+                            <th>Tên VB<br><input type="text" class="col-filter" data-col="3" placeholder=" Lọc tên VB"></th>
+                            <th>Ngày ký<br><input type="text" class="col-filter" data-col="4" placeholder=" Lọc ngày ký"></th>
+                            <th>Người ký<br><input type="text" class="col-filter" data-col="5" placeholder=" Lọc người ký"></th>
+                            <th>Nơi ban hành<br><input type="text" class="col-filter" data-col="6" placeholder=" Lọc nơi ban hành"></th>
+                            <th>Nội dung<br><input type="text" class="col-filter" data-col="7" placeholder=" Lọc nội dung"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                    </tbody>
+                </table>
+                
+                <table class="data-table" id="timkiem-cvden-table" style="display: none;">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Năm<br><input type="text" class="col-filter" data-col="1" placeholder=" Lọc năm"></th>
+                            <th>Số đến<br><input type="text" class="col-filter" data-col="2" placeholder=" Lọc số đến"></th>
+                            <th>Người nhận<br><input type="text" class="col-filter" data-col="3" placeholder=" Lọc người nhận"></th>
+                            <th>Ngày nhận<br><input type="text" class="col-filter" data-col="4" placeholder=" Lọc ngày nhận"></th>
+                            <th>Số CV<br><input type="text" class="col-filter" data-col="5" placeholder=" Lọc số CV"></th>
+                            <th>Tên VB<br><input type="text" class="col-filter" data-col="6" placeholder=" Lọc tên VB"></th>
+                            <th>Nơi ban hành<br><input type="text" class="col-filter" data-col="7" placeholder=" Lọc nơi ban hành"></th>
+                            <th>Nội dung<br><input type="text" class="col-filter" data-col="8" placeholder=" Lọc nội dung"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Tổng hợp -->
+            <div id="tong-hop-screen" class="content-section">
+                <div class="screen-header">
+                    <h2><i class="fas fa-chart-bar"></i> TỔNG HỢP BÁO CÁO</h2>
+                    <button class="back-btn" data-target="main-screen">
+                        <i class="fas fa-arrow-left"></i> Quay lại
+                    </button>
+                </div>
+                
+                <div class="tong-hop-container">
+                    <div class="tong-hop-header">
+                        <h2>TỔNG HỢP CÔNG VĂN ĐI - ĐẾN</h2>
+                    </div>
+                    
+                    <div class="tong-hop-grid">
+                        <div class="tong-hop-card">
+                            <h3>CÔNG VĂN ĐI</h3>
+                            <div id="tong-hop-di-content-report">
+                                <!-- Nội dung sẽ được cập nhật bằng JavaScript -->
                             </div>
                         </div>
                         
-                        <div class="tong-hop-total">
-                            Tổng số công văn: <span id="tong-so-cong-van">0</span>
+                        <div class="tong-hop-card">
+                            <h3>CÔNG VĂN ĐẾN</h3>
+                            <div id="tong-hop-den-content-report">
+                                <!-- Nội dung sẽ được cập nhật bằng JavaScript -->
+                            </div>
                         </div>
+                    </div>
+                    
+                    <div class="tong-hop-total">
+                        <div>TỔNG CỘNG: <span id="tong-cong-di-report">0</span> công văn đi - <span id="tong-cong-den-report">0</span> công văn đến</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal thêm mới giá trị cho combobox -->
-    <div id="add-value-modal" class="modal">
+    <!-- Modal xem file -->
+    <div class="modal" id="file-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="modal-title">Thêm giá trị mới</h3>
+                <h3>XEM FILE ĐÍNH KÈM</h3>
                 <button class="close-modal">&times;</button>
             </div>
-            <div class="form-group">
-                <label for="new-value-input">Giá trị mới</label>
-                <input type="text" id="new-value-input" placeholder="Nhập giá trị mới">
-                <div class="error-message" id="modal-error"></div>
-            </div>
-            <div class="form-buttons">
-                <button class="btn btn-secondary" id="cancel-modal">Hủy</button>
-                <button class="btn btn-primary" id="save-new-value">Lưu</button>
+            <div id="file-modal-content">
+                <!-- Nội dung file sẽ được hiển thị ở đây -->
             </div>
         </div>
     </div>
 
     <script>
-        // Cấu hình Firebase
+        // ========== CẤU HÌNH FIREBASE ==========
+        // Thay thế bằng cấu hình Firebase của bạn
         const firebaseConfig = {
             apiKey: "AIzaSyBWKTyXVK1y2dqxWUWprIxd5CCHMzSMc_o",
             authDomain: "quan-ly-cong-van-dede3.firebaseapp.com",
@@ -1126,221 +1132,170 @@
             messagingSenderId: "1080528314069",
             appId: "1:1080528314069:web:831f1b3c497ba082f80c5c",
         };
-        
+
         // Khởi tạo Firebase
         firebase.initializeApp(firebaseConfig);
-        
-        // Biến toàn cục
-        let currentUser = null;
-        let currentEditingId = null;
-        let currentComboboxType = null;
-        let currentComboboxElement = null;
-        
-        // Tham chiếu đến database
         const database = firebase.database();
+        const auth = firebase.auth();
+
+        // THÊM ĐOẠN NÀY: Đảm bảo kết nối realtime
+        database.ref('.info/connected').on('value', (snapshot) => {
+            if (snapshot.val() === true) {
+                console.log('Đã kết nối với Firebase');
+            } else {
+                console.log('Mất kết nối với Firebase');
+            }
+        });
+
+        // ========== KHAI BÁO BIẾN TOÀN CỤC ==========
+        // Đăng nhập/đăng ký
+        const loginContainer = document.querySelector('.login-container');
+        const mainLayout = document.querySelector('.main-layout');
+        const loginScreen = document.getElementById('login-screen');
+        const registerScreen = document.getElementById('register-screen');
+        const showRegisterBtn = document.getElementById('show-register');
+        const showLoginBtn = document.getElementById('show-login');
+        const loginBtn = document.getElementById('login-btn');
+        const registerBtn = document.getElementById('register-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const userDisplay = document.getElementById('user-display');
+        const loadingElement = document.getElementById('loading');
         
-        // Hàm khởi tạo ứng dụng
-        function initApp() {
-            // Xử lý sự kiện đăng nhập
-            document.getElementById('login-btn').addEventListener('click', login);
-            
-            // Xử lý sự kiện đăng ký
-            document.getElementById('register-btn').addEventListener('click', register);
-            
-            // Xử lý chuyển đổi giữa đăng nhập và đăng ký
-            document.getElementById('register-link').addEventListener('click', showRegisterScreen);
-            document.getElementById('back-to-login').addEventListener('click', showLoginScreen);
-            
-            // Xử lý đăng xuất
-            document.getElementById('logout-btn').addEventListener('click', logout);
-            
-            // Xử lý menu
-            document.querySelectorAll('.menu-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const target = this.getAttribute('data-target');
-                    showContentSection(target);
-                });
-            });
-            
-            // Xử lý menu card trên dashboard
-            document.querySelectorAll('.menu-card').forEach(card => {
-                card.addEventListener('click', function() {
-                    const target = this.getAttribute('data-target');
-                    showContentSection(target);
-                });
-            });
-            
-            // Xử lý nút quay lại
-            document.querySelectorAll('.back-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const target = this.getAttribute('data-target');
-                    showContentSection(target);
-                });
-            });
-            
-            // Xử lý công văn đi
-            document.getElementById('add-cong-van-di').addEventListener('click', function() {
-                showCongVanDiForm();
-            });
-            
-            document.getElementById('cancel-cong-van-di').addEventListener('click', function() {
-                hideCongVanDiForm();
-            });
-            
-            document.getElementById('cong-van-di-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                saveCongVanDi();
-            });
-            
-            document.getElementById('update-cong-van-di').addEventListener('click', function() {
-                updateCongVanDi();
-            });
-            
-            // Xử lý công văn đến
-            document.getElementById('add-cong-van-den').addEventListener('click', function() {
-                showCongVanDenForm();
-            });
-            
-            document.getElementById('cancel-cong-van-den').addEventListener('click', function() {
-                hideCongVanDenForm();
-            });
-            
-            document.getElementById('cong-van-den-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                saveCongVanDen();
-            });
-            
-            document.getElementById('update-cong-van-den').addEventListener('click', function() {
-                updateCongVanDen();
-            });
-            
-            // Xử lý tìm kiếm
-            document.getElementById('search-btn-di').addEventListener('click', loadCongVanDi);
-            document.getElementById('search-btn-den').addEventListener('click', loadCongVanDen);
-            
-            // Xử lý modal thêm giá trị mới
-            document.querySelectorAll('[id^="add-"]').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const id = this.id;
-                    if (id.includes('ten-van-ban-di')) {
-                        openAddValueModal('ten-van-ban', 'Tên văn bản', document.getElementById('ten-van-ban-di'));
-                    } else if (id.includes('nguoi-ky-di')) {
-                        openAddValueModal('nguoi-ky', 'Người ký', document.getElementById('nguoi-ky-di'));
-                    } else if (id.includes('noi-ban-hanh-di')) {
-                        openAddValueModal('noi-ban-hanh', 'Nơi ban hành', document.getElementById('noi-ban-hanh-di'));
-                    } else if (id.includes('ten-van-ban-den')) {
-                        openAddValueModal('ten-van-ban', 'Tên văn bản', document.getElementById('ten-van-ban-den'));
-                    } else if (id.includes('nguoi-ky-den')) {
-                        openAddValueModal('nguoi-ky', 'Người ký', document.getElementById('nguoi-ky-den'));
-                    } else if (id.includes('noi-ban-hanh-den')) {
-                        openAddValueModal('noi-ban-hanh', 'Nơi ban hành', document.getElementById('noi-ban-hanh-den'));
-                    } else if (id.includes('nguoi-nhan')) {
-                        openAddValueModal('nguoi-nhan', 'Người nhận', document.getElementById('nguoi-nhan'));
-                    }
-                });
-            });
-            
-            document.getElementById('cancel-modal').addEventListener('click', closeModal);
-            document.querySelector('.close-modal').addEventListener('click', closeModal);
-            document.getElementById('save-new-value').addEventListener('click', saveNewValue);
-            
-            // Kiểm tra trạng thái đăng nhập
-            firebase.auth().onAuthStateChanged(user => {
-                if (user) {
-                    currentUser = user;
-                    showMainScreen();
-                    loadAllData();
-                } else {
-                    showLoginScreen();
-                }
-            });
+        // Công văn đi
+        const namSelect = document.getElementById('nam');
+        const tenVbSelect = document.getElementById('ten-vb');
+        const nguoiKySelect = document.getElementById('nguoi-ky');
+        const noiBanHanhSelect = document.getElementById('noi-ban-hanh');
+        const saveCvdiBtn = document.getElementById('save-cvdi-btn');
+        const updateCvdiBtn = document.getElementById('update-cvdi-btn');
+        const resetCvdiBtn = document.getElementById('reset-cvdi-btn');
+        let congVanDiData = [];
+        let tempFileDataDi = null;
+        let tempFileNameDi = '';
+        let editIndexDi = -1;
+        let editingCvDiId = null;
+        
+        // Công văn đến
+        const namDenSelect = document.getElementById('nam-den');
+        const tenVbDenSelect = document.getElementById('ten-vb-den');
+        const nguoiKyDenSelect = document.getElementById('nguoi-ky-den');
+        const nguoiNhanSelect = document.getElementById('nguoi-nhan');
+        const noiBanHanhDenSelect = document.getElementById('noi-ban-hanh-den');
+        const saveCvdenBtn = document.getElementById('save-cvden-btn');
+        const updateCvdenBtn = document.getElementById('update-cvden-btn');
+        const resetCvdenBtn = document.getElementById('reset-cvden-btn');
+        let congVanDenData = [];
+        let tempFileDataDen = null;
+        let tempFileNameDen = '';
+        let editIndexDen = -1;
+        let editingCvDenId = null;
+        
+        // Tìm kiếm
+        const loaiCongVanSelect = document.getElementById('loai-cong-van');
+        const showAllBtn = document.getElementById('show-all-btn');
+        
+        // Modal
+        const fileModal = document.getElementById('file-modal');
+        const closeModalBtn = document.querySelector('.close-modal');
+
+        // ========== HÀM HIỂN THỊ/ẨN LOADING ==========
+        function showLoading() {
+            loadingElement.style.display = 'block';
+        }
+
+        function hideLoading() {
+            loadingElement.style.display = 'none';
+        }
+
+        // ========== FIREBASE AUTHENTICATION ==========
+        // Hàm hiển thị màn hình đăng nhập
+        function showLoginScreen() {
+            loginScreen.style.display = "block";
+            registerScreen.style.display = "none";
+        }
+        
+        // Hàm hiển thị màn hình đăng ký
+        function showRegisterScreen() {
+            loginScreen.style.display = "none";
+            registerScreen.style.display = "block";
         }
         
         // Hàm xử lý đăng nhập
-        function login() {
-            const email = document.getElementById('email').value;
+        function handleLogin() {
+            const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
-            let isValid = true;
             
-            // Reset lỗi
-            document.getElementById('email-error').style.display = 'none';
-            document.getElementById('password-error').style.display = 'none';
-            
-            // Kiểm tra email
-            if (!email) {
-                document.getElementById('email-error').textContent = 'Email là bắt buộc';
-                document.getElementById('email-error').style.display = 'block';
-                isValid = false;
+            // Kiểm tra thông tin đăng nhập
+            if (!username) {
+                document.getElementById('username-error').textContent = 'Vui lòng nhập tên đăng nhập';
+                document.getElementById('username-error').style.display = 'block';
+                return;
+            } else {
+                document.getElementById('username-error').style.display = 'none';
             }
             
-            // Kiểm tra mật khẩu
             if (!password) {
-                document.getElementById('password-error').textContent = 'Mật khẩu là bắt buộc';
+                document.getElementById('password-error').textContent = 'Vui lòng nhập mật khẩu';
                 document.getElementById('password-error').style.display = 'block';
-                isValid = false;
+                return;
+            } else {
+                document.getElementById('password-error').style.display = 'none';
             }
             
-            if (!isValid) return;
+            showLoading();
             
-            // Đăng nhập với Firebase
-            firebase.auth().signInWithEmailAndPassword(email, password)
-                .then(() => {
+            // Đăng nhập với Firebase Authentication
+            auth.signInWithEmailAndPassword(username, password)
+                .then((userCredential) => {
                     // Đăng nhập thành công
+                    const user = userCredential.user;
+                    loginContainer.style.display = 'none';
+                    mainLayout.style.display = 'block';
+                    userDisplay.textContent = user.email;
+                    
+                    // Tải dữ liệu từ Firebase
+                    loadAllData();
+                    hideLoading();
                 })
-                .catch(error => {
-                    let errorMessage = 'Đã xảy ra lỗi khi đăng nhập';
-                    
-                    switch (error.code) {
-                        case 'auth/invalid-email':
-                            errorMessage = 'Email không hợp lệ';
-                            break;
-                        case 'auth/user-disabled':
-                            errorMessage = 'Tài khoản đã bị vô hiệu hóa';
-                            break;
-                        case 'auth/user-not-found':
-                            errorMessage = 'Không tìm thấy tài khoản';
-                            break;
-                        case 'auth/wrong-password':
-                            errorMessage = 'Mật khẩu không đúng';
-                            break;
-                    }
-                    
-                    document.getElementById('password-error').textContent = errorMessage;
-                    document.getElementById('password-error').style.display = 'block';
+                .catch((error) => {
+                    hideLoading();
+                    alert('Đăng nhập thất bại: ' + error.message);
                 });
         }
         
         // Hàm xử lý đăng ký
-        function register() {
-            const name = document.getElementById('reg-name').value;
-            const email = document.getElementById('reg-email').value;
+        function handleRegister() {
+            const fullname = document.getElementById('reg-fullname').value;
+            const username = document.getElementById('reg-username').value;
             const password = document.getElementById('reg-password').value;
-            const confirmPassword = document.getElementById('reg-confirm-password').value;
+            const confirm = document.getElementById('reg-confirm').value;
+            
+            // Reset thông báo lỗi
+            document.querySelectorAll('.error-message').forEach(el => {
+                el.style.display = 'none';
+            });
+    
+            // Kiểm tra thông tin đăng ký
             let isValid = true;
             
-            // Reset lỗi
-            document.getElementById('reg-name-error').style.display = 'none';
-            document.getElementById('reg-email-error').style.display = 'none';
-            document.getElementById('reg-password-error').style.display = 'none';
-            document.getElementById('reg-confirm-password-error').style.display = 'none';
-            
-            // Kiểm tra tên
-            if (!name) {
-                document.getElementById('reg-name-error').textContent = 'Họ tên là bắt buộc';
-                document.getElementById('reg-name-error').style.display = 'block';
+            if (!fullname) {
+                document.getElementById('reg-fullname-error').textContent = 'Vui lòng nhập họ và tên';
+                document.getElementById('reg-fullname-error').style.display = 'block';
                 isValid = false;
             }
-            
-            // Kiểm tra email
-            if (!email) {
-                document.getElementById('reg-email-error').textContent = 'Email là bắt buộc';
-                document.getElementById('reg-email-error').style.display = 'block';
+    
+            if (!username) {
+                document.getElementById('reg-username-error').textContent = 'Vui lòng nhập tên đăng nhập';
+                document.getElementById('reg-username-error').style.display = 'block';
+                isValid = false;
+            } else if (!isValidEmail(username)) {
+                document.getElementById('reg-username-error').textContent = 'Email không hợp lệ';
+                document.getElementById('reg-username-error').style.display = 'block';
                 isValid = false;
             }
-            
-            // Kiểm tra mật khẩu
+    
             if (!password) {
-                document.getElementById('reg-password-error').textContent = 'Mật khẩu là bắt buộc';
+                document.getElementById('reg-password-error').textContent = 'Vui lòng nhập mật khẩu';
                 document.getElementById('reg-password-error').style.display = 'block';
                 isValid = false;
             } else if (password.length < 6) {
@@ -1348,838 +1303,908 @@
                 document.getElementById('reg-password-error').style.display = 'block';
                 isValid = false;
             }
-            
-            // Kiểm tra xác nhận mật khẩu
-            if (password !== confirmPassword) {
-                document.getElementById('reg-confirm-password-error').textContent = 'Mật khẩu xác nhận không khớp';
-                document.getElementById('reg-confirm-password-error').style.display = 'block';
+    
+            if (password !== confirm) {
+                document.getElementById('reg-confirm-error').textContent = 'Mật khẩu xác nhận không khớp';
+                document.getElementById('reg-confirm-error').style.display = 'block';
                 isValid = false;
             }
             
             if (!isValid) return;
             
-            // Đăng ký với Firebase
-            firebase.auth().createUserWithEmailAndPassword(email, password)
+            showLoading();
+    
+            // Đăng ký với Firebase Authentication
+            auth.createUserWithEmailAndPassword(username, password)
                 .then((userCredential) => {
-                    // Cập nhật tên hiển thị
-                    return userCredential.user.updateProfile({
-                        displayName: name
-                    });
+                    // Đăng ký thành công
+                    const user = userCredential.user;
+            
+                    // Lưu thông tin người dùng vào Realtime Database
+                    const userData = {
+                        fullname: fullname,
+                        email: username,
+                        createdAt: firebase.database.ServerValue.TIMESTAMP
+                    };
+            
+                    return database.ref('users/' + user.uid).set(userData)
+                        .then(() => {
+                            hideLoading();
+                            alert('Đăng ký thành công! Vui lòng đăng nhập.');
+                            showLoginScreen();
+                    
+                            // Reset form đăng ký
+                            document.getElementById('reg-fullname').value = '';
+                            document.getElementById('reg-username').value = '';
+                            document.getElementById('reg-password').value = '';
+                            document.getElementById('reg-confirm').value = '';
+                        });
                 })
-                .then(() => {
-                    // Đăng ký thành công, chuyển đến màn hình đăng nhập
-                    showLoginScreen();
-                    alert('Đăng ký thành công! Vui lòng đăng nhập.');
-                })
-                .catch(error => {
-                    let errorMessage = 'Đã xảy ra lỗi khi đăng ký';
+                .catch((error) => {
+                    hideLoading();
+                    console.error('Lỗi đăng ký:', error);
+                    
+                    // Hiển thị thông báo lỗi chi tiết
+                    let errorMessage = 'Đăng ký thất bại: ';
                     
                     switch (error.code) {
                         case 'auth/email-already-in-use':
-                            errorMessage = 'Email đã được sử dụng';
+                            errorMessage += 'Email đã được sử dụng.';
+                            document.getElementById('reg-username-error').textContent = 'Email đã được sử dụng';
+                            document.getElementById('reg-username-error').style.display = 'block';
                             break;
                         case 'auth/invalid-email':
-                            errorMessage = 'Email không hợp lệ';
+                            errorMessage += 'Email không hợp lệ.';
+                            document.getElementById('reg-username-error').textContent = 'Email không hợp lệ';
+                            document.getElementById('reg-username-error').style.display = 'block';
                             break;
                         case 'auth/operation-not-allowed':
-                            errorMessage = 'Hoạt động không được cho phép';
+                            errorMessage += 'Phương thức đăng ký không được cho phép.';
                             break;
                         case 'auth/weak-password':
-                            errorMessage = 'Mật khẩu quá yếu';
+                            errorMessage += 'Mật khẩu quá yếu.';
+                            document.getElementById('reg-password-error').textContent = 'Mật khẩu quá yếu';
+                            document.getElementById('reg-password-error').style.display = 'block';
                             break;
+                        default:
+                            errorMessage += error.message;
                     }
-                    
-                    document.getElementById('reg-password-error').textContent = errorMessage;
-                    document.getElementById('reg-password-error').style.display = 'block';
+    
+                    alert(errorMessage);
                 });
         }
+
+        // Hàm kiểm tra email hợp lệ
+        function isValidEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
         
+        // Kiểm tra trạng thái đăng nhập
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // Người dùng đã đăng nhập
+                loginContainer.style.display = 'none';
+                mainLayout.style.display = 'block';
+                userDisplay.textContent = user.email;
+                
+                // Tải dữ liệu từ Firebase
+                loadAllData();
+            } else {
+                // Người dùng đã đăng xuất
+                loginContainer.style.display = 'flex';
+                mainLayout.style.display = 'none';
+                showLoginScreen();
+            }
+        });
+
         // Hàm xử lý đăng xuất
-        function logout() {
-            firebase.auth().signOut()
+        function handleLogout() {
+            showLoading();
+            auth.signOut()
                 .then(() => {
-                    currentUser = null;
-                    showLoginScreen();
+                    hideLoading();
+                    alert('Đã đăng xuất thành công!');
                 })
-                .catch(error => {
-                    console.error('Lỗi khi đăng xuất:', error);
+                .catch((error) => {
+                    hideLoading();
+                    alert('Lỗi khi đăng xuất: ' + error.message);
                 });
         }
-        
-        // Hiển thị màn hình đăng nhập
-        function showLoginScreen() {
-            document.getElementById('login-screen').style.display = 'block';
-            document.getElementById('register-screen').style.display = 'none';
-            document.getElementById('main-screen').style.display = 'none';
+
+        // ========== FIREBASE REALTIME DATABASE ==========
+        // Hàm lấy tất cả dữ liệu
+        function loadAllData() {
+            showLoading();
+
+            console.log('Đang tải dữ liệu từ Firebase...');
             
-            // Reset form
-            document.getElementById('email').value = '';
-            document.getElementById('password').value = '';
-            document.getElementById('email-error').style.display = 'none';
-            document.getElementById('password-error').style.display = 'none';
-        }
-        
-        // Hiển thị màn hình đăng ký
-        function showRegisterScreen() {
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('register-screen').style.display = 'block';
-            document.getElementById('main-screen').style.display = 'none';
-            
-            // Reset form
-            document.getElementById('reg-name').value = '';
-            document.getElementById('reg-email').value = '';
-            document.getElementById('reg-password').value = '';
-            document.getElementById('reg-confirm-password').value = '';
-            document.getElementById('reg-name-error').style.display = 'none';
-            document.getElementById('reg-email-error').style.display = 'none';
-            document.getElementById('reg-password-error').style.display = 'none';
-            document.getElementById('reg-confirm-password-error').style.display = 'none';
-        }
-        
-        // Hiển thị màn hình chính
-        function showMainScreen() {
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('register-screen').style.display = 'none';
-            document.getElementById('main-screen').style.display = 'block';
-            
-            // Hiển thị thông tin người dùng
-            document.getElementById('user-display-name').textContent = currentUser.displayName || currentUser.email;
-            document.getElementById('user-email').textContent = currentUser.email;
-        }
-        
-        // Hiển thị section nội dung
-        function showContentSection(sectionId) {
-            // Ẩn tất cả các section
-            document.querySelectorAll('.content-section').forEach(section => {
-                section.classList.remove('active');
+            // Lấy dữ liệu công văn đi
+            database.ref('congVanDi').once('value')
+                .then((snapshot) => {
+                    congVanDiData = [];
+                    snapshot.forEach((childSnapshot) => {
+                        const data = childSnapshot.val();
+                        data.id = childSnapshot.key;
+                        congVanDiData.push(data);
+                    });
+                    console.log('Đã tải', congVanDiData.length, 'công văn đi');
+                    updateCvDiTable();
+                    
+                    // Lấy dữ liệu công văn đến
+                    return database.ref('congVanDen').once('value');
+                })
+                .then((snapshot) => {
+                    congVanDenData = [];
+                    snapshot.forEach((childSnapshot) => {
+                        const data = childSnapshot.val();
+                        data.id = childSnapshot.key;
+                        congVanDenData.push(data);
+                    });
+                    console.log('Đã tải', congVanDenData.length, 'công văn đến');
+                    updateCvDenTable();
+                    updateTongHop();
+                    hideLoading();
+                })
+                .catch((error) => {
+                    hideLoading();
+                    alert('Lỗi khi tải dữ liệu: ' + error.message);
+                });
+                
+            // Thiết lập listener để cập nhật realtime
+            database.ref('congVanDi').on('value', (snapshot) => {
+                congVanDiData = [];
+                snapshot.forEach((childSnapshot) => {
+                    const data = childSnapshot.val();
+                    data.id = childSnapshot.key;
+                    congVanDiData.push(data);
+                });
+                console.log('Realtime update - công văn đi:', congVanDiData.length);
+                updateCvDiTable();
+                updateTongHop();
             });
             
-            // Hiển thị section được chọn
-            document.getElementById(sectionId).classList.add('active');
+            database.ref('congVanDen').on('value', (snapshot) => {
+                congVanDenData = [];
+                snapshot.forEach((childSnapshot) => {
+                    const data = childSnapshot.val();
+                    data.id = childSnapshot.key;
+                    congVanDenData.push(data);
+                });
+                console.log('Realtime update - công văn đến:', congVanDenData.length);
+                updateCvDenTable();
+                updateTongHop();
+            });
+        }
+        
+        // ========== CÔNG VĂN ĐI ==========
+        // Tải năm vào select
+        function loadYearsToSelect() {
+            const currentYear = new Date().getFullYear();
+            const yearSelects = document.querySelectorAll('select[id^="nam"]');
             
-            // Cập nhật tiêu đề
-            const titles = {
-                'dashboard': 'Bảng điều khiển',
-                'cong-van-di': 'Quản lý công văn đi',
-                'cong-van-den': 'Quản lý công văn đến',
-                'tong-hop': 'Tổng hợp & Báo cáo'
-            };
-            
-            document.getElementById('page-title').textContent = titles[sectionId] || 'Hệ thống quản lý công văn';
-            
-            // Cập nhật menu active
-            document.querySelectorAll('.menu-item').forEach(item => {
-                item.classList.remove('active');
-                if (item.getAttribute('data-target') === sectionId) {
-                    item.classList.add('active');
+            yearSelects.forEach(select => {
+                // Xóa các option hiện có (giữ option đầu tiên)
+                while (select.options.length > 1) {
+                    select.remove(1);
+                }
+                
+                // Thêm các năm từ 2020 đến năm hiện tại + 1
+                for (let year = 2024; year <= 2035; year++) {
+                    const option = document.createElement('option');
+                    option.value = year;
+                    option.textContent = year;
+                    select.appendChild(option);
                 }
             });
-            
-            // Tải dữ liệu nếu cần
-            if (sectionId === 'cong-van-di') {
-                loadCongVanDi();
-                loadComboboxData('ten-van-ban', 'ten-van-ban-di');
-                loadComboboxData('nguoi-ky', 'nguoi-ky-di');
-                loadComboboxData('noi-ban-hanh', 'noi-ban-hanh-di');
-            } else if (sectionId === 'cong-van-den') {
-                loadCongVanDen();
-                loadComboboxData('ten-van-ban', 'ten-van-ban-den');
-                loadComboboxData('nguoi-ky', 'nguoi-ky-den');
-                loadComboboxData('noi-ban-hanh', 'noi-ban-hanh-den');
-                loadComboboxData('nguoi-nhan', 'nguoi-nhan');
-            } else if (sectionId === 'tong-hop') {
-                loadTongHop();
-            }
         }
         
-        // Hiển thị form công văn đi
-        function showCongVanDiForm() {
-            document.getElementById('cong-van-di-form').style.display = 'block';
-            document.getElementById('add-cong-van-di').style.display = 'none';
-            document.getElementById('update-cong-van-di').style.display = 'none';
+        // Tải tên văn bản vào select
+        function loadTenVBsToSelect() {
+            const tenVBs = ['Công văn', 'Tờ trình', 'Báo cáo', 'Quyết định', 'Kế hoạch', 'Thông báo'];
+            const tenVbSelects = document.querySelectorAll('select[id^="ten-vb"]');
             
-            // Reset form
-            document.getElementById('so-cong-van-di').value = '';
-            document.getElementById('ngay-ban-hanh-di').value = '';
-            document.getElementById('ten-van-ban-di').value = '';
-            document.getElementById('nguoi-ky-di').value = '';
-            document.getElementById('noi-ban-hanh-di').value = '';
-            document.getElementById('trich-yeu-di').value = '';
-            
-            currentEditingId = null;
-        }
-        
-        // Ẩn form công văn đi
-        function hideCongVanDiForm() {
-            document.getElementById('cong-van-di-form').style.display = 'none';
-            document.getElementById('add-cong-van-di').style.display = 'block';
-        }
-        
-        // Hiển thị form công văn đến
-        function showCongVanDenForm() {
-            document.getElementById('cong-van-den-form').style.display = 'block';
-            document.getElementById('add-cong-van-den').style.display = 'none';
-            document.getElementById('update-cong-van-den').style.display = 'none';
-            
-            // Reset form
-            document.getElementById('so-cong-van-den').value = '';
-            document.getElementById('ngay-ban-hanh-den').value = '';
-            document.getElementById('nguoi-gui').value = '';
-            document.getElementById('ten-van-ban-den').value = '';
-            document.getElementById('nguoi-ky-den').value = '';
-            document.getElementById('noi-ban-hanh-den').value = '';
-            document.getElementById('nguoi-nhan').value = '';
-            document.getElementById('trich-yeu-den').value = '';
-            
-            currentEditingId = null;
-        }
-        
-        // Ẩn form công văn đến
-        function hideCongVanDenForm() {
-            document.getElementById('cong-van-den-form').style.display = 'none';
-            document.getElementById('add-cong-van-den').style.display = 'block';
-        }
-        
-        // Lưu công văn đi
-        function saveCongVanDi() {
-            const soCongVan = document.getElementById('so-cong-van-di').value;
-            const ngayBanHanh = document.getElementById('ngay-ban-hanh-di').value;
-            const tenVanBan = document.getElementById('ten-van-ban-di').value;
-            const nguoiKy = document.getElementById('nguoi-ky-di').value;
-            const noiBanHanh = document.getElementById('noi-ban-hanh-di').value;
-            const trichYeu = document.getElementById('trich-yeu-di').value;
-            
-            if (!soCongVan || !ngayBanHanh || !tenVanBan || !nguoiKy || !noiBanHanh || !trichYeu) {
-                alert('Vui lòng điền đầy đủ thông tin');
-                return;
-            }
-            
-            const userId = currentUser.uid;
-            const congVanDiRef = database.ref('congVanDi/' + userId);
-            
-            // Tạo một key mới
-            const newCongVanDiRef = congVanDiRef.push();
-            
-            newCongVanDiRef.set({
-                soCongVan: soCongVan,
-                ngayBanHanh: ngayBanHanh,
-                tenVanBan: tenVanBan,
-                nguoiKy: nguoiKy,
-                noiBanHanh: noiBanHanh,
-                trichYeu: trichYeu,
-                createdAt: firebase.database.ServerValue.TIMESTAMP
-            })
-            .then(() => {
-                alert('Thêm công văn đi thành công');
-                hideCongVanDiForm();
-                loadCongVanDi();
-            })
-            .catch(error => {
-                console.error('Lỗi khi thêm công văn đi:', error);
-                alert('Đã xảy ra lỗi khi thêm công văn đi');
+            tenVbSelects.forEach(select => {
+                // Xóa các option hiện có (giữ option đầu tiên)
+                while (select.options.length > 1) {
+                    select.remove(1);
+                }
+                
+                // Thêm các tên văn bản
+                tenVBs.forEach(tenVb => {
+                    const option = document.createElement('option');
+                    option.value = tenVb;
+                    option.textContent = tenVb;
+                    select.appendChild(option);
+                });
             });
         }
         
-        // Lưu công văn đến
-        function saveCongVanDen() {
-            const soCongVan = document.getElementById('so-cong-van-den').value;
-            const ngayBanHanh = document.getElementById('ngay-ban-hanh-den').value;
-            const nguoiGui = document.getElementById('nguoi-gui').value;
-            const tenVanBan = document.getElementById('ten-van-ban-den').value;
-            const nguoiKy = document.getElementById('nguoi-ky-den').value;
-            const noiBanHanh = document.getElementById('noi-ban-hanh-den').value;
-            const nguoiNhan = document.getElementById('nguoi-nhan').value;
-            const trichYeu = document.getElementById('trich-yeu-den').value;
+        // Tải người ký vào select
+        function loadNguoiKysToSelect() {
+            const nguoiKys = ['Nguyễn Văn A', 'Trần Thị B', 'Lê Văn C', 'Phạm Thị D'];
+            const nguoiKySelects = document.querySelectorAll('select[id^="nguoi-ky"]');
             
-            if (!soCongVan || !ngayBanHanh || !nguoiGui || !tenVanBan || !nguoiKy || !noiBanHanh || !nguoiNhan || !trichYeu) {
-                alert('Vui lòng điền đầy đủ thông tin');
-                return;
-            }
-            
-            const userId = currentUser.uid;
-            const congVanDenRef = database.ref('congVanDen/' + userId);
-            
-            // Tạo một key mới
-            const newCongVanDenRef = congVanDenRef.push();
-            
-            newCongVanDenRef.set({
-                soCongVan: soCongVan,
-                ngayBanHanh: ngayBanHanh,
-                nguoiGui: nguoiGui,
-                tenVanBan: tenVanBan,
-                nguoiKy: nguoiKy,
-                noiBanHanh: noiBanHanh,
-                nguoiNhan: nguoiNhan,
-                trichYeu: trichYeu,
-                createdAt: firebase.database.ServerValue.TIMESTAMP
-            })
-            .then(() => {
-                alert('Thêm công văn đến thành công');
-                hideCongVanDenForm();
-                loadCongVanDen();
-            })
-            .catch(error => {
-                console.error('Lỗi khi thêm công văn đến:', error);
-                alert('Đã xảy ra lỗi khi thêm công văn đến');
+            nguoiKySelects.forEach(select => {
+                // Xóa các option hiện có (giữ option đầu tiên)
+                while (select.options.length > 1) {
+                    select.remove(1);
+                }
+                
+                // Thêm các người ký
+                nguoiKys.forEach(nguoiKy => {
+                    const option = document.createElement('option');
+                    option.value = nguoiKy;
+                    option.textContent = nguoiKy;
+                    select.appendChild(option);
+                });
             });
         }
         
-        // Cập nhật công văn đi
-        function updateCongVanDi() {
-            if (!currentEditingId) return;
+        // Tải nơi ban hành vào select
+        function loadNoiBanHanhsToSelect() {
+            const noiBanHanhs = ['Phòng Tổ chức', 'Phòng Kế hoạch', 'Phòng Tài chính', 'Ban Giám đốc'];
+            const noiBanHanhSelects = document.querySelectorAll('select[id^="noi-ban-hanh"]');
             
-            const soCongVan = document.getElementById('so-cong-van-di').value;
-            const ngayBanHanh = document.getElementById('ngay-ban-hanh-di').value;
-            const tenVanBan = document.getElementById('ten-van-ban-di').value;
-            const nguoiKy = document.getElementById('nguoi-ky-di').value;
-            const noiBanHanh = document.getElementById('noi-ban-hanh-di').value;
-            const trichYeu = document.getElementById('trich-yeu-di').value;
-            
-            if (!soCongVan || !ngayBanHanh || !tenVanBan || !nguoiKy || !noiBanHanh || !trichYeu) {
-                alert('Vui lòng điền đầy đủ thông tin');
-                return;
-            }
-            
-            const userId = currentUser.uid;
-            const congVanDiRef = database.ref('congVanDi/' + userId + '/' + currentEditingId);
-            
-            congVanDiRef.update({
-                soCongVan: soCongVan,
-                ngayBanHanh: ngayBanHanh,
-                tenVanBan: tenVanBan,
-                nguoiKy: nguoiKy,
-                noiBanHanh: noiBanHanh,
-                trichYeu: trichYeu,
-                updatedAt: firebase.database.ServerValue.TIMESTAMP
-            })
-            .then(() => {
-                alert('Cập nhật công văn đi thành công');
-                hideCongVanDiForm();
-                loadCongVanDi();
-            })
-            .catch(error => {
-                console.error('Lỗi khi cập nhật công văn đi:', error);
-                alert('Đã xảy ra lỗi khi cập nhật công văn đi');
+            noiBanHanhSelects.forEach(select => {
+                // Xóa các option hiện có (giữ option đầu tiên)
+                while (select.options.length > 1) {
+                    select.remove(1);
+                }
+                
+                // Thêm các nơi ban hành
+                noiBanHanhs.forEach(noiBanHanh => {
+                    const option = document.createElement('option');
+                    option.value = noiBanHanh;
+                    option.textContent = noiBanHanh;
+                    select.appendChild(option);
+                });
             });
         }
         
-        // Cập nhật công văn đến
-        function updateCongVanDen() {
-            if (!currentEditingId) return;
+        // Tải người nhận vào select
+        function loadNguoiNhansToSelect() {
+            const nguoiNhans = ['Nguyễn Văn A', 'Trần Thị B', 'Lê Văn C', 'Phạm Thị D'];
+            const nguoiNhanSelects = document.querySelectorAll('select[id^="nguoi-nhan"]');
             
-            const soCongVan = document.getElementById('so-cong-van-den').value;
-            const ngayBanHanh = document.getElementById('ngay-ban-hanh-den').value;
-            const nguoiGui = document.getElementById('nguoi-gui').value;
-            const tenVanBan = document.getElementById('ten-van-ban-den').value;
-            const nguoiKy = document.getElementById('nguoi-ky-den').value;
-            const noiBanHanh = document.getElementById('noi-ban-hanh-den').value;
-            const nguoiNhan = document.getElementById('nguoi-nhan').value;
-            const trichYeu = document.getElementById('trich-yeu-den').value;
-            
-            if (!soCongVan || !ngayBanHanh || !nguoiGui || !tenVanBan || !nguoiKy || !noiBanHanh || !nguoiNhan || !trichYeu) {
-                alert('Vui lòng điền đầy đủ thông tin');
-                return;
-            }
-            
-            const userId = currentUser.uid;
-            const congVanDenRef = database.ref('congVanDen/' + userId + '/' + currentEditingId);
-            
-            congVanDenRef.update({
-                soCongVan: soCongVan,
-                ngayBanHanh: ngayBanHanh,
-                nguoiGui: nguoiGui,
-                tenVanBan: tenVanBan,
-                nguoiKy: nguoiKy,
-                noiBanHanh: noiBanHanh,
-                nguoiNhan: nguoiNhan,
-                trichYeu: trichYeu,
-                updatedAt: firebase.database.ServerValue.TIMESTAMP
-            })
-            .then(() => {
-                alert('Cập nhật công văn đến thành công');
-                hideCongVanDenForm();
-                loadCongVanDen();
-            })
-            .catch(error => {
-                console.error('Lỗi khi cập nhật công văn đến:', error);
-                alert('Đã xảy ra lỗi khi cập nhật công văn đến');
+            nguoiNhanSelects.forEach(select => {
+                // Xóa các option hiện có (giữ option đầu tiên)
+                while (select.options.length > 1) {
+                    select.remove(1);
+                }
+                
+                // Thêm các người nhận
+                nguoiNhans.forEach(nguoiNhan => {
+                    const option = document.createElement('option');
+                    option.value = nguoiNhan;
+                    option.textContent = nguoiNhan;
+                    select.appendChild(option);
+                });
             });
+        }
+        
+        // Cập nhật bảng công văn đi
+        function updateCvDiTable() {
+            const tableBody = document.querySelector('#cvdi-table tbody');
+            tableBody.innerHTML = '';
+            
+            congVanDiData.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${item.nam}</td>
+                    <td>${item.soVb}</td>
+                    <td>${item.tenVb}</td>
+                    <td>${item.ngayKy || 'N/A'}</td>
+                    <td>${item.nguoiKy || 'N/A'}</td>
+                    <td>${item.noiBanHanh || 'N/A'}</td>
+                    <td>
+                        <button class="action-btn btn-edit" onclick="editCvDi('${item.id}')">Sửa</button>
+                        <button class="action-btn btn-delete" onclick="deleteCvDi('${item.id}')">Xóa</button>
+                        ${item.fileData ? `<button class="action-btn btn-open" onclick="openFileDi('${item.id}')">Xem file</button>` : ''}
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+        
+        // Reset form công văn đi
+        function resetCvDiForm() {
+            document.getElementById('so-vb').value = '';
+            document.getElementById('noi-dung').value = '';
+            document.getElementById('ngay-ky').value = '';
+            namSelect.value = '';
+            tenVbSelect.value = '';
+            nguoiKySelect.value = '';
+            noiBanHanhSelect.value = '';
+            document.getElementById('file-dinh-kem').value = '';
+            tempFileDataDi = null;
+            tempFileNameDi = '';
+            editingCvDiId = null;
+            
+            saveCvdiBtn.style.display = 'block';
+            updateCvdiBtn.style.display = 'none';
+        }
+        
+        // Sửa công văn đi
+        function editCvDi(id) {
+            const item = congVanDiData.find(item => item.id === id);
+            
+            if (!item) return;
+            
+            document.getElementById('nam').value = item.nam;
+            document.getElementById('so-vb').value = item.soVb;
+            document.getElementById('ten-vb').value = item.tenVb;
+            document.getElementById('noi-dung').value = item.noiDung || '';
+            document.getElementById('ngay-ky').value = item.ngayKy || '';
+            document.getElementById('nguoi-ky').value = item.nguoiKy || '';
+            document.getElementById('noi-ban-hanh').value = item.noiBanHanh || '';
+            
+            tempFileDataDi = item.fileData || null;
+            tempFileNameDi = item.fileName || '';
+            editingCvDiId = id;
+            
+            saveCvdiBtn.style.display = 'none';
+            updateCvdiBtn.style.display = 'block';
         }
         
         // Xóa công văn đi
-        function deleteCongVanDi(id) {
-            if (!confirm('Bạn có chắc chắn muốn xóa công văn này?')) return;
+        function deleteCvDi(id) {
+            if (confirm('Bạn có chắc chắn muốn xóa công văn này?')) {
+                showLoading();
+                database.ref('congVanDi/' + id).remove()
+                    .then(() => {
+                        hideLoading();
+                        alert('Đã xóa công văn đi!');
+                    })
+                    .catch((error) => {
+                        hideLoading();
+                        alert('Lỗi khi xóa công văn: ' + error.message);
+                    });
+            }
+        }
+        
+        // Xem file công văn đi
+        function openFileDi(id) {
+            const item = congVanDiData.find(item => item.id === id);
+            if (item && item.fileData) {
+                const fileModalContent = document.getElementById('file-modal-content');
+                fileModalContent.innerHTML = `
+                    <p><strong>Tên file:</strong> ${item.fileName}</p>
+                    <iframe src="${item.fileData}" width="100%" height="500px" style="border: none;"></iframe>
+                `;
+                fileModal.style.display = 'flex';
+            }
+        }
+        
+        // ========== CÔNG VĂN ĐẾN ==========
+        // Cập nhật bảng công văn đến
+        function updateCvDenTable() {
+            const tableBody = document.querySelector('#cvden-table tbody');
+            tableBody.innerHTML = '';
             
-            const userId = currentUser.uid;
-            const congVanDiRef = database.ref('congVanDi/' + userId + '/' + id);
+            congVanDenData.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${item.nam}</td>
+                    <td>${item.soDen}</td>
+                    <td>${item.nguoiNhan}</td>
+                    <td>${item.ngayNhan || 'N/A'}</td>
+                    <td>${item.soCvDen || 'N/A'}</td>
+                    <td>${item.tenVbDen || 'N/A'}</td>
+                    <td>
+                        <button class="action-btn btn-edit" onclick="editCvDen('${item.id}')">Sửa</button>
+                        <button class="action-btn btn-delete" onclick="deleteCvDen('${item.id}')">Xóa</button>
+                        ${item.fileData ? `<button class="action-btn btn-open" onclick="openFileDen('${item.id}')">Xem file</button>` : ''}
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+        
+        // Reset form công văn đến
+        function resetCvDenForm() {
+            document.getElementById('so-den').value = '';
+            document.getElementById('ngay-nhan').value = '';
+            document.getElementById('so-cv-den').value = '';
+            document.getElementById('noi-dung-den').value = '';
+            document.getElementById('so-to').value = '';
+            document.getElementById('ngay-ky-den').value = '';
+            namDenSelect.value = '';
+            tenVbDenSelect.value = '';
+            nguoiKyDenSelect.value = '';
+            nguoiNhanSelect.value = '';
+            noiBanHanhDenSelect.value = '';
+            document.getElementById('file-dinh-kem-den').value = '';
+            tempFileDataDen = null;
+            tempFileNameDen = '';
+            editingCvDenId = null;
             
-            congVanDiRef.remove()
-                .then(() => {
-                    alert('Xóa công văn đi thành công');
-                    loadCongVanDi();
-                })
-                .catch(error => {
-                    console.error('Lỗi khi xóa công văn đi:', error);
-                    alert('Đã xảy ra lỗi khi xóa công văn đi');
-                });
+            saveCvdenBtn.style.display = 'block';
+            updateCvdenBtn.style.display = 'none';
+        }
+        
+        // Sửa công văn đến
+        function editCvDen(id) {
+            const item = congVanDenData.find(item => item.id === id);
+            
+            if (!item) return;
+            
+            document.getElementById('nam-den').value = item.nam;
+            document.getElementById('so-den').value = item.soDen;
+            document.getElementById('nguoi-nhan').value = item.nguoiNhan;
+            document.getElementById('ngay-nhan').value = item.ngayNhan || '';
+            document.getElementById('so-cv-den').value = item.soCvDen || '';
+            document.getElementById('ten-vb-den').value = item.tenVbDen || '';
+            document.getElementById('noi-dung-den').value = item.noiDungDen || '';
+            document.getElementById('so-to').value = item.soTo || '';
+            document.getElementById('ngay-ky-den').value = item.ngayKyDen || '';
+            document.getElementById('nguoi-ky-den').value = item.nguoiKyDen || '';
+            document.getElementById('noi-ban-hanh-den').value = item.noiBanHanhDen || '';
+            
+            tempFileDataDen = item.fileData || null;
+            tempFileNameDen = item.fileNameDen || '';
+            editingCvDenId = id;
+            
+            saveCvdenBtn.style.display = 'none';
+            updateCvdenBtn.style.display = 'block';
         }
         
         // Xóa công văn đến
-        function deleteCongVanDen(id) {
-            if (!confirm('Bạn có chắc chắn muốn xóa công văn này?')) return;
-            
-            const userId = currentUser.uid;
-            const congVanDenRef = database.ref('congVanDen/' + userId + '/' + id);
-            
-            congVanDenRef.remove()
-                .then(() => {
-                    alert('Xóa công văn đến thành công');
-                    loadCongVanDen();
-                })
-                .catch(error => {
-                    console.error('Lỗi khi xóa công văn đến:', error);
-                    alert('Đã xảy ra lỗi khi xóa công văn đến');
-                });
-        }
-        
-        // Chỉnh sửa công văn đi
-        function editCongVanDi(id) {
-            const userId = currentUser.uid;
-            const congVanDiRef = database.ref('congVanDi/' + userId + '/' + id);
-            
-            congVanDiRef.once('value')
-                .then(snapshot => {
-                    const data = snapshot.val();
-                    
-                    if (data) {
-                        document.getElementById('so-cong-van-di').value = data.soCongVan || '';
-                        document.getElementById('ngay-ban-hanh-di').value = data.ngayBanHanh || '';
-                        document.getElementById('ten-van-ban-di').value = data.tenVanBan || '';
-                        document.getElementById('nguoi-ky-di').value = data.nguoiKy || '';
-                        document.getElementById('noi-ban-hanh-di').value = data.noiBanHanh || '';
-                        document.getElementById('trich-yeu-di').value = data.trichYeu || '';
-                        
-                        document.getElementById('cong-van-di-form').style.display = 'block';
-                        document.getElementById('add-cong-van-di').style.display = 'none';
-                        document.getElementById('update-cong-van-di').style.display = 'block';
-                        
-                        currentEditingId = id;
-                    }
-                })
-                .catch(error => {
-                    console.error('Lỗi khi tải dữ liệu công văn đi:', error);
-                    alert('Đã xảy ra lỗi khi tải dữ liệu công văn đi');
-                });
-        }
-        
-        // Chỉnh sửa công văn đến
-        function editCongVanDen(id) {
-            const userId = currentUser.uid;
-            const congVanDenRef = database.ref('congVanDen/' + userId + '/' + id);
-            
-            congVanDenRef.once('value')
-                .then(snapshot => {
-                    const data = snapshot.val();
-                    
-                    if (data) {
-                        document.getElementById('so-cong-van-den').value = data.soCongVan || '';
-                        document.getElementById('ngay-ban-hanh-den').value = data.ngayBanHanh || '';
-                        document.getElementById('nguoi-gui').value = data.nguoiGui || '';
-                        document.getElementById('ten-van-ban-den').value = data.tenVanBan || '';
-                        document.getElementById('nguoi-ky-den').value = data.nguoiKy || '';
-                        document.getElementById('noi-ban-hanh-den').value = data.noiBanHanh || '';
-                        document.getElementById('nguoi-nhan').value = data.nguoiNhan || '';
-                        document.getElementById('trich-yeu-den').value = data.trichYeu || '';
-                        
-                        document.getElementById('cong-van-den-form').style.display = 'block';
-                        document.getElementById('add-cong-van-den').style.display = 'none';
-                        document.getElementById('update-cong-van-den').style.display = 'block';
-                        
-                        currentEditingId = id;
-                    }
-                })
-                .catch(error => {
-                    console.error('Lỗi khi tải dữ liệu công văn đến:', error);
-                    alert('Đã xảy ra lỗi khi tải dữ liệu công văn đến');
-                });
-        }
-        
-        // Tải dữ liệu công văn đi
-        function loadCongVanDi() {
-            const userId = currentUser.uid;
-            const congVanDiRef = database.ref('congVanDi/' + userId);
-            
-            // Hiển thị loading
-            document.querySelector('#cong-van-di .loading').style.display = 'block';
-            
-            congVanDiRef.once('value')
-                .then(snapshot => {
-                    const data = snapshot.val();
-                    const tableBody = document.getElementById('cong-van-di-table').querySelector('tbody');
-                    tableBody.innerHTML = '';
-                    
-                    if (data) {
-                        // Lọc dữ liệu nếu có
-                        const searchText = document.getElementById('search-cong-van-di').value.toLowerCase();
-                        const startDate = document.getElementById('start-date-di').value;
-                        const endDate = document.getElementById('end-date-di').value;
-                        
-                        Object.keys(data).forEach(key => {
-                            const item = data[key];
-                            
-                            // Kiểm tra tìm kiếm
-                            if (searchText && 
-                                !item.soCongVan.toLowerCase().includes(searchText) && 
-                                !item.trichYeu.toLowerCase().includes(searchText)) {
-                                return;
-                            }
-                            
-                            // Kiểm tra ngày
-                            if (startDate && item.ngayBanHanh < startDate) return;
-                            if (endDate && item.ngayBanHanh > endDate) return;
-                            
-                            const row = document.createElement('tr');
-                            row.innerHTML = `
-                                <td>${item.soCongVan || ''}</td>
-                                <td>${item.ngayBanHanh || ''}</td>
-                                <td>${item.tenVanBan || ''}</td>
-                                <td>${item.nguoiKy || ''}</td>
-                                <td>${item.noiBanHanh || ''}</td>
-                                <td>${item.trichYeu || ''}</td>
-                                <td>
-                                    <button class="action-btn btn-edit" onclick="editCongVanDi('${key}')">Sửa</button>
-                                    <button class="action-btn btn-delete" onclick="deleteCongVanDi('${key}')">Xóa</button>
-                                </td>
-                            `;
-                            tableBody.appendChild(row);
-                        });
-                    } else {
-                        const row = document.createElement('tr');
-                        row.innerHTML = '<td colspan="7" style="text-align: center;">Chưa có dữ liệu công văn đi</td>';
-                        tableBody.appendChild(row);
-                    }
-                    
-                    // Ẩn loading
-                    document.querySelector('#cong-van-di .loading').style.display = 'none';
-                })
-                .catch(error => {
-                    console.error('Lỗi khi tải dữ liệu công văn đi:', error);
-                    alert('Đã xảy ra lỗi khi tải dữ liệu công văn đi');
-                    
-                    // Ẩn loading
-                    document.querySelector('#cong-van-di .loading').style.display = 'none';
-                });
-        }
-        
-        // Tải dữ liệu công văn đến
-        function loadCongVanDen() {
-            const userId = currentUser.uid;
-            const congVanDenRef = database.ref('congVanDen/' + userId);
-            
-            // Hiển thị loading
-            document.querySelector('#cong-van-den .loading').style.display = 'block';
-            
-            congVanDenRef.once('value')
-                .then(snapshot => {
-                    const data = snapshot.val();
-                    const tableBody = document.getElementById('cong-van-den-table').querySelector('tbody');
-                    tableBody.innerHTML = '';
-                    
-                    if (data) {
-                        // Lọc dữ liệu nếu có
-                        const searchText = document.getElementById('search-cong-van-den').value.toLowerCase();
-                        const startDate = document.getElementById('start-date-den').value;
-                        const endDate = document.getElementById('end-date-den').value;
-                        
-                        Object.keys(data).forEach(key => {
-                            const item = data[key];
-                            
-                            // Kiểm tra tìm kiếm
-                            if (searchText && 
-                                !item.soCongVan.toLowerCase().includes(searchText) && 
-                                !item.trichYeu.toLowerCase().includes(searchText) &&
-                                !item.nguoiGui.toLowerCase().includes(searchText)) {
-                                return;
-                            }
-                            
-                            // Kiểm tra ngày
-                            if (startDate && item.ngayBanHanh < startDate) return;
-                            if (endDate && item.ngayBanHanh > endDate) return;
-                            
-                            const row = document.createElement('tr');
-                            row.innerHTML = `
-                                <td>${item.soCongVan || ''}</td>
-                                <td>${item.ngayBanHanh || ''}</td>
-                                <td>${item.nguoiGui || ''}</td>
-                                <td>${item.tenVanBan || ''}</td>
-                                <td>${item.nguoiKy || ''}</td>
-                                <td>${item.noiBanHanh || ''}</td>
-                                <td>${item.nguoiNhan || ''}</td>
-                                <td>${item.trichYeu || ''}</td>
-                                <td>
-                                    <button class="action-btn btn-edit" onclick="editCongVanDen('${key}')">Sửa</button>
-                                    <button class="action-btn btn-delete" onclick="deleteCongVanDen('${key}')">Xóa</button>
-                                </td>
-                            `;
-                            tableBody.appendChild(row);
-                        });
-                    } else {
-                        const row = document.createElement('tr');
-                        row.innerHTML = '<td colspan="9" style="text-align: center;">Chưa có dữ liệu công văn đến</td>';
-                        tableBody.appendChild(row);
-                    }
-                    
-                    // Ẩn loading
-                    document.querySelector('#cong-van-den .loading').style.display = 'none';
-                })
-                .catch(error => {
-                    console.error('Lỗi khi tải dữ liệu công văn đến:', error);
-                    alert('Đã xảy ra lỗi khi tải dữ liệu công văn đến');
-                    
-                    // Ẩn loading
-                    document.querySelector('#cong-van-den .loading').style.display = 'none';
-                });
-        }
-        
-        // Tải dữ liệu tổng hợp
-        function loadTongHop() {
-            const userId = currentUser.uid;
-            const congVanDiRef = database.ref('congVanDi/' + userId);
-            const congVanDenRef = database.ref('congVanDen/' + userId);
-            
-            // Tải công văn đi
-            congVanDiRef.once('value')
-                .then(snapshot => {
-                    const data = snapshot.val();
-                    let total = 0;
-                    let thisMonth = 0;
-                    let thisWeek = 0;
-                    let today = 0;
-                    
-                    const now = new Date();
-                    const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-                    const firstDayOfWeek = new Date(now);
-                    firstDayOfWeek.setDate(now.getDate() - now.getDay());
-                    firstDayOfWeek.setHours(0, 0, 0, 0);
-                    
-                    if (data) {
-                        Object.keys(data).forEach(key => {
-                            const item = data[key];
-                            total++;
-                            
-                            const itemDate = new Date(item.ngayBanHanh);
-                            
-                            // Kiểm tra tháng này
-                            if (itemDate >= firstDayOfMonth) {
-                                thisMonth++;
-                            }
-                            
-                            // Kiểm tra tuần này
-                            if (itemDate >= firstDayOfWeek) {
-                                thisWeek++;
-                            }
-                            
-                            // Kiểm tra hôm nay
-                            if (itemDate.toDateString() === now.toDateString()) {
-                                today++;
-                            }
-                        });
-                    }
-                    
-                    document.getElementById('tong-cong-van-di').textContent = total;
-                    document.getElementById('cong-van-di-thang').textContent = thisMonth;
-                    document.getElementById('cong-van-di-tuan').textContent = thisWeek;
-                    document.getElementById('cong-van-di-hom-nay').textContent = today;
-                })
-                .catch(error => {
-                    console.error('Lỗi khi tải dữ liệu tổng hợp công văn đi:', error);
-                });
-            
-            // Tải công văn đến
-            congVanDenRef.once('value')
-                .then(snapshot => {
-                    const data = snapshot.val();
-                    let total = 0;
-                    let thisMonth = 0;
-                    let thisWeek = 0;
-                    let today = 0;
-                    
-                    const now = new Date();
-                    const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-                    const firstDayOfWeek = new Date(now);
-                    firstDayOfWeek.setDate(now.getDate() - now.getDay());
-                    firstDayOfWeek.setHours(0, 0, 0, 0);
-                    
-                    if (data) {
-                        Object.keys(data).forEach(key => {
-                            const item = data[key];
-                            total++;
-                            
-                            const itemDate = new Date(item.ngayBanHanh);
-                            
-                            // Kiểm tra tháng này
-                            if (itemDate >= firstDayOfMonth) {
-                                thisMonth++;
-                            }
-                            
-                            // Kiểm tra tuần này
-                            if (itemDate >= firstDayOfWeek) {
-                                thisWeek++;
-                            }
-                            
-                            // Kiểm tra hôm nay
-                            if (itemDate.toDateString() === now.toDateString()) {
-                                today++;
-                            }
-                        });
-                    }
-                    
-                    document.getElementById('tong-cong-van-den').textContent = total;
-                    document.getElementById('cong-van-den-thang').textContent = thisMonth;
-                    document.getElementById('cong-van-den-tuan').textContent = thisWeek;
-                    document.getElementById('cong-van-den-hom-nay').textContent = today;
-                    
-                    // Tính tổng số công văn
-                    const tongCongVanDi = parseInt(document.getElementById('tong-cong-van-di').textContent);
-                    const tongCongVanDen = parseInt(document.getElementById('tong-cong-van-den').textContent);
-                    document.getElementById('tong-so-cong-van').textContent = tongCongVanDi + tongCongVanDen;
-                })
-                .catch(error => {
-                    console.error('Lỗi khi tải dữ liệu tổng hợp công văn đến:', error);
-                });
-        }
-        
-        // Tải tất cả dữ liệu
-        function loadAllData() {
-            loadCongVanDi();
-            loadCongVanDen();
-            loadTongHop();
-            
-            // Tải dữ liệu cho combobox
-            loadComboboxData('ten-van-ban', 'ten-van-ban-di');
-            loadComboboxData('nguoi-ky', 'nguoi-ky-di');
-            loadComboboxData('noi-ban-hanh', 'noi-ban-hanh-di');
-            loadComboboxData('ten-van-ban', 'ten-van-ban-den');
-            loadComboboxData('nguoi-ky', 'nguoi-ky-den');
-            loadComboboxData('noi-ban-hanh', 'noi-ban-hanh-den');
-            loadComboboxData('nguoi-nhan', 'nguoi-nhan');
-        }
-        
-        // Mở modal thêm giá trị mới
-        function openAddValueModal(type, title, element) {
-            currentComboboxType = type;
-            currentComboboxElement = element;
-            
-            document.getElementById('modal-title').textContent = `Thêm ${title} mới`;
-            document.getElementById('new-value-input').value = '';
-            document.getElementById('modal-error').style.display = 'none';
-            
-            document.getElementById('add-value-modal').style.display = 'flex';
-        }
-        
-        // Đóng modal
-        function closeModal() {
-            document.getElementById('add-value-modal').style.display = 'none';
-        }
-        
-        // Lưu giá trị mới
-        function saveNewValue() {
-            const newValue = document.getElementById('new-value-input').value.trim();
-            
-            if (!newValue) {
-                document.getElementById('modal-error').textContent = 'Vui lòng nhập giá trị';
-                document.getElementById('modal-error').style.display = 'block';
-                return;
-            }
-            
-            const userId = currentUser.uid;
-            const ref = database.ref(`comboboxData/${userId}/${currentComboboxType}`);
-            
-            // Kiểm tra xem giá trị đã tồn tại chưa
-            ref.once('value')
-                .then(snapshot => {
-                    const data = snapshot.val();
-                    let exists = false;
-                    
-                    if (data) {
-                        Object.keys(data).forEach(key => {
-                            if (data[key].value.toLowerCase() === newValue.toLowerCase()) {
-                                exists = true;
-                            }
-                        });
-                    }
-                    
-                    if (exists) {
-                        document.getElementById('modal-error').textContent = 'Giá trị này đã tồn tại';
-                        document.getElementById('modal-error').style.display = 'block';
-                        return;
-                    }
-                    
-                    // Thêm giá trị mới
-                    return ref.push().set({
-                        value: newValue,
-                        createdAt: firebase.database.ServerValue.TIMESTAMP
+        function deleteCvDen(id) {
+            if (confirm('Bạn có chắc chắn muốn xóa công văn này?')) {
+                showLoading();
+                database.ref('congVanDen/' + id).remove()
+                    .then(() => {
+                        hideLoading();
+                        alert('Đã xóa công văn đến!');
+                    })
+                    .catch((error) => {
+                        hideLoading();
+                        alert('Lỗi khi xóa công văn: ' + error.message);
                     });
-                })
-                .then(() => {
-                    // Thêm vào combobox hiện tại
-                    const option = document.createElement('option');
-                    option.value = newValue;
-                    option.textContent = newValue;
-                    currentComboboxElement.appendChild(option);
-                    currentComboboxElement.value = newValue;
-                    
-                    closeModal();
-                })
-                .catch(error => {
-                    console.error('Lỗi khi lưu giá trị mới:', error);
-                    document.getElementById('modal-error').textContent = 'Đã xảy ra lỗi khi lưu giá trị';
-                    document.getElementById('modal-error').style.display = 'block';
-                });
+            }
         }
         
-        // Tải dữ liệu cho combobox
-        function loadComboboxData(type, elementId) {
-            const userId = currentUser.uid;
-            const ref = database.ref(`comboboxData/${userId}/${type}`);
-            const selectElement = document.getElementById(elementId);
+        // Xem file công văn đến
+        function openFileDen(id) {
+            const item = congVanDenData.find(item => item.id === id);
+            if (item && item.fileData) {
+                const fileModalContent = document.getElementById('file-modal-content');
+                fileModalContent.innerHTML = `
+                    <p><strong>Tên file:</strong> ${item.fileNameDen}</p>
+                    <iframe src="${item.fileData}" width="100%" height="500px" style="border: none;"></iframe>
+                `;
+                fileModal.style.display = 'flex';
+            }
+        }
+        
+        // ========== TÌM KIẾM ==========
+        // Tải dữ liệu tìm kiếm
+        function loadSearchData() {
+            const loaiCongVan = loaiCongVanSelect.value;
             
-            // Giữ lại option đầu tiên (-- Chọn --)
-            const firstOption = selectElement.options[0];
-            selectElement.innerHTML = '';
-            selectElement.appendChild(firstOption);
+            if (loaiCongVan === 'cong-van-di') {
+                document.getElementById('timkiem-cvdi-table').style.display = 'table';
+                document.getElementById('timkiem-cvden-table').style.display = 'none';
+                
+                const tableBody = document.querySelector('#timkiem-cvdi-table tbody');
+                tableBody.innerHTML = '';
+                
+                congVanDiData.forEach((item, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${item.nam}</td>
+                        <td>${item.soVb}</td>
+                        <td>${item.tenVb}</td>
+                        <td>${item.ngayKy || 'N/A'}</td>
+                        <td>${item.nguoiKy || 'N/A'}</td>
+                        <td>${item.noiBanHanh || 'N/A'}</td>
+                        <td>${item.noiDung || 'N/A'}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            } else {
+                document.getElementById('timkiem-cvdi-table').style.display = 'none';
+                document.getElementById('timkiem-cvden-table').style.display = 'table';
+                
+                const tableBody = document.querySelector('#timkiem-cvden-table tbody');
+                tableBody.innerHTML = '';
+                
+                congVanDenData.forEach((item, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${item.nam}</td>
+                        <td>${item.soDen}</td>
+                        <td>${item.nguoiNhan}</td>
+                        <td>${item.ngayNhan || 'N/A'}</td>
+                        <td>${item.soCvDen || 'N/A'}</td>
+                        <td>${item.tenVbDen || 'N/A'}</td>
+                        <td>${item.noiBanHanhDen || 'N/A'}</td>
+                        <td>${item.noiDungDen || 'N/A'}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }
+        }
+        
+        // Kiểm tra thiết bị mobile
+        function isMobileDevice() {
+            return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
+        }
+
+        // Tự động điều chỉnh giao diện trên mobile
+        if (isMobileDevice()) {
+            document.body.style.zoom = "1";
+            document.querySelector('.login-container').style.padding = "20px 15px";
+        }    
+
+        // Lọc bảng
+        function filterTable(input, tableId) {
+            const filter = input.value.toUpperCase();
+            const table = document.getElementById(tableId);
+            const tr = table.getElementsByTagName('tr');
             
-            ref.once('value')
-                .then(snapshot => {
-                    const data = snapshot.val();
-                    
-                    if (data) {
-                        // Sắp xếp theo giá trị
-                        const sortedValues = [];
-                        
-                        Object.keys(data).forEach(key => {
-                            sortedValues.push(data[key].value);
-                        });
-                        
-                        sortedValues.sort();
-                        
-                        // Thêm vào combobox
-                        sortedValues.forEach(value => {
-                            const option = document.createElement('option');
-                            option.value = value;
-                            option.textContent = value;
-                            selectElement.appendChild(option);
-                        });
+            for (let i = 1; i < tr.length; i++) {
+                let td = tr[i].getElementsByTagName('td');
+                let show = false;
+                
+                for (let j = 0; j < td.length; j++) {
+                    if (td[j]) {
+                        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            show = true;
+                            break;
+                        }
                     }
-                })
-                .catch(error => {
-                    console.error(`Lỗi khi tải dữ liệu combobox ${type}:`, error);
-                });
+                }
+                
+                tr[i].style.display = show ? '' : 'none';
+            }
         }
         
-        // Khởi tạo ứng dụng khi trang được tải
-        window.addEventListener('DOMContentLoaded', initApp);
+        // ========== TỔNG HỢP ==========
+        // Hàm cập nhật tổng hợp công văn
+        function updateTongHop() {
+            // Đếm số lượng công văn đi và đến
+            const tongCongDi = congVanDiData.length;
+            const tongCongDen = congVanDenData.length;
+            
+            // Cập nhật tổng cộng
+            document.getElementById('tong-cong-di').textContent = tongCongDi;
+            document.getElementById('tong-cong-den').textContent = tongCongDen;
+            document.getElementById('tong-cong-di-report').textContent = tongCongDi;
+            document.getElementById('tong-cong-den-report').textContent = tongCongDen;
+            
+            // Phân loại công văn đi theo tên văn bản
+            const diTheoLoai = {};
+            congVanDiData.forEach(cv => {
+                if (diTheoLoai[cv.tenVb]) {
+                    diTheoLoai[cv.tenVb]++;
+                } else {
+                    diTheoLoai[cv.tenVb] = 1;
+                }
+            });
+            
+            // Phân loại công văn đến theo tên văn bản
+            const denTheoLoai = {};
+            congVanDenData.forEach(cv => {
+                if (denTheoLoai[cv.tenVbDen]) {
+                    denTheoLoai[cv.tenVbDen]++;
+                } else {
+                    denTheoLoai[cv.tenVbDen] = 1;
+                }
+            });
+            
+            // Cập nhật nội dung công văn đi
+            let diHtml = '';
+            for (const [tenVb, soLuong] of Object.entries(diTheoLoai)) {
+                diHtml += `<div class="tong-hop-item"><span>${tenVb}</span><span>${soLuong}</span></div>`;
+            }
+            document.getElementById('tong-hop-di-content').innerHTML = diHtml || '<p>Chưa có công văn đi</p>';
+            document.getElementById('tong-hop-di-content-report').innerHTML = diHtml || '<p>Chưa có công văn đi</p>';
+            
+            // Cập nhật nội dung công văn đến
+            let denHtml = '';
+            for (const [tenVb, soLuong] of Object.entries(denTheoLoai)) {
+                denHtml += `<div class="tong-hop-item"><span>${tenVb}</span><span>${soLuong}</span></div>`;
+            }
+            document.getElementById('tong-hop-den-content').innerHTML = denHtml || '<p>Chưa có công văn đến</p>';
+            document.getElementById('tong-hop-den-content-report').innerHTML = denHtml || '<p>Chưa có công văn đến</p>';
+        }
+        
+        // ========== KHỞI TẠO ỨNG DỤNG ==========
+        function initApp() {
+            // Tải dữ liệu vào các select
+            loadYearsToSelect();
+            loadTenVBsToSelect();
+            loadNguoiKysToSelect();
+            loadNoiBanHanhsToSelect();
+            loadNguoiNhansToSelect();
+            
+            // Xử lý sự kiện cho menu
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const target = this.getAttribute('data-target');
+                    
+                    // Ẩn tất cả các màn hình
+                    document.querySelectorAll('.content-section').forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    
+                    // Hiển thị màn hình được chọn
+                    document.getElementById(target).classList.add('active');
+                    
+                    // Cập nhật menu active
+                    document.querySelectorAll('.menu-item').forEach(menuItem => {
+                        menuItem.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    // Nếu là màn hình tìm kiếm, tải dữ liệu
+                    if (target === 'tim-kiem-screen') {
+                        loadSearchData();
+                    }
+                    
+                    // Nếu là màn hình tổng hợp, cập nhật dữ liệu
+                    if (target === 'tong-hop-screen') {
+                        updateTongHop();
+                    }
+                });
+            });
+            
+            // Xử lý sự kiện cho nút quay lại
+            document.querySelectorAll('.back-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const target = this.getAttribute('data-target');
+                    
+                    // Ẩn tất cả các màn hình
+                    document.querySelectorAll('.content-section').forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    
+                    // Hiển thị màn hình chính
+                    document.getElementById(target).classList.add('active');
+                    
+                    // Cập nhật menu active
+                    document.querySelectorAll('.menu-item').forEach(menuItem => {
+                        menuItem.classList.remove('active');
+                        if (menuItem.getAttribute('data-target') === target) {
+                            menuItem.classList.add('active');
+                        }
+                    });
+                });
+            });
+            
+            // Xử lý file đính kèm công văn đi
+            document.getElementById('file-dinh-kem').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        tempFileDataDi = e.target.result;
+                        tempFileNameDi = file.name;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Xử lý file đính kèm công văn đến
+            document.getElementById('file-dinh-kem-den').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        tempFileDataDen = e.target.result;
+                        tempFileNameDen = file.name;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Xử lý lưu công văn đi
+            saveCvdiBtn.addEventListener('click', function() {
+                const nam = namSelect.value;
+                const soVb = document.getElementById('so-vb').value;
+                const tenVb = tenVbSelect.value;
+                const noiDung = document.getElementById('noi-dung').value;
+                const ngayKy = document.getElementById('ngay-ky').value;
+                const nguoiKy = nguoiKySelect.value;
+                const noiBanHanh = noiBanHanhSelect.value;
+
+                if (nam && soVb && tenVb) {
+                    const newCongVan = { 
+                        nam, 
+                        soVb, 
+                        tenVb, 
+                        noiDung, 
+                        fileData: tempFileDataDi,
+                        fileName: tempFileNameDi,
+                        ngayKy, 
+                        nguoiKy, 
+                        noiBanHanh,
+                        createdAt: firebase.database.ServerValue.TIMESTAMP
+                    };
+                    
+                    showLoading();
+                    
+                    if (editingCvDiId) {
+                        // Cập nhật công văn đi
+                        database.ref('congVanDi/' + editingCvDiId).update(newCongVan)
+                            .then(() => {
+                                hideLoading();
+                                resetCvDiForm();
+                                alert('Đã cập nhật công văn đi!');
+                            })
+                            .catch((error) => {
+                                hideLoading();
+                                alert('Lỗi khi cập nhật công văn: ' + error.message);
+                            });
+                    } else {
+                        // Thêm công văn đi mới
+                        database.ref('congVanDi').push(newCongVan)
+                            .then(() => {
+                                hideLoading();
+                                resetCvDiForm();
+                                alert('Đã lưu công văn đi!');
+                            })
+                            .catch((error) => {
+                                hideLoading();
+                                alert('Lỗi khi lưu công văn: ' + error.message);
+                            });
+                    }
+                } else {
+                    alert('Vui lòng nhập đầy đủ thông tin bắt buộc.');
+                }
+            });
+            
+            // Xử lý reset công văn đi
+            resetCvdiBtn.addEventListener('click', resetCvDiForm);
+            
+            // Xử lý lưu công văn đến
+            saveCvdenBtn.addEventListener('click', function() {
+                const nam = namDenSelect.value;
+                const soDen = document.getElementById('so-den').value;
+                const nguoiNhan = nguoiNhanSelect.value;
+                const ngayNhan = document.getElementById('ngay-nhan').value;
+                const soCvDen = document.getElementById('so-cv-den').value;
+                const tenVbDen = tenVbDenSelect.value;
+                const noiDungDen = document.getElementById('noi-dung-den').value;
+                const soTo = document.getElementById('so-to').value;
+                const ngayKyDen = document.getElementById('ngay-ky-den').value;
+                const nguoiKyDen = nguoiKyDenSelect.value;
+                const noiBanHanhDen = noiBanHanhDenSelect.value;
+
+                if (nam && soDen && nguoiNhan) {
+                    const newCongVan = { 
+                        nam, 
+                        soDen, 
+                        nguoiNhan, 
+                        ngayNhan, 
+                        soCvDen, 
+                        tenVbDen, 
+                        noiDungDen, 
+                        fileData: tempFileDataDen,
+                        fileNameDen: tempFileNameDen,
+                        soTo, 
+                        ngayKyDen, 
+                        nguoiKyDen, 
+                        noiBanHanhDen,
+                        createdAt: firebase.database.ServerValue.TIMESTAMP
+                    };
+                    
+                    showLoading();
+                    
+                    if (editingCvDenId) {
+                        // Cập nhật công văn đến
+                        database.ref('congVanDen/' + editingCvDenId).update(newCongVan)
+                            .then(() => {
+                                hideLoading();
+                                resetCvDenForm();
+                                alert('Đã cập nhật công văn đến!');
+                            })
+                            .catch((error) => {
+                                hideLoading();
+                                alert('Lỗi khi cập nhật công văn: ' + error.message);
+                            });
+                    } else {
+                        // Thêm công văn đến mới
+                        database.ref('congVanDen').push(newCongVan)
+                            .then(() => {
+                                hideLoading();
+                                resetCvDenForm();
+                                alert('Đã lưu công văn đến!');
+                            })
+                            .catch((error) => {
+                                hideLoading();
+                                alert('Lỗi khi lưu công văn: ' + error.message);
+                            });
+                    }
+                } else {
+                    alert('Vui lòng nhập đầy đủ thông tin bắt buộc.');
+                }
+            });
+            
+            // Xử lý reset công văn đến
+            resetCvdenBtn.addEventListener('click', resetCvDenForm);
+            
+            // Xử lý tìm kiếm
+            loaiCongVanSelect.addEventListener('change', function() {
+                loadSearchData();
+            });
+
+            // Gán sự kiện cho nút đăng ký
+            registerBtn.addEventListener('click', handleRegister);
+            
+            document.querySelectorAll('.filter-input').forEach(input => {
+                input.addEventListener('keyup', function() {
+                    const activeTableId = loaiCongVanSelect.value === 'cong-van-di' 
+                        ? 'timkiem-cvdi-table' 
+                        : 'timkiem-cvden-table';
+                    filterTable(this, activeTableId);
+                });
+            });
+
+            showAllBtn.addEventListener('click', function() {
+                loadSearchData();
+                document.querySelectorAll('.filter-input').forEach(input => input.value = '');
+            });
+            
+            // Xử lý đóng modal
+            closeModalBtn.addEventListener('click', function() {
+                fileModal.style.display = 'none';
+            });
+            
+            // Đóng modal khi click bên ngoài
+            window.addEventListener('click', function(e) {
+                if (e.target === fileModal) {
+                    fileModal.style.display = 'none';
+                }
+            });
+        }
+        
+        // ========== SỰ KIỆN ĐĂNG NHẬP/ĐĂNG KÝ ==========
+        // Gán sự kiện cho các nút
+        showRegisterBtn.addEventListener('click', showRegisterScreen);
+        showLoginBtn.addEventListener('click', showLoginScreen);
+        loginBtn.addEventListener('click', handleLogin);
+        logoutBtn.addEventListener('click', handleLogout);
+        
+        // ========== KHỞI CHẠY ỨNG DỤNG ==========
+        initApp();
+
+        // Cho phép sử dụng các hàm toàn cục từ HTML
+        window.editCvDi = editCvDi;
+        window.deleteCvDi = deleteCvDi;
+        window.editCvDen = editCvDen;
+        window.deleteCvDen = deleteCvDen;
+        window.openFileDi = openFileDi;
+        window.openFileDen = openFileDen;
+    
+        function filterByColumn(input) {
+            const colIndex = parseInt(input.getAttribute("data-col"));
+            const filter = input.value.toUpperCase();
+            const table = input.closest("table");
+            const tr = table.getElementsByTagName("tr");
+
+            for (let i = 1; i < tr.length; i++) {
+                let td = tr[i].getElementsByTagName("td")[colIndex];
+                if (td) {
+                    tr[i].style.display = td.innerHTML.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+                }
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll('.col-filter').forEach(input => {
+                input.addEventListener('keyup', function() {
+                    filterByColumn(this);
+                });
+            });
+        });
     </script>
 </body>
-</html>
 
+</html>
