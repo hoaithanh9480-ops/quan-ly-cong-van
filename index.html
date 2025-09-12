@@ -2217,18 +2217,6 @@ document.getElementById('import-file-den').addEventListener('change', (e) => {
   }
 }
 
-  const select = document.getElementById(selectId);
-  const newValue = prompt("Nhập giá trị mới:");
-  if (newValue && newValue.trim() !== "") {
-    const option = document.createElement("option");
-    option.value = newValue.trim();
-    option.textContent = newValue.trim();
-    select.appendChild(option);
-    select.value = newValue.trim();
-  }
-}
-
-
 // ========== LOAD OPTIONS TỪ FIREBASE ==========
 function loadOptionsFromFirebase() {
   const optionFields = ['ten-vb','nguoi-ky','noi-ban-hanh','nguoi-nhan','ten-vb-den','nguoi-ky-den','noi-ban-hanh-den'];
@@ -2626,3 +2614,4 @@ document.getElementById('import-file-den').addEventListener('change', (e) => {
 </body>
 
 </html>
+
