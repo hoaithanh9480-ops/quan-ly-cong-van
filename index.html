@@ -30,6 +30,7 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
+            zoom: 0.75;
         }
         
         /* Container cho màn hình đăng nhập/đăng ký */
@@ -54,6 +55,63 @@
             overflow: hidden;
         }
 
+        .sidebar {
+            position: fixed; /* Giữ sidebar cố định trên màn hình */
+            top: 0;          /* Đặt sidebar ở phía trên cùng của màn hình */
+            bottom: 0;       /* Đặt sidebar ở phía dưới cùng của màn hình */
+            width: 250px;
+            background-color: #f4f4f4;
+            padding: 20px;
+            border-right: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #1e4c78;
+        }
+
+        .logo h2 {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        
+        .logo p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            cursor: pointer;
+            font-size: 16px;
+            color: #555;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background-color: #1e4c78;
+            color: white;
+        }
+
+        .menu-item i {
+            font-size: 20px;
+        }
+
+        .content-container {
+            margin-left: 250px; /* Bằng đúng chiều rộng của .sidebar */
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
         .login-header {
             margin-bottom: 30px;
             text-align: center;
@@ -115,7 +173,7 @@
         .btn-primary {
             background-color: #2c6cb0;
             color: white;
-            width: 100%;
+            width: auto;
         }
         
         .btn-primary:hover {
@@ -146,8 +204,8 @@
         }
 
         /* Các màn hình chính và con */
-        #login-screen {
-            display: block;
+        #main-screen {
+            display: none;
         }
         #register-screen {
             display: none;
@@ -158,9 +216,6 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-            padding: 20px;
-            background-color: #f8f9fa;
-            border-bottom: 1px solid #ddd;
         }
 
         .user-info {
@@ -184,9 +239,9 @@
             display: flex;
             align-items: center;
             gap: 5px;
-            font-size: 16px;
         }
 
+        
         .content-section {
             display: none;
         }
@@ -220,11 +275,8 @@
         .form-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 15px;
+            gap: 5px;
             margin-bottom: 20px;
-            padding: 20px;
-            background-color: #f8f9fa;
-            border-radius: 5px;
         }
         
         .form-group-full {
@@ -238,10 +290,9 @@
         
         .form-buttons {
             display: flex;
-            gap: 10px;
+            gap: 5px;
             justify-content: flex-end;
             margin-top: 20px;
-            padding: 0 20px;
         }
         
         .btn-secondary {
@@ -380,6 +431,148 @@
             color: #6c757d;
         }
         
+        @media (max-width: 1024px) {
+            .data-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .main-layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #ddd;
+            }
+            
+            .form-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-buttons {
+                flex-direction: column;
+            }
+            
+            .input-group {
+                flex-direction: column;
+            }
+        }
+        
+        .search-filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .filter-input {
+            width: 100%;
+            padding: 6px 8px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        
+        .filter-input:focus {
+            outline: none;
+            border-color: #2c6cb0;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .menu-card {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-card i {
+            font-size: 40px;
+            color: #1e4c78;
+            margin-bottom: 15px;
+        }
+
+        .menu-card h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .menu-card p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Styles mới cho trang tổng hợp */
+        .tong-hop-container {
+            padding: 20px;
+        }
+
+        .tong-hop-header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #1e4c78;
+        }
+
+        .tong-hop-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .tong-hop-card {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .tong-hop-card h3 {
+            color: #1e4c78;
+            border-bottom: 2px solid #1e4c78;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .tong-hop-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .tong-hop-total {
+            background-color: #1e4c78;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
         /* Loading indicator */
         .loading {
             display: none;
@@ -400,8 +593,10 @@
             100% { transform: rotate(360deg); }
         }
 
+        /* ========== RESPONSIVE CHO MOBILE ========== */
         @media (max-width: 768px) {
             body {
+                zoom: 1;
                 padding: 10px;
             }
             
@@ -411,16 +606,82 @@
                 border-radius: 0;
             }
             
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid #ddd;
+            }
+            
+            .content-container {
+                margin-left: 0;
+            }
+            
             .form-container {
                 grid-template-columns: 1fr;
+                gap: 10px;
             }
             
-            .form-buttons {
-                flex-direction: column;
+            .data-table {
+                font-size: 12px;
+                overflow-x: auto;
+                display: block;
             }
             
-            .input-group {
-                flex-direction: column;
+            .data-table th, .data-table td {
+                padding: 6px 8px;
+            }
+            
+            .action-btn {
+                padding: 3px 6px;
+                font-size: 11px;
+                margin-bottom: 2px;
+            }
+            
+            .tong-hop-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .search-filters {
+                grid-template-columns: 1fr;
+                gap: 10px;
+                padding: 10px;
+            }
+            
+            /* Hiển thị đầy đủ form trên mobile */
+            .form-group {
+                margin-bottom: 15px;
+            }
+            
+            input, select, textarea {
+                font-size: 16px; /* Ngăn chặn zoom trên iOS */
+            }
+        }
+
+        /* Menu mobile */
+        @media (max-width: 480px) {
+            .menu-item {
+                padding: 12px;
+                font-size: 14px;
+            }
+            
+            .menu-item i {
+                font-size: 18px;
+            }
+            
+            .logo h2 {
+                font-size: 18px;
+            }
+            
+            .logo p {
+                font-size: 12px;
+            }
+            
+            .btn {
+                padding: 10px 15px;
+                font-size: 14px;
             }
         }
     </style>
@@ -443,7 +704,7 @@
                 <input type="password" id="password" placeholder="Nhập mật khẩu">
                 <div class="error-message" id="password-error"></div>
             </div>
-            <button class="btn btn-primary" id="login-btn">Đăng nhập</button>
+            <button class="btn btn-primary" id="login-btn" style="width: 100%;">Đăng nhập</button>
             <div class="register-link">
                 Chưa có tài khoản? <a href="#" id="register-link">Đăng ký ngay</a>
             </div>
@@ -477,7 +738,7 @@
                 <input type="password" id="reg-confirm-password" placeholder="Nhập lại mật khẩu">
                 <div class="error-message" id="reg-confirm-password-error"></div>
             </div>
-            <button class="btn btn-primary" id="register-btn">Đăng ký</button>
+            <button class="btn btn-primary" id="register-btn" style="width: 100%;">Đăng ký</button>
             <div class="register-link">
                 Đã có tài khoản? <a href="#" id="back-to-login">Quay lại đăng nhập</a>
             </div>
@@ -486,40 +747,384 @@
 
     <!-- Giao diện chính của ứng dụng -->
     <div id="main-screen" class="main-layout">
-        <div class="main-header">
-            <h1 id="page-title">Hệ Thống Quản Lý Công Văn</h1>
-            <div class="user-info">
-                <span id="user-display-name">Người dùng</span>
-                <button class="logout-btn" id="logout-btn">
-                    <i class="fas fa-sign-out-alt"></i> Đăng xuất
-                </button>
+        <div class="sidebar">
+            <div class="logo">
+                <h2>Hệ Thống Quản Lý Công Văn</h2>
+                <p id="user-email">user@example.com</p>
+            </div>
+            <div class="menu-item active" data-target="dashboard">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Bảng điều khiển</span>
+            </div>
+            <div class="menu-item" data-target="cong-van-di">
+                <i class="fas fa-paper-plane"></i>
+                <span>Công văn đi</span>
+            </div>
+            <div class="menu-item" data-target="cong-van-den">
+                <i class="fas fa-envelope"></i>
+                <span>Công văn đến</span>
+            </div>
+            <div class="menu-item" data-target="tong-hop">
+                <i class="fas fa-chart-bar"></i>
+                <span>Tổng hợp & Báo cáo</span>
             </div>
         </div>
         
         <div class="content-container">
-            <div class="content-section active" id="dashboard">
-                <h2>Chào mừng bạn đến với hệ thống</h2>
-                <p>Đây là hệ thống quản lý công văn đến và công văn đi.</p>
+            <div class="main-header">
+                <h1 id="page-title">Bảng điều khiển</h1>
+                <div class="user-info">
+                    <span id="user-display-name">Người dùng</span>
+                    <button class="logout-btn" id="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Nội dung chính -->
+            <div id="content">
+                <!-- Bảng điều khiển -->
+                <div id="dashboard" class="content-section active">
+                    <h2>Chào mừng bạn đến với hệ thống</h2>
+                    <p>Đây là hệ thống quản lý công văn đến và công văn đi.</p>
+                    
+                    <div class="menu-grid">
+                        <div class="menu-card" data-target="cong-van-di">
+                            <i class="fas fa-paper-plane"></i>
+                            <h3>Công văn đi</h3>
+                            <p>Quản lý các công văn được gửi đi từ đơn vị</p>
+                        </div>
+                        <div class="menu-card" data-target="cong-van-den">
+                            <i class="fas fa-envelope"></i>
+                            <h3>Công văn đến</h3>
+                            <p>Quản lý các công văn nhận được từ bên ngoài</p>
+                        </div>
+                        <div class="menu-card" data-target="tong-hop">
+                            <i class="fas fa-chart-bar"></i>
+                            <h3>Tổng hợp & Báo cáo</h3>
+                            <p>Xem báo cáo tổng hợp và thống kê</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Công văn đi -->
+                <div id="cong-van-di" class="content-section">
+                    <div class="screen-header">
+                        <h2>Quản lý công văn đi</h2>
+                        <button class="back-btn" data-target="dashboard">
+                            <i class="fas fa-arrow-left"></i> Quay lại
+                        </button>
+                    </div>
+                    
+                    <div class="search-filters">
+                        <div class="form-group">
+                            <label>Tìm kiếm</label>
+                            <input type="text" id="search-cong-van-di" class="filter-input" placeholder="Tìm theo số, trích yếu...">
+                        </div>
+                        <div class="form-group">
+                            <label>Ngày bắt đầu</label>
+                            <input type="date" id="start-date-di" class="filter-input">
+                        </div>
+                        <div class="form-group">
+                            <label>Ngày kết thúc</label>
+                            <input type="date" id="end-date-di" class="filter-input">
+                        </div>
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <button class="btn btn-primary" id="search-btn-di">Tìm kiếm</button>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" id="add-cong-van-di">
+                        <i class="fas fa-plus"></i> Thêm công văn đi
+                    </button>
+                    
+                    <form id="cong-van-di-form" style="display: none; margin-top: 20px;">
+                        <div class="form-container">
+                            <div class="form-group">
+                                <label for="so-cong-van-di">Số công văn</label>
+                                <input type="text" id="so-cong-van-di" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="ngay-ban-hanh-di">Ngày ban hành</label>
+                                <input type="date" id="ngay-ban-hanh-di" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="ten-van-ban-di">Tên văn bản</label>
+                                <div class="input-group">
+                                    <select id="ten-van-ban-di" required>
+                                        <option value="">-- Chọn tên văn bản --</option>
+                                    </select>
+                                    <button type="button" class="btn btn-primary btn-sm" id="add-ten-van-ban-di">+</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="nguoi-ky-di">Người ký</label>
+                                <div class="input-group">
+                                    <select id="nguoi-ky-di" required>
+                                        <option value="">-- Chọn người ký --</option>
+                                    </select>
+                                    <button type="button" class="btn btn-primary btn-sm" id="add-nguoi-ky-di">+</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="noi-ban-hanh-di">Nơi ban hành</label>
+                                <div class="input-group">
+                                    <select id="noi-ban-hanh-di" required>
+                                        <option value="">-- Chọn nơi ban hành --</option>
+                                    </select>
+                                    <button type="button" class="btn btn-primary btn-sm" id="add-noi-ban-hanh-di">+</button>
+                                </div>
+                            </div>
+                            <div class="form-group-full">
+                                <label for="trich-yeu-di">Trích yếu</label>
+                                <textarea id="trich-yeu-di" required></textarea>
+                            </div>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="button" class="btn btn-secondary" id="cancel-cong-van-di">Hủy</button>
+                            <button type="submit" class="btn btn-primary">Lưu</button>
+                            <button type="button" class="btn btn-update" id="update-cong-van-di">Cập nhật</button>
+                        </div>
+                    </form>
+                    
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        <p>Đang tải dữ liệu...</p>
+                    </div>
+                    
+                    <table class="data-table" id="cong-van-di-table">
+                        <thead>
+                            <tr>
+                                <th>Số CV</th>
+                                <th>Ngày BH</th>
+                                <th>Tên văn bản</th>
+                                <th>Người ký</th>
+                                <th>Nơi BH</th>
+                                <th>Trích yếu</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Công văn đến -->
+                <div id="cong-van-den" class="content-section">
+                    <div class="screen-header">
+                        <h2>Quản lý công văn đến</h2>
+                        <button class="back-btn" data-target="dashboard">
+                            <i class="fas fa-arrow-left"></i> Quay lại
+                        </button>
+                    </div>
+                    
+                    <div class="search-filters">
+                        <div class="form-group">
+                            <label>Tìm kiếm</label>
+                            <input type="text" id="search-cong-van-den" class="filter-input" placeholder="Tìm theo số, trích yếu...">
+                        </div>
+                        <div class="form-group">
+                            <label>Ngày bắt đầu</label>
+                            <input type="date" id="start-date-den" class="filter-input">
+                        </div>
+                        <div class="form-group">
+                            <label>Ngày kết thúc</label>
+                            <input type="date" id="end-date-den" class="filter-input">
+                        </div>
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <button class="btn btn-primary" id="search-btn-den">Tìm kiếm</button>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" id="add-cong-van-den">
+                        <i class="fas fa-plus"></i> Thêm công văn đến
+                    </button>
+                    
+                    <form id="cong-van-den-form" style="display: none; margin-top: 20px;">
+                        <div class="form-container">
+                            <div class="form-group">
+                                <label for="so-cong-van-den">Số công văn</label>
+                                <input type="text" id="so-cong-van-den" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="ngay-ban-hanh-den">Ngày ban hành</label>
+                                <input type="date" id="ngay-ban-hanh-den" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="nguoi-gui">Người/Nơi gửi</label>
+                                <input type="text" id="nguoi-gui" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="ten-van-ban-den">Tên văn bản</label>
+                                <div class="input-group">
+                                    <select id="ten-van-ban-den" required>
+                                        <option value="">-- Chọn tên văn bản --</option>
+                                    </select>
+                                    <button type="button" class="btn btn-primary btn-sm" id="add-ten-van-ban-den">+</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="nguoi-ky-den">Người ký</label>
+                                <div class="input-group">
+                                    <select id="nguoi-ky-den" required>
+                                        <option value="">-- Chọn người ký --</option>
+                                    </select>
+                                    <button type="button" class="btn btn-primary btn-sm" id="add-nguoi-ky-den">+</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="noi-ban-hanh-den">Nơi ban hành</label>
+                                <div class="input-group">
+                                    <select id="noi-ban-hanh-den" required>
+                                        <option value="">-- Chọn nơi ban hành --</option>
+                                    </select>
+                                    <button type="button" class="btn btn-primary btn-sm" id="add-noi-ban-hanh-den">+</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="nguoi-nhan">Người nhận</label>
+                                <div class="input-group">
+                                    <select id="nguoi-nhan" required>
+                                        <option value="">-- Chọn người nhận --</option>
+                                    </select>
+                                    <button type="button" class="btn btn-primary btn-sm" id="add-nguoi-nhan">+</button>
+                                </div>
+                            </div>
+                            <div class="form-group-full">
+                                <label for="trich-yeu-den">Trích yếu</label>
+                                <textarea id="trich-yeu-den" required></textarea>
+                            </div>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="button" class="btn btn-secondary" id="cancel-cong-van-den">Hủy</button>
+                            <button type="submit" class="btn btn-primary">Lưu</button>
+                            <button type="button" class="btn btn-update" id="update-cong-van-den">Cập nhật</button>
+                        </div>
+                    </form>
+                    
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        <p>Đang tải dữ liệu...</p>
+                    </div>
+                    
+                    <table class="data-table" id="cong-van-den-table">
+                        <thead>
+                            <tr>
+                                <th>Số CV</th>
+                                <th>Ngày BH</th>
+                                <th>Người gửi</th>
+                                <th>Tên văn bản</th>
+                                <th>Người ký</th>
+                                <th>Nơi BH</th>
+                                <th>Người nhận</th>
+                                <th>Trích yếu</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Tổng hợp & Báo cáo -->
+                <div id="tong-hop" class="content-section">
+                    <div class="screen-header">
+                        <h2>Tổng hợp & Báo cáo</h2>
+                        <button class="back-btn" data-target="dashboard">
+                            <i class="fas fa-arrow-left"></i> Quay lại
+                        </button>
+                    </div>
+                    
+                    <div class="tong-hop-container">
+                        <div class="tong-hop-header">
+                            <h2>Thống kê công văn</h2>
+                            <p>Tổng hợp số liệu công văn đến và công văn đi</p>
+                        </div>
+                        
+                        <div class="tong-hop-grid">
+                            <div class="tong-hop-card">
+                                <h3>Công văn đi</h3>
+                                <div class="tong-hop-item">
+                                    <span>Tổng số công văn đi:</span>
+                                    <span id="tong-cong-van-di">0</span>
+                                </div>
+                                <div class="tong-hop-item">
+                                    <span>Công văn đi tháng này:</span>
+                                    <span id="cong-van-di-thang">0</span>
+                                </div>
+                                <div class="tong-hop-item">
+                                    <span>Công văn đi tuần này:</span>
+                                    <span id="cong-van-di-tuan">0</span>
+                                </div>
+                                <div class="tong-hop-item">
+                                    <span>Công văn đi hôm nay:</span>
+                                    <span id="cong-van-di-hom-nay">0</span>
+                                </div>
+                            </div>
+                            
+                            <div class="tong-hop-card">
+                                <h3>Công văn đến</h3>
+                                <div class="tong-hop-item">
+                                    <span>Tổng số công văn đến:</span>
+                                    <span id="tong-cong-van-den">0</span>
+                                </div>
+                                <div class="tong-hop-item">
+                                    <span>Công văn đến tháng này:</span>
+                                    <span id="cong-van-den-thang">0</span>
+                                </div>
+                                <div class="tong-hop-item">
+                                    <span>Công văn đến tuần này:</span>
+                                    <span id="cong-van-den-tuan">0</span>
+                                </div>
+                                <div class="tong-hop-item">
+                                    <span>Công văn đến hôm nay:</span>
+                                    <span id="cong-van-den-hom-nay">0</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="tong-hop-total">
+                            Tổng số công văn: <span id="tong-so-cong-van">0</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Loading indicator -->
-    <div class="loading" id="loading">
-        <div class="loading-spinner"></div>
-        <p>Đang tải dữ liệu...</p>
+    <!-- Modal thêm mới giá trị cho combobox -->
+    <div id="add-value-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Thêm giá trị mới</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="form-group">
+                <label for="new-value-input">Giá trị mới</label>
+                <input type="text" id="new-value-input" placeholder="Nhập giá trị mới">
+                <div class="error-message" id="modal-error"></div>
+            </div>
+            <div class="form-buttons">
+                <button class="btn btn-secondary" id="cancel-modal">Hủy</button>
+                <button class="btn btn-primary" id="save-new-value">Lưu</button>
+            </div>
+        </div>
     </div>
 
     <script>
         // Cấu hình Firebase
         const firebaseConfig = {
-            apiKey: "AIzaSyBWKTyXVK1y2dqxWUWprIxd5CCHMzSMc_o",
-            authDomain: "quan-ly-cong-van-dede3.firebaseapp.com",
-            databaseURL: "https://quan-ly-cong-van-dede3-default-rtdb.firebaseio.com",
-            projectId: "quan-ly-cong-van-dede3",
-            storageBucket: "quan-ly-cong-van-dede3.firebasestorage.app",
-            messagingSenderId: "1080528314069",
-            appId: "1:1080528314069:web:831f1b3c497ba082f80c5c",
+            apiKey: "AIzaSyDEXAMPLEEXAMPLEEXAMPLEEXAMPLE",
+            authDomain: "quan-ly-cong-van.firebaseapp.com",
+            databaseURL: "https://quan-ly-cong-van-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "quan-ly-cong-van",
+            storageBucket: "quan-ly-cong-van.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:exampleexampleexample"
         };
         
         // Khởi tạo Firebase
@@ -527,10 +1132,12 @@
         
         // Biến toàn cục
         let currentUser = null;
+        let currentEditingId = null;
+        let currentComboboxType = null;
+        let currentComboboxElement = null;
         
         // Tham chiếu đến database
         const database = firebase.database();
-        const auth = firebase.auth();
         
         // Hàm khởi tạo ứng dụng
         function initApp() {
@@ -547,11 +1154,102 @@
             // Xử lý đăng xuất
             document.getElementById('logout-btn').addEventListener('click', logout);
             
+            // Xử lý menu
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const target = this.getAttribute('data-target');
+                    showContentSection(target);
+                });
+            });
+            
+            // Xử lý menu card trên dashboard
+            document.querySelectorAll('.menu-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const target = this.getAttribute('data-target');
+                    showContentSection(target);
+                });
+            });
+            
+            // Xử lý nút quay lại
+            document.querySelectorAll('.back-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const target = this.getAttribute('data-target');
+                    showContentSection(target);
+                });
+            });
+            
+            // Xử lý công văn đi
+            document.getElementById('add-cong-van-di').addEventListener('click', function() {
+                showCongVanDiForm();
+            });
+            
+            document.getElementById('cancel-cong-van-di').addEventListener('click', function() {
+                hideCongVanDiForm();
+            });
+            
+            document.getElementById('cong-van-di-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveCongVanDi();
+            });
+            
+            document.getElementById('update-cong-van-di').addEventListener('click', function() {
+                updateCongVanDi();
+            });
+            
+            // Xử lý công văn đến
+            document.getElementById('add-cong-van-den').addEventListener('click', function() {
+                showCongVanDenForm();
+            });
+            
+            document.getElementById('cancel-cong-van-den').addEventListener('click', function() {
+                hideCongVanDenForm();
+            });
+            
+            document.getElementById('cong-van-den-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveCongVanDen();
+            });
+            
+            document.getElementById('update-cong-van-den').addEventListener('click', function() {
+                updateCongVanDen();
+            });
+            
+            // Xử lý tìm kiếm
+            document.getElementById('search-btn-di').addEventListener('click', loadCongVanDi);
+            document.getElementById('search-btn-den').addEventListener('click', loadCongVanDen);
+            
+            // Xử lý modal thêm giá trị mới
+            document.querySelectorAll('[id^="add-"]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = this.id;
+                    if (id.includes('ten-van-ban-di')) {
+                        openAddValueModal('ten-van-ban', 'Tên văn bản', document.getElementById('ten-van-ban-di'));
+                    } else if (id.includes('nguoi-ky-di')) {
+                        openAddValueModal('nguoi-ky', 'Người ký', document.getElementById('nguoi-ky-di'));
+                    } else if (id.includes('noi-ban-hanh-di')) {
+                        openAddValueModal('noi-ban-hanh', 'Nơi ban hành', document.getElementById('noi-ban-hanh-di'));
+                    } else if (id.includes('ten-van-ban-den')) {
+                        openAddValueModal('ten-van-ban', 'Tên văn bản', document.getElementById('ten-van-ban-den'));
+                    } else if (id.includes('nguoi-ky-den')) {
+                        openAddValueModal('nguoi-ky', 'Người ký', document.getElementById('nguoi-ky-den'));
+                    } else if (id.includes('noi-ban-hanh-den')) {
+                        openAddValueModal('noi-ban-hanh', 'Nơi ban hành', document.getElementById('noi-ban-hanh-den'));
+                    } else if (id.includes('nguoi-nhan')) {
+                        openAddValueModal('nguoi-nhan', 'Người nhận', document.getElementById('nguoi-nhan'));
+                    }
+                });
+            });
+            
+            document.getElementById('cancel-modal').addEventListener('click', closeModal);
+            document.querySelector('.close-modal').addEventListener('click', closeModal);
+            document.getElementById('save-new-value').addEventListener('click', saveNewValue);
+            
             // Kiểm tra trạng thái đăng nhập
-            auth.onAuthStateChanged(user => {
+            firebase.auth().onAuthStateChanged(user => {
                 if (user) {
                     currentUser = user;
                     showMainScreen();
+                    loadAllData();
                 } else {
                     showLoginScreen();
                 }
@@ -584,16 +1282,12 @@
             
             if (!isValid) return;
             
-            showLoading();
-            
             // Đăng nhập với Firebase
-            auth.signInWithEmailAndPassword(email, password)
+            firebase.auth().signInWithEmailAndPassword(email, password)
                 .then(() => {
-                    hideLoading();
                     // Đăng nhập thành công
                 })
                 .catch(error => {
-                    hideLoading();
                     let errorMessage = 'Đã xảy ra lỗi khi đăng nhập';
                     
                     switch (error.code) {
@@ -664,10 +1358,8 @@
             
             if (!isValid) return;
             
-            showLoading();
-            
             // Đăng ký với Firebase
-            auth.createUserWithEmailAndPassword(email, password)
+            firebase.auth().createUserWithEmailAndPassword(email, password)
                 .then((userCredential) => {
                     // Cập nhật tên hiển thị
                     return userCredential.user.updateProfile({
@@ -675,13 +1367,11 @@
                     });
                 })
                 .then(() => {
-                    hideLoading();
                     // Đăng ký thành công, chuyển đến màn hình đăng nhập
                     showLoginScreen();
                     alert('Đăng ký thành công! Vui lòng đăng nhập.');
                 })
                 .catch(error => {
-                    hideLoading();
                     let errorMessage = 'Đã xảy ra lỗi khi đăng ký';
                     
                     switch (error.code) {
@@ -706,17 +1396,13 @@
         
         // Hàm xử lý đăng xuất
         function logout() {
-            showLoading();
-            auth.signOut()
+            firebase.auth().signOut()
                 .then(() => {
-                    hideLoading();
                     currentUser = null;
                     showLoginScreen();
                 })
                 .catch(error => {
-                    hideLoading();
                     console.error('Lỗi khi đăng xuất:', error);
-                    alert('Đã xảy ra lỗi khi đăng xuất');
                 });
         }
         
@@ -758,16 +1444,737 @@
             
             // Hiển thị thông tin người dùng
             document.getElementById('user-display-name').textContent = currentUser.displayName || currentUser.email;
+            document.getElementById('user-email').textContent = currentUser.email;
         }
         
-        // Hiển thị loading
-        function showLoading() {
-            document.getElementById('loading').style.display = 'block';
+        // Hiển thị section nội dung
+        function showContentSection(sectionId) {
+            // Ẩn tất cả các section
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Hiển thị section được chọn
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Cập nhật tiêu đề
+            const titles = {
+                'dashboard': 'Bảng điều khiển',
+                'cong-van-di': 'Quản lý công văn đi',
+                'cong-van-den': 'Quản lý công văn đến',
+                'tong-hop': 'Tổng hợp & Báo cáo'
+            };
+            
+            document.getElementById('page-title').textContent = titles[sectionId] || 'Hệ thống quản lý công văn';
+            
+            // Cập nhật menu active
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('data-target') === sectionId) {
+                    item.classList.add('active');
+                }
+            });
+            
+            // Tải dữ liệu nếu cần
+            if (sectionId === 'cong-van-di') {
+                loadCongVanDi();
+                loadComboboxData('ten-van-ban', 'ten-van-ban-di');
+                loadComboboxData('nguoi-ky', 'nguoi-ky-di');
+                loadComboboxData('noi-ban-hanh', 'noi-ban-hanh-di');
+            } else if (sectionId === 'cong-van-den') {
+                loadCongVanDen();
+                loadComboboxData('ten-van-ban', 'ten-van-ban-den');
+                loadComboboxData('nguoi-ky', 'nguoi-ky-den');
+                loadComboboxData('noi-ban-hanh', 'noi-ban-hanh-den');
+                loadComboboxData('nguoi-nhan', 'nguoi-nhan');
+            } else if (sectionId === 'tong-hop') {
+                loadTongHop();
+            }
         }
         
-        // Ẩn loading
-        function hideLoading() {
-            document.getElementById('loading').style.display = 'none';
+        // Hiển thị form công văn đi
+        function showCongVanDiForm() {
+            document.getElementById('cong-van-di-form').style.display = 'block';
+            document.getElementById('add-cong-van-di').style.display = 'none';
+            document.getElementById('update-cong-van-di').style.display = 'none';
+            
+            // Reset form
+            document.getElementById('so-cong-van-di').value = '';
+            document.getElementById('ngay-ban-hanh-di').value = '';
+            document.getElementById('ten-van-ban-di').value = '';
+            document.getElementById('nguoi-ky-di').value = '';
+            document.getElementById('noi-ban-hanh-di').value = '';
+            document.getElementById('trich-yeu-di').value = '';
+            
+            currentEditingId = null;
+        }
+        
+        // Ẩn form công văn đi
+        function hideCongVanDiForm() {
+            document.getElementById('cong-van-di-form').style.display = 'none';
+            document.getElementById('add-cong-van-di').style.display = 'block';
+        }
+        
+        // Hiển thị form công văn đến
+        function showCongVanDenForm() {
+            document.getElementById('cong-van-den-form').style.display = 'block';
+            document.getElementById('add-cong-van-den').style.display = 'none';
+            document.getElementById('update-cong-van-den').style.display = 'none';
+            
+            // Reset form
+            document.getElementById('so-cong-van-den').value = '';
+            document.getElementById('ngay-ban-hanh-den').value = '';
+            document.getElementById('nguoi-gui').value = '';
+            document.getElementById('ten-van-ban-den').value = '';
+            document.getElementById('nguoi-ky-den').value = '';
+            document.getElementById('noi-ban-hanh-den').value = '';
+            document.getElementById('nguoi-nhan').value = '';
+            document.getElementById('trich-yeu-den').value = '';
+            
+            currentEditingId = null;
+        }
+        
+        // Ẩn form công văn đến
+        function hideCongVanDenForm() {
+            document.getElementById('cong-van-den-form').style.display = 'none';
+            document.getElementById('add-cong-van-den').style.display = 'block';
+        }
+        
+        // Lưu công văn đi
+        function saveCongVanDi() {
+            const soCongVan = document.getElementById('so-cong-van-di').value;
+            const ngayBanHanh = document.getElementById('ngay-ban-hanh-di').value;
+            const tenVanBan = document.getElementById('ten-van-ban-di').value;
+            const nguoiKy = document.getElementById('nguoi-ky-di').value;
+            const noiBanHanh = document.getElementById('noi-ban-hanh-di').value;
+            const trichYeu = document.getElementById('trich-yeu-di').value;
+            
+            if (!soCongVan || !ngayBanHanh || !tenVanBan || !nguoiKy || !noiBanHanh || !trichYeu) {
+                alert('Vui lòng điền đầy đủ thông tin');
+                return;
+            }
+            
+            const userId = currentUser.uid;
+            const congVanDiRef = database.ref('congVanDi/' + userId);
+            
+            // Tạo một key mới
+            const newCongVanDiRef = congVanDiRef.push();
+            
+            newCongVanDiRef.set({
+                soCongVan: soCongVan,
+                ngayBanHanh: ngayBanHanh,
+                tenVanBan: tenVanBan,
+                nguoiKy: nguoiKy,
+                noiBanHanh: noiBanHanh,
+                trichYeu: trichYeu,
+                createdAt: firebase.database.ServerValue.TIMESTAMP
+            })
+            .then(() => {
+                alert('Thêm công văn đi thành công');
+                hideCongVanDiForm();
+                loadCongVanDi();
+            })
+            .catch(error => {
+                console.error('Lỗi khi thêm công văn đi:', error);
+                alert('Đã xảy ra lỗi khi thêm công văn đi');
+            });
+        }
+        
+        // Lưu công văn đến
+        function saveCongVanDen() {
+            const soCongVan = document.getElementById('so-cong-van-den').value;
+            const ngayBanHanh = document.getElementById('ngay-ban-hanh-den').value;
+            const nguoiGui = document.getElementById('nguoi-gui').value;
+            const tenVanBan = document.getElementById('ten-van-ban-den').value;
+            const nguoiKy = document.getElementById('nguoi-ky-den').value;
+            const noiBanHanh = document.getElementById('noi-ban-hanh-den').value;
+            const nguoiNhan = document.getElementById('nguoi-nhan').value;
+            const trichYeu = document.getElementById('trich-yeu-den').value;
+            
+            if (!soCongVan || !ngayBanHanh || !nguoiGui || !tenVanBan || !nguoiKy || !noiBanHanh || !nguoiNhan || !trichYeu) {
+                alert('Vui lòng điền đầy đủ thông tin');
+                return;
+            }
+            
+            const userId = currentUser.uid;
+            const congVanDenRef = database.ref('congVanDen/' + userId);
+            
+            // Tạo một key mới
+            const newCongVanDenRef = congVanDenRef.push();
+            
+            newCongVanDenRef.set({
+                soCongVan: soCongVan,
+                ngayBanHanh: ngayBanHanh,
+                nguoiGui: nguoiGui,
+                tenVanBan: tenVanBan,
+                nguoiKy: nguoiKy,
+                noiBanHanh: noiBanHanh,
+                nguoiNhan: nguoiNhan,
+                trichYeu: trichYeu,
+                createdAt: firebase.database.ServerValue.TIMESTAMP
+            })
+            .then(() => {
+                alert('Thêm công văn đến thành công');
+                hideCongVanDenForm();
+                loadCongVanDen();
+            })
+            .catch(error => {
+                console.error('Lỗi khi thêm công văn đến:', error);
+                alert('Đã xảy ra lỗi khi thêm công văn đến');
+            });
+        }
+        
+        // Cập nhật công văn đi
+        function updateCongVanDi() {
+            if (!currentEditingId) return;
+            
+            const soCongVan = document.getElementById('so-cong-van-di').value;
+            const ngayBanHanh = document.getElementById('ngay-ban-hanh-di').value;
+            const tenVanBan = document.getElementById('ten-van-ban-di').value;
+            const nguoiKy = document.getElementById('nguoi-ky-di').value;
+            const noiBanHanh = document.getElementById('noi-ban-hanh-di').value;
+            const trichYeu = document.getElementById('trich-yeu-di').value;
+            
+            if (!soCongVan || !ngayBanHanh || !tenVanBan || !nguoiKy || !noiBanHanh || !trichYeu) {
+                alert('Vui lòng điền đầy đủ thông tin');
+                return;
+            }
+            
+            const userId = currentUser.uid;
+            const congVanDiRef = database.ref('congVanDi/' + userId + '/' + currentEditingId);
+            
+            congVanDiRef.update({
+                soCongVan: soCongVan,
+                ngayBanHanh: ngayBanHanh,
+                tenVanBan: tenVanBan,
+                nguoiKy: nguoiKy,
+                noiBanHanh: noiBanHanh,
+                trichYeu: trichYeu,
+                updatedAt: firebase.database.ServerValue.TIMESTAMP
+            })
+            .then(() => {
+                alert('Cập nhật công văn đi thành công');
+                hideCongVanDiForm();
+                loadCongVanDi();
+            })
+            .catch(error => {
+                console.error('Lỗi khi cập nhật công văn đi:', error);
+                alert('Đã xảy ra lỗi khi cập nhật công văn đi');
+            });
+        }
+        
+        // Cập nhật công văn đến
+        function updateCongVanDen() {
+            if (!currentEditingId) return;
+            
+            const soCongVan = document.getElementById('so-cong-van-den').value;
+            const ngayBanHanh = document.getElementById('ngay-ban-hanh-den').value;
+            const nguoiGui = document.getElementById('nguoi-gui').value;
+            const tenVanBan = document.getElementById('ten-van-ban-den').value;
+            const nguoiKy = document.getElementById('nguoi-ky-den').value;
+            const noiBanHanh = document.getElementById('noi-ban-hanh-den').value;
+            const nguoiNhan = document.getElementById('nguoi-nhan').value;
+            const trichYeu = document.getElementById('trich-yeu-den').value;
+            
+            if (!soCongVan || !ngayBanHanh || !nguoiGui || !tenVanBan || !nguoiKy || !noiBanHanh || !nguoiNhan || !trichYeu) {
+                alert('Vui lòng điền đầy đủ thông tin');
+                return;
+            }
+            
+            const userId = currentUser.uid;
+            const congVanDenRef = database.ref('congVanDen/' + userId + '/' + currentEditingId);
+            
+            congVanDenRef.update({
+                soCongVan: soCongVan,
+                ngayBanHanh: ngayBanHanh,
+                nguoiGui: nguoiGui,
+                tenVanBan: tenVanBan,
+                nguoiKy: nguoiKy,
+                noiBanHanh: noiBanHanh,
+                nguoiNhan: nguoiNhan,
+                trichYeu: trichYeu,
+                updatedAt: firebase.database.ServerValue.TIMESTAMP
+            })
+            .then(() => {
+                alert('Cập nhật công văn đến thành công');
+                hideCongVanDenForm();
+                loadCongVanDen();
+            })
+            .catch(error => {
+                console.error('Lỗi khi cập nhật công văn đến:', error);
+                alert('Đã xảy ra lỗi khi cập nhật công văn đến');
+            });
+        }
+        
+        // Xóa công văn đi
+        function deleteCongVanDi(id) {
+            if (!confirm('Bạn có chắc chắn muốn xóa công văn này?')) return;
+            
+            const userId = currentUser.uid;
+            const congVanDiRef = database.ref('congVanDi/' + userId + '/' + id);
+            
+            congVanDiRef.remove()
+                .then(() => {
+                    alert('Xóa công văn đi thành công');
+                    loadCongVanDi();
+                })
+                .catch(error => {
+                    console.error('Lỗi khi xóa công văn đi:', error);
+                    alert('Đã xảy ra lỗi khi xóa công văn đi');
+                });
+        }
+        
+        // Xóa công văn đến
+        function deleteCongVanDen(id) {
+            if (!confirm('Bạn có chắc chắn muốn xóa công văn này?')) return;
+            
+            const userId = currentUser.uid;
+            const congVanDenRef = database.ref('congVanDen/' + userId + '/' + id);
+            
+            congVanDenRef.remove()
+                .then(() => {
+                    alert('Xóa công văn đến thành công');
+                    loadCongVanDen();
+                })
+                .catch(error => {
+                    console.error('Lỗi khi xóa công văn đến:', error);
+                    alert('Đã xảy ra lỗi khi xóa công văn đến');
+                });
+        }
+        
+        // Chỉnh sửa công văn đi
+        function editCongVanDi(id) {
+            const userId = currentUser.uid;
+            const congVanDiRef = database.ref('congVanDi/' + userId + '/' + id);
+            
+            congVanDiRef.once('value')
+                .then(snapshot => {
+                    const data = snapshot.val();
+                    
+                    if (data) {
+                        document.getElementById('so-cong-van-di').value = data.soCongVan || '';
+                        document.getElementById('ngay-ban-hanh-di').value = data.ngayBanHanh || '';
+                        document.getElementById('ten-van-ban-di').value = data.tenVanBan || '';
+                        document.getElementById('nguoi-ky-di').value = data.nguoiKy || '';
+                        document.getElementById('noi-ban-hanh-di').value = data.noiBanHanh || '';
+                        document.getElementById('trich-yeu-di').value = data.trichYeu || '';
+                        
+                        document.getElementById('cong-van-di-form').style.display = 'block';
+                        document.getElementById('add-cong-van-di').style.display = 'none';
+                        document.getElementById('update-cong-van-di').style.display = 'block';
+                        
+                        currentEditingId = id;
+                    }
+                })
+                .catch(error => {
+                    console.error('Lỗi khi tải dữ liệu công văn đi:', error);
+                    alert('Đã xảy ra lỗi khi tải dữ liệu công văn đi');
+                });
+        }
+        
+        // Chỉnh sửa công văn đến
+        function editCongVanDen(id) {
+            const userId = currentUser.uid;
+            const congVanDenRef = database.ref('congVanDen/' + userId + '/' + id);
+            
+            congVanDenRef.once('value')
+                .then(snapshot => {
+                    const data = snapshot.val();
+                    
+                    if (data) {
+                        document.getElementById('so-cong-van-den').value = data.soCongVan || '';
+                        document.getElementById('ngay-ban-hanh-den').value = data.ngayBanHanh || '';
+                        document.getElementById('nguoi-gui').value = data.nguoiGui || '';
+                        document.getElementById('ten-van-ban-den').value = data.tenVanBan || '';
+                        document.getElementById('nguoi-ky-den').value = data.nguoiKy || '';
+                        document.getElementById('noi-ban-hanh-den').value = data.noiBanHanh || '';
+                        document.getElementById('nguoi-nhan').value = data.nguoiNhan || '';
+                        document.getElementById('trich-yeu-den').value = data.trichYeu || '';
+                        
+                        document.getElementById('cong-van-den-form').style.display = 'block';
+                        document.getElementById('add-cong-van-den').style.display = 'none';
+                        document.getElementById('update-cong-van-den').style.display = 'block';
+                        
+                        currentEditingId = id;
+                    }
+                })
+                .catch(error => {
+                    console.error('Lỗi khi tải dữ liệu công văn đến:', error);
+                    alert('Đã xảy ra lỗi khi tải dữ liệu công văn đến');
+                });
+        }
+        
+        // Tải dữ liệu công văn đi
+        function loadCongVanDi() {
+            const userId = currentUser.uid;
+            const congVanDiRef = database.ref('congVanDi/' + userId);
+            
+            // Hiển thị loading
+            document.querySelector('#cong-van-di .loading').style.display = 'block';
+            
+            congVanDiRef.once('value')
+                .then(snapshot => {
+                    const data = snapshot.val();
+                    const tableBody = document.getElementById('cong-van-di-table').querySelector('tbody');
+                    tableBody.innerHTML = '';
+                    
+                    if (data) {
+                        // Lọc dữ liệu nếu có
+                        const searchText = document.getElementById('search-cong-van-di').value.toLowerCase();
+                        const startDate = document.getElementById('start-date-di').value;
+                        const endDate = document.getElementById('end-date-di').value;
+                        
+                        Object.keys(data).forEach(key => {
+                            const item = data[key];
+                            
+                            // Kiểm tra tìm kiếm
+                            if (searchText && 
+                                !item.soCongVan.toLowerCase().includes(searchText) && 
+                                !item.trichYeu.toLowerCase().includes(searchText)) {
+                                return;
+                            }
+                            
+                            // Kiểm tra ngày
+                            if (startDate && item.ngayBanHanh < startDate) return;
+                            if (endDate && item.ngayBanHanh > endDate) return;
+                            
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${item.soCongVan || ''}</td>
+                                <td>${item.ngayBanHanh || ''}</td>
+                                <td>${item.tenVanBan || ''}</td>
+                                <td>${item.nguoiKy || ''}</td>
+                                <td>${item.noiBanHanh || ''}</td>
+                                <td>${item.trichYeu || ''}</td>
+                                <td>
+                                    <button class="action-btn btn-edit" onclick="editCongVanDi('${key}')">Sửa</button>
+                                    <button class="action-btn btn-delete" onclick="deleteCongVanDi('${key}')">Xóa</button>
+                                </td>
+                            `;
+                            tableBody.appendChild(row);
+                        });
+                    } else {
+                        const row = document.createElement('tr');
+                        row.innerHTML = '<td colspan="7" style="text-align: center;">Chưa có dữ liệu công văn đi</td>';
+                        tableBody.appendChild(row);
+                    }
+                    
+                    // Ẩn loading
+                    document.querySelector('#cong-van-di .loading').style.display = 'none';
+                })
+                .catch(error => {
+                    console.error('Lỗi khi tải dữ liệu công văn đi:', error);
+                    alert('Đã xảy ra lỗi khi tải dữ liệu công văn đi');
+                    
+                    // Ẩn loading
+                    document.querySelector('#cong-van-di .loading').style.display = 'none';
+                });
+        }
+        
+        // Tải dữ liệu công văn đến
+        function loadCongVanDen() {
+            const userId = currentUser.uid;
+            const congVanDenRef = database.ref('congVanDen/' + userId);
+            
+            // Hiển thị loading
+            document.querySelector('#cong-van-den .loading').style.display = 'block';
+            
+            congVanDenRef.once('value')
+                .then(snapshot => {
+                    const data = snapshot.val();
+                    const tableBody = document.getElementById('cong-van-den-table').querySelector('tbody');
+                    tableBody.innerHTML = '';
+                    
+                    if (data) {
+                        // Lọc dữ liệu nếu có
+                        const searchText = document.getElementById('search-cong-van-den').value.toLowerCase();
+                        const startDate = document.getElementById('start-date-den').value;
+                        const endDate = document.getElementById('end-date-den').value;
+                        
+                        Object.keys(data).forEach(key => {
+                            const item = data[key];
+                            
+                            // Kiểm tra tìm kiếm
+                            if (searchText && 
+                                !item.soCongVan.toLowerCase().includes(searchText) && 
+                                !item.trichYeu.toLowerCase().includes(searchText) &&
+                                !item.nguoiGui.toLowerCase().includes(searchText)) {
+                                return;
+                            }
+                            
+                            // Kiểm tra ngày
+                            if (startDate && item.ngayBanHanh < startDate) return;
+                            if (endDate && item.ngayBanHanh > endDate) return;
+                            
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${item.soCongVan || ''}</td>
+                                <td>${item.ngayBanHanh || ''}</td>
+                                <td>${item.nguoiGui || ''}</td>
+                                <td>${item.tenVanBan || ''}</td>
+                                <td>${item.nguoiKy || ''}</td>
+                                <td>${item.noiBanHanh || ''}</td>
+                                <td>${item.nguoiNhan || ''}</td>
+                                <td>${item.trichYeu || ''}</td>
+                                <td>
+                                    <button class="action-btn btn-edit" onclick="editCongVanDen('${key}')">Sửa</button>
+                                    <button class="action-btn btn-delete" onclick="deleteCongVanDen('${key}')">Xóa</button>
+                                </td>
+                            `;
+                            tableBody.appendChild(row);
+                        });
+                    } else {
+                        const row = document.createElement('tr');
+                        row.innerHTML = '<td colspan="9" style="text-align: center;">Chưa có dữ liệu công văn đến</td>';
+                        tableBody.appendChild(row);
+                    }
+                    
+                    // Ẩn loading
+                    document.querySelector('#cong-van-den .loading').style.display = 'none';
+                })
+                .catch(error => {
+                    console.error('Lỗi khi tải dữ liệu công văn đến:', error);
+                    alert('Đã xảy ra lỗi khi tải dữ liệu công văn đến');
+                    
+                    // Ẩn loading
+                    document.querySelector('#cong-van-den .loading').style.display = 'none';
+                });
+        }
+        
+        // Tải dữ liệu tổng hợp
+        function loadTongHop() {
+            const userId = currentUser.uid;
+            const congVanDiRef = database.ref('congVanDi/' + userId);
+            const congVanDenRef = database.ref('congVanDen/' + userId);
+            
+            // Tải công văn đi
+            congVanDiRef.once('value')
+                .then(snapshot => {
+                    const data = snapshot.val();
+                    let total = 0;
+                    let thisMonth = 0;
+                    let thisWeek = 0;
+                    let today = 0;
+                    
+                    const now = new Date();
+                    const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+                    const firstDayOfWeek = new Date(now);
+                    firstDayOfWeek.setDate(now.getDate() - now.getDay());
+                    firstDayOfWeek.setHours(0, 0, 0, 0);
+                    
+                    if (data) {
+                        Object.keys(data).forEach(key => {
+                            const item = data[key];
+                            total++;
+                            
+                            const itemDate = new Date(item.ngayBanHanh);
+                            
+                            // Kiểm tra tháng này
+                            if (itemDate >= firstDayOfMonth) {
+                                thisMonth++;
+                            }
+                            
+                            // Kiểm tra tuần này
+                            if (itemDate >= firstDayOfWeek) {
+                                thisWeek++;
+                            }
+                            
+                            // Kiểm tra hôm nay
+                            if (itemDate.toDateString() === now.toDateString()) {
+                                today++;
+                            }
+                        });
+                    }
+                    
+                    document.getElementById('tong-cong-van-di').textContent = total;
+                    document.getElementById('cong-van-di-thang').textContent = thisMonth;
+                    document.getElementById('cong-van-di-tuan').textContent = thisWeek;
+                    document.getElementById('cong-van-di-hom-nay').textContent = today;
+                })
+                .catch(error => {
+                    console.error('Lỗi khi tải dữ liệu tổng hợp công văn đi:', error);
+                });
+            
+            // Tải công văn đến
+            congVanDenRef.once('value')
+                .then(snapshot => {
+                    const data = snapshot.val();
+                    let total = 0;
+                    let thisMonth = 0;
+                    let thisWeek = 0;
+                    let today = 0;
+                    
+                    const now = new Date();
+                    const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+                    const firstDayOfWeek = new Date(now);
+                    firstDayOfWeek.setDate(now.getDate() - now.getDay());
+                    firstDayOfWeek.setHours(0, 0, 0, 0);
+                    
+                    if (data) {
+                        Object.keys(data).forEach(key => {
+                            const item = data[key];
+                            total++;
+                            
+                            const itemDate = new Date(item.ngayBanHanh);
+                            
+                            // Kiểm tra tháng này
+                            if (itemDate >= firstDayOfMonth) {
+                                thisMonth++;
+                            }
+                            
+                            // Kiểm tra tuần này
+                            if (itemDate >= firstDayOfWeek) {
+                                thisWeek++;
+                            }
+                            
+                            // Kiểm tra hôm nay
+                            if (itemDate.toDateString() === now.toDateString()) {
+                                today++;
+                            }
+                        });
+                    }
+                    
+                    document.getElementById('tong-cong-van-den').textContent = total;
+                    document.getElementById('cong-van-den-thang').textContent = thisMonth;
+                    document.getElementById('cong-van-den-tuan').textContent = thisWeek;
+                    document.getElementById('cong-van-den-hom-nay').textContent = today;
+                    
+                    // Tính tổng số công văn
+                    const tongCongVanDi = parseInt(document.getElementById('tong-cong-van-di').textContent);
+                    const tongCongVanDen = parseInt(document.getElementById('tong-cong-van-den').textContent);
+                    document.getElementById('tong-so-cong-van').textContent = tongCongVanDi + tongCongVanDen;
+                })
+                .catch(error => {
+                    console.error('Lỗi khi tải dữ liệu tổng hợp công văn đến:', error);
+                });
+        }
+        
+        // Tải tất cả dữ liệu
+        function loadAllData() {
+            loadCongVanDi();
+            loadCongVanDen();
+            loadTongHop();
+            
+            // Tải dữ liệu cho combobox
+            loadComboboxData('ten-van-ban', 'ten-van-ban-di');
+            loadComboboxData('nguoi-ky', 'nguoi-ky-di');
+            loadComboboxData('noi-ban-hanh', 'noi-ban-hanh-di');
+            loadComboboxData('ten-van-ban', 'ten-van-ban-den');
+            loadComboboxData('nguoi-ky', 'nguoi-ky-den');
+            loadComboboxData('noi-ban-hanh', 'noi-ban-hanh-den');
+            loadComboboxData('nguoi-nhan', 'nguoi-nhan');
+        }
+        
+        // Mở modal thêm giá trị mới
+        function openAddValueModal(type, title, element) {
+            currentComboboxType = type;
+            currentComboboxElement = element;
+            
+            document.getElementById('modal-title').textContent = `Thêm ${title} mới`;
+            document.getElementById('new-value-input').value = '';
+            document.getElementById('modal-error').style.display = 'none';
+            
+            document.getElementById('add-value-modal').style.display = 'flex';
+        }
+        
+        // Đóng modal
+        function closeModal() {
+            document.getElementById('add-value-modal').style.display = 'none';
+        }
+        
+        // Lưu giá trị mới
+        function saveNewValue() {
+            const newValue = document.getElementById('new-value-input').value.trim();
+            
+            if (!newValue) {
+                document.getElementById('modal-error').textContent = 'Vui lòng nhập giá trị';
+                document.getElementById('modal-error').style.display = 'block';
+                return;
+            }
+            
+            const userId = currentUser.uid;
+            const ref = database.ref(`comboboxData/${userId}/${currentComboboxType}`);
+            
+            // Kiểm tra xem giá trị đã tồn tại chưa
+            ref.once('value')
+                .then(snapshot => {
+                    const data = snapshot.val();
+                    let exists = false;
+                    
+                    if (data) {
+                        Object.keys(data).forEach(key => {
+                            if (data[key].value.toLowerCase() === newValue.toLowerCase()) {
+                                exists = true;
+                            }
+                        });
+                    }
+                    
+                    if (exists) {
+                        document.getElementById('modal-error').textContent = 'Giá trị này đã tồn tại';
+                        document.getElementById('modal-error').style.display = 'block';
+                        return;
+                    }
+                    
+                    // Thêm giá trị mới
+                    return ref.push().set({
+                        value: newValue,
+                        createdAt: firebase.database.ServerValue.TIMESTAMP
+                    });
+                })
+                .then(() => {
+                    // Thêm vào combobox hiện tại
+                    const option = document.createElement('option');
+                    option.value = newValue;
+                    option.textContent = newValue;
+                    currentComboboxElement.appendChild(option);
+                    currentComboboxElement.value = newValue;
+                    
+                    closeModal();
+                })
+                .catch(error => {
+                    console.error('Lỗi khi lưu giá trị mới:', error);
+                    document.getElementById('modal-error').textContent = 'Đã xảy ra lỗi khi lưu giá trị';
+                    document.getElementById('modal-error').style.display = 'block';
+                });
+        }
+        
+        // Tải dữ liệu cho combobox
+        function loadComboboxData(type, elementId) {
+            const userId = currentUser.uid;
+            const ref = database.ref(`comboboxData/${userId}/${type}`);
+            const selectElement = document.getElementById(elementId);
+            
+            // Giữ lại option đầu tiên (-- Chọn --)
+            const firstOption = selectElement.options[0];
+            selectElement.innerHTML = '';
+            selectElement.appendChild(firstOption);
+            
+            ref.once('value')
+                .then(snapshot => {
+                    const data = snapshot.val();
+                    
+                    if (data) {
+                        // Sắp xếp theo giá trị
+                        const sortedValues = [];
+                        
+                        Object.keys(data).forEach(key => {
+                            sortedValues.push(data[key].value);
+                        });
+                        
+                        sortedValues.sort();
+                        
+                        // Thêm vào combobox
+                        sortedValues.forEach(value => {
+                            const option = document.createElement('option');
+                            option.value = value;
+                            option.textContent = value;
+                            selectElement.appendChild(option);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error(`Lỗi khi tải dữ liệu combobox ${type}:`, error);
+                });
         }
         
         // Khởi tạo ứng dụng khi trang được tải
