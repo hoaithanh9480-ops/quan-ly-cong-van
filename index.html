@@ -856,7 +856,12 @@
                     
                     <div class="form-group">
                         <label for="ten-vb">Tên văn bản</label>
-                        <input type="text" id="ten-vb" placeholder="Nhập tên văn bản">
+    <div class="input-group">
+      <select id="ten-vb">
+        <option value="">Chọn tên văn bản</option>
+      </select>
+      <button type="button" class="btn btn-primary btn-sm" onclick="addOption('ten-vb')">+</button>
+    </div>
                     </div>
                     
                     <div class="form-group">
@@ -866,12 +871,22 @@
                     
                     <div class="form-group">
                         <label for="nguoi-ky">Người ký</label>
-                        <input type="text" id="nguoi-ky" placeholder="Nhập tên người ký">
+    <div class="input-group">
+      <select id="nguoi-ky">
+        <option value="">Chọn người ký</option>
+      </select>
+      <button type="button" class="btn btn-primary btn-sm" onclick="addOption('nguoi-ky')">+</button>
+    </div>
                     </div>
                     
                     <div class="form-group">
                         <label for="noi-ban-hanh">Nơi ban hành</label>
-                        <input type="text" id="noi-ban-hanh" placeholder="Nhập nơi ban hành">
+    <div class="input-group">
+      <select id="noi-ban-hanh">
+        <option value="">Chọn nơi ban hành</option>
+      </select>
+      <button type="button" class="btn btn-primary btn-sm" onclick="addOption('noi-ban-hanh')">+</button>
+    </div>
                     </div>
                     
                     <div class="form-group form-group-full">
@@ -934,7 +949,12 @@
                     
                     <div class="form-group">
                         <label for="nguoi-nhan">Người nhận</label>
-                        <input type="text" id="nguoi-nhan" placeholder="Nhập tên người nhận">
+    <div class="input-group">
+      <select id="nguoi-nhan">
+        <option value="">Chọn người nhận</option>
+      </select>
+      <button type="button" class="btn btn-primary btn-sm" onclick="addOption('nguoi-nhan')">+</button>
+    </div>
                     </div>
                     
                     <div class="form-group">
@@ -949,7 +969,12 @@
                     
                     <div class="form-group">
                         <label for="ten-vb-den">Tên văn bản</label>
-                        <input type="text" id="ten-vb-den" placeholder="Nhập tên VB đến">
+    <div class="input-group">
+      <select id="ten-vb-den">
+        <option value="">Chọn tên văn bản</option>
+      </select>
+      <button type="button" class="btn btn-primary btn-sm" onclick="addOption('ten-vb-den')">+</button>
+    </div>
                     </div>
                     
                     <div class="form-group">
@@ -959,12 +984,22 @@
                     
                     <div class="form-group">
                         <label for="nguoi-ky-den">Người ký</label>
-                        <input type="text" id="nguoi-ky-den" placeholder="Nhập tên người ký">
+    <div class="input-group">
+      <select id="nguoi-ky-den">
+        <option value="">Chọn người ký</option>
+      </select>
+      <button type="button" class="btn btn-primary btn-sm" onclick="addOption('nguoi-ky-den')">+</button>
+    </div>
                     </div>
                     
                     <div class="form-group">
                         <label for="noi-ban-hanh-den">Nơi ban hành</label>
-                        <input type="text" id="noi-ban-hanh-den" placeholder="Nhập nơi ban hành">
+    <div class="input-group">
+      <select id="noi-ban-hanh-den">
+        <option value="">Chọn nơi ban hành</option>
+      </select>
+      <button type="button" class="btn btn-primary btn-sm" onclick="addOption('noi-ban-hanh-den')">+</button>
+    </div>
                     </div>
                     
                     <div class="form-group">
@@ -1915,7 +1950,19 @@
             document.getElementById('tong-hop-den-content-report').innerHTML = denHtml || '<p>Chưa có công văn đến</p>';
         }
         
-        // ========== KHỞI TẠO ỨNG DỤNG ==========
+        function addOption(selectId) {
+  const select = document.getElementById(selectId);
+  const newValue = prompt("Nhập giá trị mới:");
+  if (newValue && newValue.trim() !== "") {
+    const option = document.createElement("option");
+    option.value = newValue.trim();
+    option.textContent = newValue.trim();
+    select.appendChild(option);
+    select.value = newValue.trim();
+  }
+}
+
+// ========== KHỞI TẠO ỨNG DỤNG ==========
         function initApp() {
             // Tải dữ liệu vào các select
             loadYearsToSelect();
