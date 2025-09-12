@@ -1030,7 +1030,6 @@ document.getElementById('import-file-den').addEventListener('change', (e) => {
             <div class="menu-item" data-target="tong-hop-screen">
                 <i class="fas fa-chart-bar"></i> Tổng hợp
             </div>
-        <button id="sidebar-logout-btn" class="btn btn-danger" style="margin-top:auto;"><i class="fas fa-sign-out-alt"></i> Đăng xuất</button>
         </div>
 
         <div class="content-container">
@@ -1701,82 +1700,7 @@ document.getElementById('import-file-den').addEventListener('change', (e) => {
                 });
         }
 
-        
-// ========== XỬ LÝ ĐĂNG XUẤT (SIDEBAR) ==========
-const sidebarLogoutBtn = document.getElementById("sidebar-logout-btn");
-if (sidebarLogoutBtn) {
-  sidebarLogoutBtn.addEventListener("click", () => {
-    showLoading();
-    auth.signOut()
-      .then(() => {
-        hideLoading();
-        alert("Đã đăng xuất!");
-      })
-      .catch((error) => {
-        hideLoading();
-        alert("Lỗi đăng xuất: " + error.message);
-      });
-  });
-}
-
-
-// ========== XỬ LÝ CẬP NHẬT CÔNG VĂN ĐI ==========
-document.getElementById("updateCvdiBtn").addEventListener("click", () => {
-  if (!editingCvDiId) {
-    alert("Chưa chọn công văn để cập nhật!");
-    return;
-  }
-  const updatedItem = {
-    nam: document.getElementById("nam-di").value,
-    soVb: document.getElementById("so-vb").value,
-    tenVb: document.getElementById("ten-vb").value,
-    ngayKy: document.getElementById("ngay-ky").value,
-    nguoiKy: document.getElementById("nguoi-ky").value,
-    noiBanHanh: document.getElementById("noi-ban-hanh").value,
-    noiDung: document.getElementById("noi-dung-di").value
-  };
-  database.ref("congVanDi/" + editingCvDiId).update(updatedItem)
-    .then(() => {
-      alert("Cập nhật công văn đi thành công!");
-      editingCvDiId = null;
-      document.getElementById("cvdi-form").reset();
-    })
-    .catch(error => {
-      alert("Lỗi khi cập nhật: " + error.message);
-    });
-});
-
-// ========== XỬ LÝ CẬP NHẬT CÔNG VĂN ĐẾN ==========
-document.getElementById("updateCvdenBtn").addEventListener("click", () => {
-  if (!editingCvDenId) {
-    alert("Chưa chọn công văn để cập nhật!");
-    return;
-  }
-  const updatedItem = {
-    nam: document.getElementById("nam-den").value,
-    soDen: document.getElementById("so-den").value,
-    nguoiNhan: document.getElementById("nguoi-nhan").value,
-    ngayNhan: document.getElementById("ngay-nhan").value,
-    soCvDen: document.getElementById("so-cv-den").value,
-    tenVbDen: document.getElementById("ten-vb-den").value,
-    ngayKyDen: document.getElementById("ngay-ky-den").value,
-    nguoiKyDen: document.getElementById("nguoi-ky-den").value,
-    noiBanHanhDen: document.getElementById("noi-ban-hanh-den").value,
-    soTo: document.getElementById("so-to").value,
-    noiDungDen: document.getElementById("noi-dung-den").value
-  };
-  database.ref("congVanDen/" + editingCvDenId).update(updatedItem)
-    .then(() => {
-      alert("Cập nhật công văn đến thành công!");
-      editingCvDenId = null;
-      document.getElementById("cvden-form").reset();
-    })
-    .catch(error => {
-      alert("Lỗi khi cập nhật: " + error.message);
-    });
-});
-
-// ========== FIREBASE REALTIME DATABASE ==========
+        // ========== FIREBASE REALTIME DATABASE ==========
         // Hàm lấy tất cả dữ liệu
         function loadAllData() {
             showLoading();
