@@ -327,6 +327,15 @@
         .btn-danger:hover {
             background: #c82333;
         }
+        
+        /* Thêm style cho nút export/email */
+        .btn-info {
+            background-color: #17a2b8;
+        }
+        
+        .btn-info:hover {
+            background-color: #138496;
+        }
 
         .back-btn {
             background-color: #7f8c8d;
@@ -401,6 +410,14 @@
         .phieu-details h3 {
             font-size: 16px;
             color: #2a5298;
+            margin-bottom: 15px;
+        }
+        
+        /* Container cho nút Gửi Email */
+        .phieu-details-header {
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
             margin-bottom: 15px;
         }
 
@@ -669,6 +686,16 @@
             .edit-candidates-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .phieu-details-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .phieu-details-header h3 {
+                margin-bottom: 0;
+            }
         }
 
         /* Small Mobile */
@@ -814,7 +841,6 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header>
         <div class="header-content">
             <div class="header-title">HỆ THỐNG BẦU CỬ</div>
@@ -825,7 +851,6 @@
         </div>
     </header>
 
-    <!-- Main Content -->
     <div class="main-content">
         <div class="page-header">
             <h2>Kiểm phiếu</h2>
@@ -835,29 +860,24 @@
             </div>
         </div>
 
-        <!-- Loading indicator -->
         <div id="loading" class="loading">Đang tải dữ liệu...</div>
 
-        <!-- Nội dung chính (ẩn ban đầu) -->
         <div id="mainContent" style="display: none;">
-            <!-- Chọn ứng cử viên -->
             <div class="candidate-selection">
                 <h3>CHỌN ỨNG CỬ VIÊN CHO PHIẾU <span class="current-phieu" id="currentPhieu">1</span></h3>
                 
-                <!-- Phần nhập số nhanh -->
                 <div class="quick-input-section">
                     <div class="input-group">
                         <label for="numberInput">Nhập số ứng viên (cách nhau bằng dấu cách):</label>
                         <input type="text" id="numberInput" class="number-input" placeholder="Ví dụ: 1 3 5" autocomplete="off">
                     </div>
                     <div class="input-hint">
-                        💡 Gõ số ứng viên (1, 2, 3...) và nhấn Enter để kiểm phiếu tự động
+                        💡 Gõ số ứng viên (1, 2, 3...) và **nhấn Enter** để kiểm phiếu tự động
                     </div>
                 </div>
 
                 <div class="candidates-grid" id="candidatesGrid">
-                    <!-- Danh sách ứng cử viên sẽ được load ở đây -->
-                </div>
+                    </div>
                 <div class="selection-controls">
                     <div class="selection-info">
                         <span>Số đã chọn: <strong id="selectedCount">0</strong></span>
@@ -867,9 +887,7 @@
                 </div>
             </div>
 
-            <!-- Thống kê 3 cột -->
             <div class="stats-grid">
-                <!-- Cột 1: Thông tin cử tri -->
                 <div class="stat-card">
                     <h3>THÔNG TIN CỬ TRI</h3>
                     <div class="stat-row">
@@ -886,7 +904,6 @@
                     </div>
                 </div>
 
-                <!-- Cột 2: Thông tin phiếu -->
                 <div class="stat-card">
                     <h3>THÔNG TIN PHIẾU</h3>
                     <div class="stat-row">
@@ -903,7 +920,6 @@
                     </div>
                 </div>
 
-                <!-- Cột 3: Thông tin ứng cử -->
                 <div class="stat-card">
                     <h3>THÔNG TIN ỨNG CỬ</h3>
                     <div class="stat-row">
@@ -921,7 +937,6 @@
                 </div>
             </div>
 
-            <!-- Kết quả ứng viên -->
             <div class="candidate-results">
                 <h3>KẾT QUẢ ỨNG VIÊN</h3>
                 <table id="resultsTable">
@@ -934,22 +949,21 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Kết quả sẽ được cập nhật ở đây -->
-                    </tbody>
+                        </tbody>
                 </table>
             </div>
 
-            <!-- Kiểm tra từng phiếu -->
             <div class="phieu-details">
-                <h3>KIỂM TRA TỪNG PHIẾU</h3>
-                <div class="phieu-table-container" id="phieuTableContainer">
-                    <!-- Bảng kiểm tra từng phiếu sẽ được tạo ở đây -->
+                <div class="phieu-details-header">
+                    <h3>KIỂM TRA TỪNG PHIẾU</h3>
+                    <button id="btnExportEmail" class="btn btn-info">Gửi Email (Excel)</button>
                 </div>
+                <div class="phieu-table-container" id="phieuTableContainer">
+                    </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal sửa phiếu -->
     <div id="editModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -959,8 +973,7 @@
             <div class="candidate-selection">
                 <h3>CHỌN ỨNG CỬ VIÊN CHO PHIẾU</h3>
                 <div class="edit-candidates-grid" id="editCandidatesGrid">
-                    <!-- Danh sách ứng cử viên để sửa sẽ được load ở đây -->
-                </div>
+                    </div>
                 <div class="edit-selection-controls">
                     <button id="btnSaveEdit" class="btn btn-success">Lưu thay đổi</button>
                     <button id="btnDeletePhieu" class="btn btn-danger">Xóa phiếu</button>
@@ -1106,18 +1119,23 @@
             const numberInput = document.getElementById('numberInput');
             const inputValue = numberInput.value.trim();
             
+            // Reset tất cả checkbox và class selected
+            document.querySelectorAll('.candidate-checkbox').forEach(checkbox => {
+                checkbox.checked = false;
+                const candidateItem = checkbox.closest('.candidate-item');
+                if (candidateItem) {
+                    candidateItem.classList.remove('selected');
+                }
+            });
+
             if (!inputValue) {
-                resetSelection();
+                updateSelectedCount();
                 return;
             }
 
             // Tách các số bằng dấu cách
             const numbers = inputValue.split(' ').filter(num => num.trim() !== '');
             
-            // Reset tất cả checkbox
-            document.querySelectorAll('.candidate-checkbox').forEach(checkbox => {
-                checkbox.checked = false;
-            });
             
             // Tích chọn các số được nhập
             numbers.forEach(num => {
@@ -1170,13 +1188,17 @@
             let trangThai = '';
             const soUngVienDuocChon = selectedIds.length;
 
-            if (soUngVienDuocChon === 0 || soUngVienDuocChon === candidates.length) {
-                trangThai = 'Không hợp lệ';
-            } else if (soUngVienDuocChon === soDu) {
+            // Đây là logic bầu loại. Người được chọn là người bị loại.
+            // Số người hợp lệ: Số người không bị loại = Tổng số UC - Số người bị loại (được chọn)
+            const soNguoiHopLe = candidates.length - soUngVienDuocChon;
+            
+            if (soUngVienDuocChon === candidates.length) {
+                trangThai = 'Không hợp lệ'; // Loại tất cả
+            } else if (soUngVienDuocChon === 0) {
+                trangThai = 'Không hợp lệ'; // Không loại ai
+            } else if (soNguoiHopLe === soNguoiDuocBau) {
                 trangThai = 'Hợp lệ';
-            } else if (soUngVienDuocChon < soDu) {
-                trangThai = 'Không hợp lệ';
-            } else if (soUngVienDuocChon < soNguoiDuocBau) {
+            } else if (soNguoiHopLe < soNguoiDuocBau && soNguoiHopLe > 0) {
                 trangThai = 'Bầu thiếu';
             } else {
                 trangThai = 'Không hợp lệ';
@@ -1207,10 +1229,10 @@
             // Tự động lưu vào Firebase
             saveKiemPhieu();
 
+            console.log(`Đã kiểm phiếu ${currentPhieu - 1}! Chuyển đến phiếu ${currentPhieu}`);
+
             // Focus lại vào input để tiếp tục nhập
             document.getElementById('numberInput').focus();
-
-            console.log(`Đã kiểm phiếu ${currentPhieu - 1}! Chuyển đến phiếu ${currentPhieu}`);
         }
 
         // Cập nhật bảng kết quả
@@ -1247,7 +1269,7 @@
                     <thead>
                         <tr>
                             <th>Phiếu số</th>
-                            <th>Đọc phiếu</th>
+                            <th>Đọc phiếu (Loại)</th>
                             <th>Trạng thái</th>
             `;
             
@@ -1283,7 +1305,7 @@
                             <td class="${getStatusClass(phieu.trangThai)}"><strong>${phieu.trangThai}</strong></td>
                     `;
                     
-                    // Hiển thị kết quả cho từng ứng viên
+                    // Hiển thị kết quả cho từng ứng viên (1 nếu không bị loại, 0 nếu bị loại)
                     candidates.forEach(candidate => {
                         const isLoai = phieu.selectedIds.includes(candidate.id);
                         tableHTML += `<td class="candidate-col">${isLoai ? '0' : '<strong>1</strong>'}</td>`;
@@ -1313,7 +1335,7 @@
                     tableHTML += `<td>${total}</td>`;
                 });
 
-                // Tổng tất cả (tổng số phiếu * số ứng viên không bị loại)
+                // Tổng tất cả các phiếu hợp lệ (tổng số phiếu * số ứng viên không bị loại)
                 const totalPerColumn = candidates.map(candidate =>
                     phieuDetails.reduce((sum, phieu) => sum + (!phieu.selectedIds.includes(candidate.id) ? 1 : 0), 0)
                 );
@@ -1347,7 +1369,8 @@
             editGrid.innerHTML = '';
             
             candidates.forEach(candidate => {
-                const isSelected = phieu.selectedIds.includes(candidate.id);
+                // Kiểm tra xem ứng viên này có nằm trong danh sách bị loại (selectedIds) của phiếu không
+                const isSelected = phieu.selectedIds.includes(candidate.id); 
                 const candidateItem = document.createElement('div');
                 candidateItem.className = `edit-candidate-item ${isSelected ? 'selected' : ''}`;
                 candidateItem.innerHTML = `
@@ -1388,15 +1411,18 @@
             // Tính lại trạng thái
             const soNguoiDuocBau = parseInt(document.getElementById('soNguoiDuocBau').textContent) || 0;
             const soDu = parseInt(document.getElementById('soDu').textContent) || 0;
-            const soUngVienDuocChon = selectedIds.length;
+            const soUngVienDuocChon = selectedIds.length; // Số người bị loại
 
-            if (soUngVienDuocChon === 0 || soUngVienDuocChon === candidates.length) {
-                phieu.trangThai = 'Không hợp lệ';
-            } else if (soUngVienDuocChon === soDu) {
+            // Số người hợp lệ: Số người không bị loại = Tổng số UC - Số người bị loại (được chọn)
+            const soNguoiHopLe = candidates.length - soUngVienDuocChon; 
+
+            if (soUngVienDuocChon === candidates.length) {
+                phieu.trangThai = 'Không hợp lệ'; // Loại tất cả
+            } else if (soUngVienDuocChon === 0) {
+                phieu.trangThai = 'Không hợp lệ'; // Không loại ai
+            } else if (soNguoiHopLe === soNguoiDuocBau) {
                 phieu.trangThai = 'Hợp lệ';
-            } else if (soUngVienDuocChon < soDu) {
-                phieu.trangThai = 'Không hợp lệ';
-            } else if (soUngVienDuocChon < soNguoiDuocBau) {
+            } else if (soNguoiHopLe < soNguoiDuocBau && soNguoiHopLe > 0) {
                 phieu.trangThai = 'Bầu thiếu';
             } else {
                 phieu.trangThai = 'Không hợp lệ';
@@ -1404,12 +1430,12 @@
 
             // Cập nhật số phiếu của ứng viên
             candidates.forEach(candidate => {
-                // Giảm số phiếu của những người không còn được chọn
-                if (oldSelectedIds.includes(candidate.id) && !selectedIds.includes(candidate.id)) {
+                // Giảm số phiếu của những người KHÔNG bị loại trước đó (tức là không có trong oldSelectedIds) mà nay lại bị loại (có trong selectedIds)
+                if (!oldSelectedIds.includes(candidate.id) && selectedIds.includes(candidate.id)) {
                     candidate.votes -= 1;
                 }
-                // Tăng số phiếu của những người mới được chọn
-                if (!oldSelectedIds.includes(candidate.id) && selectedIds.includes(candidate.id)) {
+                // Tăng số phiếu của những người bị loại trước đó (có trong oldSelectedIds) mà nay lại không bị loại (không có trong selectedIds)
+                if (oldSelectedIds.includes(candidate.id) && !selectedIds.includes(candidate.id)) {
                     candidate.votes += 1;
                 }
             });
@@ -1436,7 +1462,7 @@
             const phieu = phieuDetails[currentEditPhieuIndex];
             const selectedIds = phieu.selectedIds;
 
-            // Giảm số phiếu của những người không được chọn
+            // Giảm số phiếu của những người KHÔNG được chọn (tức là người nhận phiếu)
             candidates.forEach(candidate => {
                 if (!selectedIds.includes(candidate.id)) {
                     candidate.votes -= 1;
@@ -1445,8 +1471,15 @@
 
             // Giảm số phiếu thu vào
             const currentSoPhieuThuVao = parseInt(document.getElementById('soPhieuThuVao').textContent) || 0;
-            document.getElementById('soPhieuThuVao').textContent = currentSoPhieuThuVao - 1;
-            document.getElementById('thamGiaBoPhieu').value = currentSoPhieuThuVao - 1;
+            const newSoPhieuThuVao = currentSoPhieuThuVao - 1;
+            document.getElementById('soPhieuThuVao').textContent = newSoPhieuThuVao;
+            document.getElementById('thamGiaBoPhieu').value = newSoPhieuThuVao;
+
+            // Cập nhật currentPhieu
+            currentPhieu = newSoPhieuThuVao + 1;
+            document.getElementById('currentPhieu').textContent = currentPhieu;
+            document.getElementById('currentPhieuDisplay').textContent = currentPhieu;
+
 
             // Xóa phiếu khỏi danh sách
             phieuDetails.splice(currentEditPhieuIndex, 1);
@@ -1478,6 +1511,7 @@
                     const data = snapshot.val();
                     document.getElementById('soNguoiUngCu').textContent = data.soNguoiUngCu || 0;
                     document.getElementById('soNguoiDuocBau').textContent = data.soNguoiDuocBau || 0;
+                    // Số dư: Số ứng cử - Số được bầu
                     document.getElementById('soDu').textContent = (data.soNguoiUngCu - data.soNguoiDuocBau) || 0;
                 }
             } catch (error) {
@@ -1506,21 +1540,7 @@
                     }
                 }
 
-                // 2️⃣ Kết quả ứng viên
-                const resultsSnapshot = await db.ref(getUserPath('candidateResults')).once('value');
-                if (resultsSnapshot.exists()) {
-                    const resultData = resultsSnapshot.val();
-                    candidates.forEach(candidate => {
-                        const c = resultData[candidate.id];
-                        if (c) {
-                            candidate.votes = parseInt(c.votes) || 0;
-                            candidate.stt = parseInt(c.stt) || candidate.stt;
-                        }
-                    });
-                    updateResultsTable();
-                }
-
-                // 3️⃣ Dữ liệu phiếu đã kiểm
+                // 2️⃣ Dữ liệu phiếu đã kiểm
                 const phieuSnapshot = await db.ref(getUserPath('phieuDetails')).once('value');
                 if (phieuSnapshot.exists()) {
                     const rawData = phieuSnapshot.val();
@@ -1531,17 +1551,34 @@
                         // Nếu lưu dạng object
                         phieuDetails = Object.values(rawData);
                     }
+                    // Tính toán lại kết quả ứng viên từ phieuDetails
+                    recalculateCandidateVotes();
                     updatePhieuTable();
                 } else {
                     phieuDetails = [];
                     updatePhieuTable();
                 }
-
+                
+                updateResultsTable();
                 updatePercentages();
+                
                 console.log('✅ Dữ liệu kiểm phiếu đã được tải!');
             } catch (error) {
                 console.error('❌ Lỗi khi tải kiểm phiếu:', error);
             }
+        }
+        
+        // Hàm tính toán lại tổng số phiếu cho ứng viên từ chi tiết phiếu
+        function recalculateCandidateVotes() {
+            candidates.forEach(c => c.votes = 0); // Reset votes
+            phieuDetails.forEach(phieu => {
+                // Logic bầu loại: Tăng số phiếu cho những người KHÔNG được chọn
+                candidates.forEach(candidate => {
+                    if (!phieu.selectedIds.includes(candidate.id)) {
+                        candidate.votes += 1;
+                    }
+                });
+            });
         }
 
         // Lưu thông tin kiểm phiếu
@@ -1557,7 +1594,7 @@
                 };
                 await db.ref(userPath).set(kiemPhieuData);
 
-                // 2️⃣ Lưu kết quả ứng viên
+                // 2️⃣ Lưu kết quả ứng viên (dùng để hiển thị nhanh)
                 const resultsData = {};
                 candidates.forEach(candidate => {
                     resultsData[candidate.id] = {
@@ -1580,6 +1617,7 @@
 
         // Reset selection
         function resetSelection() {
+            document.getElementById('numberInput').value = ''; // Xóa input
             document.querySelectorAll('.candidate-checkbox').forEach(checkbox => {
                 checkbox.checked = false;
                 const candidateItem = checkbox.closest('.candidate-item');
@@ -1588,7 +1626,95 @@
                 }
             });
             updateSelectedCount();
+            document.getElementById('numberInput').focus();
         }
+        
+        // --- CHỨC NĂNG EXPORT EMAIL ---
+        function exportPhieuDetailsToExcel() {
+            if (phieuDetails.length === 0) {
+                alert('Chưa có phiếu nào được kiểm để xuất dữ liệu.');
+                return;
+            }
+
+            // 1. Chuẩn bị header
+            let header = "Phiếu số,Đọc phiếu (Loại),Trạng thái";
+            candidates.forEach(c => {
+                header += `,${c.name} (N${c.stt})`;
+            });
+            header += ",Tổng\n"; // Thêm cột tổng cuối cùng
+
+            // 2. Chuẩn bị dữ liệu rows
+            let csv = header;
+            let totalVotes = Array(candidates.length).fill(0);
+            let grandTotalVotes = 0;
+
+            phieuDetails.forEach(phieu => {
+                const docPhieu = phieu.selectedStt ? phieu.selectedStt.sort((a, b) => a - b).join(' ') : '';
+                // Bao quanh bằng dấu "" để đảm bảo dấu phẩy trong nội dung không làm hỏng định dạng CSV
+                let row = `${phieu.phieuSo},"${docPhieu}",${phieu.trangThai}`;
+                
+                let soNguoiKhongBiLoai = 0;
+                candidates.forEach((candidate, index) => {
+                    const isLoai = phieu.selectedIds.includes(candidate.id);
+                    const voteValue = isLoai ? 0 : 1;
+                    
+                    row += `,${voteValue}`;
+                    if (!isLoai) {
+                        totalVotes[index] += 1;
+                        soNguoiKhongBiLoai += 1;
+                    }
+                });
+                
+                row += `,${soNguoiKhongBiLoai}\n`;
+                csv += row;
+            });
+            
+            // Tính tổng cho hàng cuối cùng
+            totalVotes.forEach(total => {
+                grandTotalVotes += total;
+            });
+
+
+            // 3. Thêm hàng TỔNG
+            // Cột TỔNG phải căn chỉnh đúng cột: 3 cột đầu tiên (Phiếu số, Đọc phiếu, Trạng thái) trống
+            let totalRow = "TỔNG,,"; 
+            totalVotes.forEach(total => {
+                totalRow += `,${total}`;
+            });
+            totalRow += `,${grandTotalVotes}\n`;
+            csv += totalRow;
+
+
+            // 4. Tạo Blob và link tải về
+            const filename = `KiemPhieu_ChiTiet_${new Date().toISOString().slice(0, 10)}.csv`;
+            // Thêm BOM (Byte Order Mark) để đảm bảo hiển thị tiếng Việt có dấu trong Excel
+            const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csv], { type: 'text/csv;charset=utf-8;' }); 
+            const link = document.createElement('a');
+            
+            
+            // Tải file về
+            if (link.download !== undefined) { 
+                const url = URL.createObjectURL(blob);
+                link.setAttribute('href', url);
+                link.setAttribute('download', filename);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                // Mở mail client để người dùng đính kèm file vừa tải
+                setTimeout(() => {
+                    const emailSubject = encodeURIComponent(`Báo cáo chi tiết kiểm phiếu (File đính kèm: ${filename})`);
+                    const emailBody = encodeURIComponent("Kính gửi,\n\nĐây là báo cáo chi tiết kết quả kiểm phiếu. Vui lòng đính kèm file CSV/Excel vừa tải xuống để hoàn tất việc gửi báo cáo.\n\nTrân trọng!");
+                    window.location.href = `mailto:?subject=${emailSubject}&body=${emailBody}`;
+                }, 500); // Chờ 0.5s để file tải về
+                
+            } else {
+                alert('Trình duyệt của bạn không hỗ trợ tải file tự động. Vui lòng thử lại với trình duyệt khác.');
+            }
+        }
+        // --- HẾT CHỨC NĂNG EXPORT EMAIL ---
+
 
         // Khởi tạo ứng dụng
         async function initApp() {
@@ -1611,11 +1737,11 @@
 
                 await loadThongTin();
                 await loadCandidates();
-                await loadKiemPhieu();
+                await loadKiemPhieu(); // Cập nhật cả results và phieuDetails
 
-                // Xóa nút kiểm phiếu cũ và thêm sự kiện cho textbox
+                // Gán sự kiện cho các nút và input
                 document.getElementById('btnResetSelection').addEventListener('click', resetSelection);
-
+                
                 // Sự kiện cho textbox nhập số
                 const numberInput = document.getElementById('numberInput');
                 numberInput.addEventListener('input', handleNumberInput);
@@ -1631,6 +1757,9 @@
                 document.getElementById('tongSoCuTri').addEventListener('input', updatePercentages);
                 document.getElementById('thamGiaBoPhieu').addEventListener('input', updatePercentages);
                 document.getElementById('soPhieuPhatRa').addEventListener('input', updatePercentages);
+                
+                // Sự kiện cho nút Gửi Email
+                document.getElementById('btnExportEmail').addEventListener('click', exportPhieuDetailsToExcel);
 
                 // Thêm event listeners cho modal
                 document.querySelector('.close').addEventListener('click', closeEditModal);
