@@ -1044,7 +1044,7 @@
         firebase.initializeApp(firebaseConfig);
 
         // Initialize EmailJS
-        emailjs.init("user_your_emailjs_user_id"); // Thay bằng EmailJS user ID của bạn
+        emailjs.init("hAXDSwD49GBY7NlAh"); // Thay bằng EmailJS user ID của bạn
 
         const db = firebase.database();
         const auth = firebase.auth();
@@ -1735,7 +1735,7 @@
                 
                 // Gửi email sử dụng EmailJS
                 // Lưu ý: Cần thiết lập EmailJS service và template trước
-                const response = await emailjs.send('service_your_service_id', 'template_your_template_id', {
+                const response = await emailjs.send('service_bwkzhgq', 'template_a7vcf7j', {
                     to_email: 'thanh941980@gmail.com',
                     subject: `Kết quả kiểm phiếu - ${new Date().toLocaleDateString('vi-VN')}`,
                     message: `Kết quả kiểm phiếu được gửi tự động từ hệ thống. Thời gian kết thúc: ${new Date().toLocaleString('vi-VN')}`,
