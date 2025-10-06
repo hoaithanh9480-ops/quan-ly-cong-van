@@ -198,6 +198,7 @@
             word-break: break-word;
         }
 
+        /* Điều chỉnh: Sử dụng flexbox để căn chỉnh các nút */
         .selection-controls {
             display: flex;
             gap: 10px;
@@ -211,6 +212,13 @@
             color: #2a5298;
         }
 
+        /* Thêm một container cho các nút chức năng để dễ quản lý */
+        .control-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
         .selection-info {
             display: flex;
             gap: 15px;
@@ -652,6 +660,12 @@
                 justify-content: space-between;
             }
             
+            /* Điều chỉnh các nút điều khiển trong .selection-controls */
+            .control-buttons {
+                width: 100%;
+                justify-content: space-between;
+            }
+
             .stats-grid {
                 grid-template-columns: 1fr;
                 gap: 10px;
@@ -762,7 +776,7 @@
             }
             
             .phieu-table {
-                font-size: 10px;
+                font-size: 11px;
             }
             
             .phieu-table th, .phieu-table td {
@@ -883,7 +897,10 @@
                         <span>Số đã chọn: <strong id="selectedCount">0</strong></span>
                         <span>Phiếu hiện tại: <strong id="currentPhieuDisplay">1</strong></span>
                     </div>
-                    <button id="btnResetSelection" class="btn btn-warning">Bỏ chọn tất cả</button>
+                    <div class="control-buttons">
+                        <button id="btnExportExcel" class="btn btn-info">Xuất Excel (CSV)</button>
+                        <button id="btnResetSelection" class="btn btn-warning">Bỏ chọn tất cả</button>
+                    </div>
                 </div>
             </div>
 
@@ -956,7 +973,6 @@
             <div class="phieu-details">
                 <div class="phieu-details-header">
                     <h3>KIỂM TRA TỪNG PHIẾU</h3>
-                    <button id="btnExportExcel" class="btn btn-info">Xuất Excel (CSV)</button>
                 </div>
                 <div class="phieu-table-container" id="phieuTableContainer">
                     </div>
@@ -1644,13 +1660,13 @@
             }
 
             // 1. Chuẩn bị header
-            // Thay thế 'Đọc phiếu' thành 'Đọc phiếu (Loại)' như trong ảnh
+            // Tách header thành từng cột rõ ràng
             let header = "Phiếu số,Đọc phiếu (Loại),Trạng thái"; 
             
             candidates.forEach(c => {
-                // Lấy tên rút gọn cho header cột ứng viên
+                // Tên rút gọn (N1) cho header cột ứng viên
                 const shortName = c.name.split(' ').pop() || c.name;
-                header += `,"${shortName} (N${c.stt})"`;
+                header += `,"${shortName} (N${c.stt})"`; // Bao quanh bằng "" để đảm bảo không bị lỗi dấu phẩy
             });
             header += ",Tổng\n"; // Thêm cột tổng cuối cùng
 
@@ -1661,27 +1677,27 @@
 
             phieuDetails.forEach(phieu => {
                 const docPhieu = phieu.selectedStt ? phieu.selectedStt.sort((a, b) => a - b).join(' ') : '';
-                // Bao quanh bằng dấu "" để đảm bảo dấu phẩy/khoảng trắng trong nội dung không làm hỏng định dạng CSV
-                let row = `${phieu.phieuSo},"${docPhieu}",${phieu.trangThai}`;
+                // Dòng dữ liệu, các giá trị cách nhau bằng dấu phẩy (tức là tách cột)
+                let row = `${phieu.phieuSo},"${docPhieu}",${phieu.trangThai}`; 
                 
                 let soNguoiKhongBiLoai = 0;
                 candidates.forEach((candidate, index) => {
                     const isLoai = phieu.selectedIds.includes(candidate.id);
-                    const voteValue = isLoai ? 0 : 1;
+                    const voteValue = isLoai ? 0 : 1; // 0 hoặc 1 là giá trị của cột ứng viên đó
                     
-                    row += `,${voteValue}`;
+                    row += `,${voteValue}`; // Thêm dấu phẩy để tách cột
                     if (!isLoai) {
                         totalVotes[index] += 1;
                         soNguoiKhongBiLoai += 1;
                     }
                 });
                 
-                row += `,${soNguoiKhongBiLoai}\n`;
+                row += `,${soNguoiKhongBiLoai}\n`; // Cột tổng cuối cùng
                 csv += row;
             });
             
             // 3. Thêm hàng TỔNG
-            // 3 cột đầu tiên (Phiếu số, Đọc phiếu, Trạng thái) trống, CỘT TỔNG bắt đầu từ cột thứ 4
+            // 3 cột đầu tiên (Phiếu số, Đọc phiếu, Trạng thái) trống (không có giá trị), sau đó là "TỔNG"
             let totalRow = ",,,TỔNG"; 
             let totalColCount = 0;
 
