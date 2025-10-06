@@ -19,75 +19,40 @@
             line-height: 1.4;
         }
 
-        .container {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 220px;
+        /* Header */
+        header {
             background: linear-gradient(135deg, #1e3c72, #2a5298);
             color: white;
-            padding: 15px 0;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            padding: 12px 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .logo {
-            text-align: center;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 15px;
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        .logo h1 {
+        .header-title {
             font-size: 18px;
             font-weight: 600;
         }
 
-        .nav-links {
-            list-style: none;
-            padding: 0 10px;
-        }
-
-        .nav-links li {
-            margin-bottom: 8px;
-        }
-
-        .nav-links a {
+        .header-buttons {
             display: flex;
-            align-items: center;
-            padding: 10px 12px;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-            font-size: 13px;
-        }
-
-        .nav-links a:hover, .nav-links a.active {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .nav-links i {
-            margin-right: 8px;
-            font-size: 16px;
-        }
-
-        .logout {
-            margin-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 15px;
+            gap: 10px;
         }
 
         /* Main Content */
         .main-content {
-            flex: 1;
-            padding: 20px;
-            min-width: 0;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
         }
 
-        .header {
+        .page-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -96,7 +61,7 @@
             gap: 15px;
         }
 
-        .header h2 {
+        .page-header h2 {
             font-size: 20px;
             color: #2a5298;
         }
@@ -250,6 +215,22 @@
             color: white;
         }
 
+        .back-btn {
+            background-color: #7f8c8d;
+        }
+        
+        .back-btn:hover {
+            background-color: #95a5a6;
+        }
+        
+        .logout-btn {
+            background-color: #e74c3c;
+        }
+        
+        .logout-btn:hover {
+            background-color: #c0392b;
+        }
+
         .loading {
             text-align: center;
             padding: 20px;
@@ -268,38 +249,11 @@
 
         /* Responsive */
         @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-            }
-            
-            .sidebar {
-                width: 100%;
-                height: auto;
-                padding: 10px 0;
-            }
-            
-            .nav-links {
-                display: flex;
-                overflow-x: auto;
-                padding: 0 10px;
-            }
-            
-            .nav-links li {
-                margin-bottom: 0;
-                margin-right: 8px;
-                flex-shrink: 0;
-            }
-            
-            .nav-links a {
-                padding: 8px 12px;
-                font-size: 12px;
-            }
-            
             .main-content {
-                padding: 15px;
+                padding: 0 15px;
             }
             
-            .header {
+            .page-header {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 10px;
@@ -340,6 +294,20 @@
                 padding: 7px 12px;
                 font-size: 12px;
             }
+
+            .form-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            h2 {
+                font-size: 1.1rem;
+                text-align: center;
+            }
+            
+            .tab-content {
+                padding: 12px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -348,10 +316,10 @@
             }
             
             .main-content {
-                padding: 10px;
+                padding: 0 10px;
             }
             
-            .header h2 {
+            .page-header h2 {
                 font-size: 18px;
             }
             
@@ -378,162 +346,171 @@
                 padding: 6px 10px;
                 font-size: 12px;
             }
+            
+            .header-title {
+                font-size: 0.9rem;
+                max-width: 40%;
+            }
+            
+            .btn {
+                padding: 0.4rem 0.7rem;
+                font-size: 0.75rem;
+            }
+            
+            .header-buttons {
+                gap: 5px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <div class="logo">
-                <h1>HỆ THỐNG BẦU CỬ</h1>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="header-title">HỆ THỐNG BẦU CỬ</div>
+            <div class="header-buttons">
+                <button onclick="window.location.href='dashboard.html'" class="btn back-btn">Quay lại</button>
+                <button id="logoutBtn" class="btn logout-btn">Đăng xuất</button>
             </div>
-            <ul class="nav-links">
-                <li><a href="#" class="active" data-target="dashboard"><i>ℹ️</i> Thông tin</a></li>
-                <li><a href="kiemphieu.html" data-target="kiemphieu"><i>✅</i> Kiểm phiếu</a></li>
-                <li><a href="tonghop.html" data-target="tonghop"><i>📈</i> Tổng hợp</a></li>
-                <li><a href="bienban.html" data-target="bienban"><i>📝</i> Biên bản</a></li>
-                <li class="logout"><a href="#" id="logout"><i>🚪</i> Đăng xuất</a></li>
-            </ul>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="page-header">
+            <h2>Quản lý Thông tin</h2>
+            <div class="user-info">
+                <img src="https://ui-avatars.com/api/?name=Admin&background=2a5298&color=fff" alt="User">
+                <span id="userName">Quản trị viên</span>
+            </div>
         </div>
 
-        <!-- Main Content -->
-        <div class="main-content">
-            <div class="header">
-                <h2>Quản lý Thông tin</h2>
-                <div class="user-info">
-                    <img src="https://ui-avatars.com/api/?name=Admin&background=2a5298&color=fff" alt="User">
-                    <span id="userName">Quản trị viên</span>
+        <!-- Loading indicator -->
+        <div id="loading" class="loading">Đang tải dữ liệu...</div>
+
+        <!-- Nội dung chính (ẩn ban đầu) -->
+        <div id="mainContent" style="display: none;">
+            <!-- Tabs -->
+            <div class="tabs">
+                <div class="tab active" data-tab="donvi">Thông tin đơn vị</div>
+                <div class="tab" data-tab="ungcu">Người ứng cử</div>
+                <div class="tab" data-tab="nguoikiemphieu">Người kiểm phiếu</div>
+                <div class="tab" data-tab="chungkien">Người chứng kiến</div>
+            </div>
+
+            <!-- Nội dung các tab -->
+            <div id="donvi" class="tab-content active compact-form">
+                <h3 style="margin-bottom: 15px; color: #2a5298; font-size: 16px;">Thông tin đơn vị bầu cử</h3>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="tinhThanh">Tỉnh, Thành phố</label>
+                        <input type="text" id="tinhThanh" class="form-control" placeholder="Nhập tỉnh, thành phố">
+                    </div>
+                    <div class="form-group">
+                        <label for="phuongXa">Phường, xã</label>
+                        <input type="text" id="phuongXa" class="form-control" placeholder="Nhập phường, xã">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="khoa">Khóa</label>
+                        <input type="text" id="khoa" class="form-control" placeholder="Nhập khóa">
+                    </div>
+                    <div class="form-group">
+                        <label for="donViBauCu">Đơn vị bầu cử số</label>
+                        <input type="text" id="donViBauCu" class="form-control" placeholder="Nhập đơn vị bầu cử">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="gomCo">Gồm có</label>
+                    <textarea id="gomCo" class="form-control" placeholder="Mô tả các thành phần gồm có" rows="2"></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="khuVucBoPhieu">Khu vực bỏ phiếu số</label>
+                        <input type="text" id="khuVucBoPhieu" class="form-control" placeholder="Nhập khu vực bỏ phiếu">
+                    </div>
+                    <div class="form-group">
+                        <label for="nhiemKy">Nhiệm kỳ</label>
+                        <input type="text" id="nhiemKy" class="form-control" placeholder="Nhập nhiệm kỳ">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="bauCuCap">Bầu cử HĐND cấp</label>
+                    <select id="bauCuCap" class="form-control">
+                        <option value="">-- Chọn cấp bầu cử --</option>
+                        <option value="quoc_hoi">Quốc hội</option>
+                        <option value="thanh_pho">Thành Phố</option>
+                        <option value="phuong">Phường</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="soNguoiUngCu">Số người ứng cử</label>
+                        <input type="number" id="soNguoiUngCu" class="form-control" placeholder="Nhập số người ứng cử" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="soNguoiDuocBau">Số người được bầu</label>
+                        <input type="number" id="soNguoiDuocBau" class="form-control" placeholder="Nhập số người được bầu" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="soDu">Số dư</label>
+                        <input type="number" id="soDu" class="form-control readonly-field" readonly>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="emailKiemPhieu">Địa chỉ Gmail người kiểm phiếu</label>
+                    <input type="email" id="emailKiemPhieu" class="form-control" placeholder="Nhập địa chỉ Gmail">
+                </div>
+
+                <div class="form-group">
+                    <button id="btnLuuDonVi" class="btn">Lưu thông tin đơn vị</button>
                 </div>
             </div>
 
-            <!-- Loading indicator -->
-            <div id="loading" class="loading">Đang tải dữ liệu...</div>
-
-            <!-- Nội dung chính (ẩn ban đầu) -->
-            <div id="mainContent" style="display: none;">
-                <!-- Tabs -->
-                <div class="tabs">
-                    <div class="tab active" data-tab="donvi">Thông tin đơn vị</div>
-                    <div class="tab" data-tab="ungcu">Người ứng cử</div>
-                    <div class="tab" data-tab="nguoikiemphieu">Người kiểm phiếu</div>
-                    <div class="tab" data-tab="chungkien">Người chứng kiến</div>
+            <div id="ungcu" class="tab-content compact-form">
+                <h3 style="margin-bottom: 15px; color: #2a5298; font-size: 16px;">Quản lý người ứng cử</h3>
+                <div class="form-group">
+                    <label>Họ tên ứng cử</label>
+                    <input id="hoTenUngCu" class="form-control" placeholder="Nhập họ tên người ứng cử">
                 </div>
+                <button id="btnThemUngCu" class="btn">Thêm ứng cử</button>
+                <table id="tableUngCu"><thead><tr><th>Họ tên</th><th>Thao tác</th></tr></thead><tbody></tbody></table>
+            </div>
 
-                <!-- Nội dung các tab -->
-                <div id="donvi" class="tab-content active compact-form">
-                    <h3 style="margin-bottom: 15px; color: #2a5298; font-size: 16px;">Thông tin đơn vị bầu cử</h3>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="tinhThanh">Tỉnh, Thành phố</label>
-                            <input type="text" id="tinhThanh" class="form-control" placeholder="Nhập tỉnh, thành phố">
-                        </div>
-                        <div class="form-group">
-                            <label for="phuongXa">Phường, xã</label>
-                            <input type="text" id="phuongXa" class="form-control" placeholder="Nhập phường, xã">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="khoa">Khóa</label>
-                            <input type="text" id="khoa" class="form-control" placeholder="Nhập khóa">
-                        </div>
-                        <div class="form-group">
-                            <label for="donViBauCu">Đơn vị bầu cử số</label>
-                            <input type="text" id="donViBauCu" class="form-control" placeholder="Nhập đơn vị bầu cử">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="gomCo">Gồm có</label>
-                        <textarea id="gomCo" class="form-control" placeholder="Mô tả các thành phần gồm có" rows="2"></textarea>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="khuVucBoPhieu">Khu vực bỏ phiếu số</label>
-                            <input type="text" id="khuVucBoPhieu" class="form-control" placeholder="Nhập khu vực bỏ phiếu">
-                        </div>
-                        <div class="form-group">
-                            <label for="nhiemKy">Nhiệm kỳ</label>
-                            <input type="text" id="nhiemKy" class="form-control" placeholder="Nhập nhiệm kỳ">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="bauCuCap">Bầu cử HĐND cấp</label>
-                        <select id="bauCuCap" class="form-control">
-                            <option value="">-- Chọn cấp bầu cử --</option>
-                            <option value="quoc_hoi">Quốc hội</option>
-                            <option value="thanh_pho">Thành Phố</option>
-                            <option value="phuong">Phường</option>
-                        </select>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="soNguoiUngCu">Số người ứng cử</label>
-                            <input type="number" id="soNguoiUngCu" class="form-control" placeholder="Nhập số người ứng cử" min="0">
-                        </div>
-                        <div class="form-group">
-                            <label for="soNguoiDuocBau">Số người được bầu</label>
-                            <input type="number" id="soNguoiDuocBau" class="form-control" placeholder="Nhập số người được bầu" min="0">
-                        </div>
-                        <div class="form-group">
-                            <label for="soDu">Số dư</label>
-                            <input type="number" id="soDu" class="form-control readonly-field" readonly>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="emailKiemPhieu">Địa chỉ Gmail người kiểm phiếu</label>
-                        <input type="email" id="emailKiemPhieu" class="form-control" placeholder="Nhập địa chỉ Gmail">
-                    </div>
-
-                    <div class="form-group">
-                        <button id="btnLuuDonVi" class="btn">Lưu thông tin đơn vị</button>
-                    </div>
+            <div id="nguoikiemphieu" class="tab-content compact-form">
+                <h3 style="margin-bottom: 15px; color: #2a5298; font-size: 16px;">Quản lý người kiểm phiếu</h3>
+                <div class="form-group">
+                    <label>Họ tên</label>
+                    <input id="hoTenKiemPhieu" class="form-control" placeholder="Nhập họ tên người kiểm phiếu">
                 </div>
-
-                <div id="ungcu" class="tab-content compact-form">
-                    <h3 style="margin-bottom: 15px; color: #2a5298; font-size: 16px;">Quản lý người ứng cử</h3>
-                    <div class="form-group">
-                        <label>Họ tên ứng cử</label>
-                        <input id="hoTenUngCu" class="form-control" placeholder="Nhập họ tên người ứng cử">
-                    </div>
-                    <button id="btnThemUngCu" class="btn">Thêm ứng cử</button>
-                    <table id="tableUngCu"><thead><tr><th>Họ tên</th><th>Thao tác</th></tr></thead><tbody></tbody></table>
+                <div class="form-group">
+                    <label>Chức vụ</label>
+                    <input id="chucVuKiemPhieu" class="form-control" placeholder="Nhập chức vụ">
                 </div>
+                <button id="btnThemKiemPhieu" class="btn">Thêm kiểm phiếu</button>
+                <table id="tableKiemPhieu"><thead><tr><th>Họ tên</th><th>Chức vụ</th><th>Thao tác</th></tr></thead><tbody></tbody></table>
+            </div>
 
-                <div id="nguoikiemphieu" class="tab-content compact-form">
-                    <h3 style="margin-bottom: 15px; color: #2a5298; font-size: 16px;">Quản lý người kiểm phiếu</h3>
-                    <div class="form-group">
-                        <label>Họ tên</label>
-                        <input id="hoTenKiemPhieu" class="form-control" placeholder="Nhập họ tên người kiểm phiếu">
-                    </div>
-                    <div class="form-group">
-                        <label>Chức vụ</label>
-                        <input id="chucVuKiemPhieu" class="form-control" placeholder="Nhập chức vụ">
-                    </div>
-                    <button id="btnThemKiemPhieu" class="btn">Thêm kiểm phiếu</button>
-                    <table id="tableKiemPhieu"><thead><tr><th>Họ tên</th><th>Chức vụ</th><th>Thao tác</th></tr></thead><tbody></tbody></table>
+            <div id="chungkien" class="tab-content compact-form">
+                <h3 style="margin-bottom: 15px; color: #2a5298; font-size: 16px;">Quản lý người chứng kiến</h3>
+                <div class="form-group">
+                    <label>Họ tên</label>
+                    <input id="hoTenChungKien" class="form-control" placeholder="Nhập họ tên người chứng kiến">
                 </div>
-
-                <div id="chungkien" class="tab-content compact-form">
-                    <h3 style="margin-bottom: 15px; color: #2a5298; font-size: 16px;">Quản lý người chứng kiến</h3>
-                    <div class="form-group">
-                        <label>Họ tên</label>
-                        <input id="hoTenChungKien" class="form-control" placeholder="Nhập họ tên người chứng kiến">
-                    </div>
-                    <div class="form-group">
-                        <label>Địa chỉ</label>
-                        <input id="diaChiChungKien" class="form-control" placeholder="Nhập địa chỉ">
-                    </div>
-                    <button id="btnThemChungKien" class="btn">Thêm chứng kiến</button>
-                    <table id="tableChungKien"><thead><tr><th>Họ tên</th><th>Địa chỉ</th><th>Thao tác</th></tr></thead><tbody></tbody></table>
+                <div class="form-group">
+                    <label>Địa chỉ</label>
+                    <input id="diaChiChungKien" class="form-control" placeholder="Nhập địa chỉ">
                 </div>
+                <button id="btnThemChungKien" class="btn">Thêm chứng kiến</button>
+                <table id="tableChungKien"><thead><tr><th>Họ tên</th><th>Địa chỉ</th><th>Thao tác</th></tr></thead><tbody></tbody></table>
             </div>
         </div>
     </div>
@@ -792,6 +769,44 @@
             }
         }
 
+        // Edit người kiểm phiếu
+        async function editKiemPhieu(id) {
+            try {
+                const userPath = getUserPath('kiemPhieu/' + id);
+                const snapshot = await db.ref(userPath).once('value');
+                const data = snapshot.val();
+                
+                const newName = prompt('Sửa tên người kiểm phiếu:', data.hoTen);
+                const newChucVu = prompt('Sửa chức vụ:', data.chucVu);
+                
+                if (newName && (newName !== data.hoTen || newChucVu !== data.chucVu)) {
+                    await db.ref(userPath).update({
+                        hoTen: newName,
+                        chucVu: newChucVu,
+                        updatedAt: new Date().toISOString()
+                    });
+                    loadKiemPhieu();
+                }
+            } catch (error) {
+                console.error('Error editing kiemPhieu:', error);
+                alert('Lỗi: ' + error.message);
+            }
+        }
+
+        // Delete người kiểm phiếu
+        async function deleteKiemPhieu(id) {
+            if (confirm('Bạn có chắc muốn xóa người kiểm phiếu này?')) {
+                try {
+                    const userPath = getUserPath('kiemPhieu/' + id);
+                    await db.ref(userPath).remove();
+                    loadKiemPhieu();
+                } catch (error) {
+                    console.error('Error deleting kiemPhieu:', error);
+                    alert('Lỗi: ' + error.message);
+                }
+            }
+        }
+
         // Load người chứng kiến
         async function loadChungKien() {
             try {
@@ -848,6 +863,44 @@
             }
         }
 
+        // Edit người chứng kiến
+        async function editChungKien(id) {
+            try {
+                const userPath = getUserPath('chungKien/' + id);
+                const snapshot = await db.ref(userPath).once('value');
+                const data = snapshot.val();
+                
+                const newName = prompt('Sửa tên người chứng kiến:', data.hoTen);
+                const newDiaChi = prompt('Sửa địa chỉ:', data.diaChi);
+                
+                if (newName && (newName !== data.hoTen || newDiaChi !== data.diaChi)) {
+                    await db.ref(userPath).update({
+                        hoTen: newName,
+                        diaChi: newDiaChi,
+                        updatedAt: new Date().toISOString()
+                    });
+                    loadChungKien();
+                }
+            } catch (error) {
+                console.error('Error editing chungKien:', error);
+                alert('Lỗi: ' + error.message);
+            }
+        }
+
+        // Delete người chứng kiến
+        async function deleteChungKien(id) {
+            if (confirm('Bạn có chắc muốn xóa người chứng kiến này?')) {
+                try {
+                    const userPath = getUserPath('chungKien/' + id);
+                    await db.ref(userPath).remove();
+                    loadChungKien();
+                } catch (error) {
+                    console.error('Error deleting chungKien:', error);
+                    alert('Lỗi: ' + error.message);
+                }
+            }
+        }
+
         // Initialize event listeners
         function initEventListeners() {
             // Unit tab
@@ -863,80 +916,48 @@
             
             // Chứng kiến tab
             document.getElementById('btnThemChungKien').addEventListener('click', addChungKien);
+            
+            // Logout button
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                if (confirm('Bạn có chắc muốn đăng xuất?')) {
+                    auth.signOut().then(() => {
+                        window.location.href = 'login.html';
+                    }).catch(error => {
+                        console.error('Logout error:', error);
+                        alert('Lỗi đăng xuất: ' + error.message);
+                    });
+                }
+            });
         }
 
-        // Load all data
-        function loadAllData() {
-            loadDonVi();
-            loadUngCu();
-            loadKiemPhieu();
-            loadChungKien();
-        }
-
-        // Main initialization
+        // Initialize app
         function initApp() {
-            auth.onAuthStateChanged(async (user) => {
-                const loadingElement = document.getElementById('loading');
-                const mainContentElement = document.getElementById('mainContent');
-                
+            auth.onAuthStateChanged(user => {
                 if (user) {
                     currentUser = user;
-                    document.getElementById('userName').textContent = user.email || 'Quản trị viên';
+                    document.getElementById('userName').textContent = user.displayName || user.email || 'Quản trị viên';
                     
-                    loadingElement.style.display = 'none';
-                    mainContentElement.style.display = 'block';
+                    // Load data
+                    loadDonVi();
+                    loadUngCu();
+                    loadKiemPhieu();
+                    loadChungKien();
                     
-                    initTabs();
-                    initEventListeners();
-                    loadAllData();
+                    // Hide loading, show content
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('mainContent').style.display = 'block';
                 } else {
-                    loadingElement.innerHTML = 'Chưa đăng nhập, đang chuyển hướng...';
-                    setTimeout(() => {
-                        window.location.href = 'index.html';
-                    }, 2000);
+                    window.location.href = 'login.html';
                 }
             });
         }
 
-        // Navigation
-        document.querySelectorAll('.nav-links a[data-target]').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                // Xóa active class từ tất cả các liên kết
-                document.querySelectorAll('.nav-links a').forEach(item => {
-                    item.classList.remove('active');
-                });
-                
-                // Thêm active class cho liên kết được nhấp
-                this.classList.add('active');
-                
-                // Chuyển hướng đến trang tương ứng
-                const targetPage = this.getAttribute('data-target') + '.html';
-                if (targetPage !== 'dashboard.html') {
-                    window.location.href = targetPage;
-                }
-            });
-        });
-
-        // Logout
-        document.getElementById('logout').addEventListener('click', function(e) {
-            e.preventDefault();
-            if (confirm('Bạn có chắc muốn đăng xuất?')) {
-                auth.signOut().then(() => {
-                    alert('Đã đăng xuất!');
-                    window.location.href = 'index.html';
-                }).catch(error => {
-                    console.error('Logout error:', error);
-                });
-            }
-        });
-
-        // Start application
-        window.addEventListener('load', function() {
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            initTabs();
+            initEventListeners();
             initApp();
         });
     </script>
 </body>
 </html>
-
