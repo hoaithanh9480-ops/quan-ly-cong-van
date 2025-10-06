@@ -19,157 +19,40 @@
             line-height: 1.4;
         }
 
-        .container {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        /* Mobile Header */
-        .mobile-header {
-            display: none;
+        /* Header */
+        header {
             background: linear-gradient(135deg, #1e3c72, #2a5298);
             color: white;
-            padding: 12px 15px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
+            padding: 12px 20px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .mobile-header-content {
+        .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        .menu-toggle {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-            padding: 5px;
-        }
-
-        /* Mobile Sidebar */
-        .mobile-sidebar {
-            position: fixed;
-            top: 0;
-            left: -280px;
-            width: 280px;
-            height: 100vh;
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
-            color: white;
-            padding: 20px 0;
-            z-index: 1001;
-            transition: left 0.3s ease;
-            overflow-y: auto;
-        }
-
-        .mobile-sidebar.active {
-            left: 0;
-        }
-
-        .mobile-sidebar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 15px;
-        }
-
-        .close-menu {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-        }
-
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-        }
-
-        .overlay.active {
-            display: block;
-        }
-
-        /* Sidebar - Desktop */
-        .sidebar {
-            width: 220px;
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
-            color: white;
-            padding: 15px 0;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .logo {
-            text-align: center;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 15px;
-        }
-
-        .logo h1 {
+        .header-title {
             font-size: 18px;
             font-weight: 600;
         }
 
-        .nav-links {
-            list-style: none;
-            padding: 0 10px;
-        }
-
-        .nav-links li {
-            margin-bottom: 8px;
-        }
-
-        .nav-links a {
+        .header-buttons {
             display: flex;
-            align-items: center;
-            padding: 10px 12px;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-            font-size: 13px;
-        }
-
-        .nav-links a:hover, .nav-links a.active {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .nav-links i {
-            margin-right: 8px;
-            font-size: 16px;
-        }
-
-        .logout {
-            margin-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 15px;
+            gap: 10px;
         }
 
         /* Main Content */
         .main-content {
-            flex: 1;
-            padding: 20px;
-            min-width: 0;
-            transition: margin-left 0.3s ease;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
         }
 
-        .header {
+        .page-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -178,7 +61,7 @@
             gap: 15px;
         }
 
-        .header h2 {
+        .page-header h2 {
             font-size: 20px;
             color: #2a5298;
         }
@@ -445,6 +328,22 @@
             background: #c82333;
         }
 
+        .back-btn {
+            background-color: #7f8c8d;
+        }
+        
+        .back-btn:hover {
+            background-color: #95a5a6;
+        }
+        
+        .logout-btn {
+            background-color: #e74c3c;
+        }
+        
+        .logout-btn:hover {
+            background-color: #c0392b;
+        }
+
         .loading {
             text-align: center;
             padding: 20px;
@@ -489,7 +388,7 @@
             font-size: 13px;
         }
 
-        /* Kiểm tra từng phiếu - ĐÃ SỬA */
+        /* Kiểm tra từng phiếu */
         .phieu-details {
             background: white;
             padding: 15px;
@@ -534,7 +433,7 @@
             z-index: 1;
         }
 
-        /* Các cột ứng viên - ĐÃ SỬA */
+        /* Các cột ứng viên */
         .phieu-table .candidate-col {
             min-width: 100px;
             text-align: center;
@@ -685,27 +584,11 @@
 
         /* Mobile */
         @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-            }
-            
-            /* Ẩn sidebar desktop trên mobile */
-            .sidebar {
-                display: none;
-            }
-            
-            /* Hiển thị mobile header */
-            .mobile-header {
-                display: block;
-            }
-            
-            /* Điều chỉnh main content cho mobile */
             .main-content {
-                padding: 70px 15px 20px 15px;
-                margin-left: 0 !important;
+                padding: 0 15px;
             }
             
-            .header {
+            .page-header {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 10px;
@@ -795,10 +678,10 @@
             }
             
             .main-content {
-                padding: 65px 10px 15px 10px;
+                padding: 0 10px;
             }
             
-            .header h2 {
+            .page-header h2 {
                 font-size: 18px;
             }
             
@@ -862,13 +745,8 @@
 
         /* Very Small Mobile */
         @media (max-width: 360px) {
-            .mobile-sidebar {
-                width: 100%;
-                left: -100%;
-            }
-            
             .main-content {
-                padding: 60px 8px 12px 8px;
+                padding: 0 8px;
             }
             
             .candidate-selection {
@@ -936,175 +814,136 @@
     </style>
 </head>
 <body>
-    <!-- Mobile Header -->
-    <div class="mobile-header">
-        <div class="mobile-header-content">
-            <button class="menu-toggle">☰</button>
-            <div class="logo">
-                <h1>HỆ THỐNG BẦU CỬ</h1>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="header-title">HỆ THỐNG BẦU CỬ</div>
+            <div class="header-buttons">
+                <button onclick="window.location.href='thongtin.html'" class="btn back-btn">Quay lại</button>
+                <button id="logoutBtn" class="btn logout-btn">Đăng xuất</button>
             </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="page-header">
+            <h2>Kiểm phiếu</h2>
             <div class="user-info">
                 <img src="https://ui-avatars.com/api/?name=Admin&background=2a5298&color=fff" alt="User">
-                <span id="mobileUserName">Admin</span>
+                <span id="userName">Quản trị viên</span>
             </div>
         </div>
-    </div>
 
-    <!-- Mobile Sidebar -->
-    <div class="mobile-sidebar">
-        <div class="mobile-sidebar-header">
-            <div class="logo">
-                <h1>HỆ THỐNG BẦU CỬ</h1>
-            </div>
-            <button class="close-menu">✕</button>
-        </div>
-        <ul class="nav-links">
-            <li><a href="thongtin.html"><i>ℹ️</i> Thông tin</a></li>
-            <li><a href="kiemphieu.html" class="active" data-target="kiemphieu"><i>✅</i> Kiểm phiếu</a></li>
-            <li><a href="tonghop.html" data-target="tonghop"><i>📈</i> Tổng hợp</a></li>
-            <li><a href="bienban.html" data-target="bienban"><i>📝</i> Biên bản</a></li>
-            <li class="logout"><a href="#" id="mobileLogout"><i>🚪</i> Đăng xuất</a></li>
-        </ul>
-    </div>
+        <!-- Loading indicator -->
+        <div id="loading" class="loading">Đang tải dữ liệu...</div>
 
-    <!-- Overlay -->
-    <div class="overlay"></div>
+        <!-- Nội dung chính (ẩn ban đầu) -->
+        <div id="mainContent" style="display: none;">
+            <!-- Chọn ứng cử viên -->
+            <div class="candidate-selection">
+                <h3>CHỌN ỨNG CỬ VIÊN CHO PHIẾU <span class="current-phieu" id="currentPhieu">1</span></h3>
+                
+                <!-- Phần nhập số nhanh -->
+                <div class="quick-input-section">
+                    <div class="input-group">
+                        <label for="numberInput">Nhập số ứng viên (cách nhau bằng dấu cách):</label>
+                        <input type="text" id="numberInput" class="number-input" placeholder="Ví dụ: 1 3 5" autocomplete="off">
+                    </div>
+                    <div class="input-hint">
+                        💡 Gõ số ứng viên (1, 2, 3...) và nhấn Enter để kiểm phiếu tự động
+                    </div>
+                </div>
 
-    <div class="container">
-        <!-- Sidebar Desktop -->
-        <div class="sidebar">
-            <div class="logo">
-                <h1>HỆ THỐNG BẦU CỬ</h1>
-            </div>
-            <ul class="nav-links">
-                <li><a href="thongtin.html"><i>ℹ️</i> Thông tin</a></li>
-                <li><a href="#" class="active" data-target="kiemphieu"><i>✅</i> Kiểm phiếu</a></li>
-                <li><a href="#" data-target="tonghop"><i>📈</i> Tổng hợp</a></li>
-                <li><a href="#" data-target="bienban"><i>📝</i> Biên bản</a></li>
-                <li class="logout"><a href="#" id="logout"><i>🚪</i> Đăng xuất</a></li>
-            </ul>
-        </div>
-
-        <!-- Main Content -->
-        <div class="main-content">
-            <div class="header">
-                <h2>Kiểm phiếu</h2>
-                <div class="user-info">
-                    <img src="https://ui-avatars.com/api/?name=Admin&background=2a5298&color=fff" alt="User">
-                    <span id="userName">Quản trị viên</span>
+                <div class="candidates-grid" id="candidatesGrid">
+                    <!-- Danh sách ứng cử viên sẽ được load ở đây -->
+                </div>
+                <div class="selection-controls">
+                    <div class="selection-info">
+                        <span>Số đã chọn: <strong id="selectedCount">0</strong></span>
+                        <span>Phiếu hiện tại: <strong id="currentPhieuDisplay">1</strong></span>
+                    </div>
+                    <button id="btnResetSelection" class="btn btn-warning">Bỏ chọn tất cả</button>
                 </div>
             </div>
 
-            <!-- Loading indicator -->
-            <div id="loading" class="loading">Đang tải dữ liệu...</div>
-
-            <!-- Nội dung chính (ẩn ban đầu) -->
-            <div id="mainContent" style="display: none;">
-                <!-- Chọn ứng cử viên -->
-                <div class="candidate-selection">
-                    <h3>CHỌN ỨNG CỬ VIÊN CHO PHIẾU <span class="current-phieu" id="currentPhieu">1</span></h3>
-                    
-                    <!-- Phần nhập số nhanh -->
-                    <div class="quick-input-section">
-                        <div class="input-group">
-                            <label for="numberInput">Nhập số ứng viên (cách nhau bằng dấu cách):</label>
-                            <input type="text" id="numberInput" class="number-input" placeholder="Ví dụ: 1 3 5" autocomplete="off">
-                        </div>
-                        <div class="input-hint">
-                            💡 Gõ số ứng viên (1, 2, 3...) và nhấn Enter để kiểm phiếu tự động
-                        </div>
+            <!-- Thống kê 3 cột -->
+            <div class="stats-grid">
+                <!-- Cột 1: Thông tin cử tri -->
+                <div class="stat-card">
+                    <h3>THÔNG TIN CỬ TRI</h3>
+                    <div class="stat-row">
+                        <span class="stat-label">Tổng số cử tri</span>
+                        <input type="number" id="tongSoCuTri" class="form-control" style="width: 80px; padding: 4px 8px; text-align: right;" value="0" min="0">
                     </div>
-
-                    <div class="candidates-grid" id="candidatesGrid">
-                        <!-- Danh sách ứng cử viên sẽ được load ở đây -->
+                    <div class="stat-row">
+                        <span class="stat-label">Tham gia bỏ phiếu</span>
+                        <input type="number" id="thamGiaBoPhieu" class="form-control" style="width: 80px; padding: 4px 8px; text-align: right;" value="0" min="0">
                     </div>
-                    <div class="selection-controls">
-                        <div class="selection-info">
-                            <span>Số đã chọn: <strong id="selectedCount">0</strong></span>
-                            <span>Phiếu hiện tại: <strong id="currentPhieuDisplay">1</strong></span>
-                        </div>
-                        <button id="btnResetSelection" class="btn btn-warning">Bỏ chọn tất cả</button>
+                    <div class="stat-row">
+                        <span class="stat-label">Đạt %</span>
+                        <span class="stat-percent" id="phanTramThamGia">0%</span>
                     </div>
                 </div>
 
-                <!-- Thống kê 3 cột -->
-                <div class="stats-grid">
-                    <!-- Cột 1: Thông tin cử tri -->
-                    <div class="stat-card">
-                        <h3>THÔNG TIN CỬ TRI</h3>
-                        <div class="stat-row">
-                            <span class="stat-label">Tổng số cử tri</span>
-                            <input type="number" id="tongSoCuTri" class="form-control" style="width: 80px; padding: 4px 8px; text-align: right;" value="0" min="0">
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">Tham gia bỏ phiếu</span>
-                            <input type="number" id="thamGiaBoPhieu" class="form-control" style="width: 80px; padding: 4px 8px; text-align: right;" value="0" min="0">
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">Đạt %</span>
-                            <span class="stat-percent" id="phanTramThamGia">0%</span>
-                        </div>
+                <!-- Cột 2: Thông tin phiếu -->
+                <div class="stat-card">
+                    <h3>THÔNG TIN PHIẾU</h3>
+                    <div class="stat-row">
+                        <span class="stat-label">Số phiếu phát ra</span>
+                        <input type="number" id="soPhieuPhatRa" class="form-control" style="width: 80px; padding: 4px 8px; text-align: right;" value="0" min="0">
                     </div>
-
-                    <!-- Cột 2: Thông tin phiếu -->
-                    <div class="stat-card">
-                        <h3>THÔNG TIN PHIẾU</h3>
-                        <div class="stat-row">
-                            <span class="stat-label">Số phiếu phát ra</span>
-                            <input type="number" id="soPhieuPhatRa" class="form-control" style="width: 80px; padding: 4px 8px; text-align: right;" value="0" min="0">
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">Số phiếu thu vào</span>
-                            <span class="stat-value" id="soPhieuThuVao">0</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">Đạt %</span>
-                            <span class="stat-percent" id="phanTramPhieu">0%</span>
-                        </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Số phiếu thu vào</span>
+                        <span class="stat-value" id="soPhieuThuVao">0</span>
                     </div>
-
-                    <!-- Cột 3: Thông tin ứng cử -->
-                    <div class="stat-card">
-                        <h3>THÔNG TIN ỨNG CỬ</h3>
-                        <div class="stat-row">
-                            <span class="stat-label">Số người ứng cử</span>
-                            <span class="stat-value" id="soNguoiUngCu">0</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">Số người được bầu</span>
-                            <span class="stat-value" id="soNguoiDuocBau">0</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">Số dư</span>
-                            <span class="stat-value" id="soDu">0</span>
-                        </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Đạt %</span>
+                        <span class="stat-percent" id="phanTramPhieu">0%</span>
                     </div>
                 </div>
 
-                <!-- Kết quả ứng viên -->
-                <div class="candidate-results">
-                    <h3>KẾT QUẢ ỨNG VIÊN</h3>
-                    <table id="resultsTable">
-                        <thead>
-                            <tr>
-                                <th>STT</th>
-                                <th>Họ tên ứng viên</th>
-                                <th>Số phiếu</th>
-                                <th>Tỷ lệ %</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Kết quả sẽ được cập nhật ở đây -->
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Kiểm tra từng phiếu - ĐÃ SỬA -->
-                <div class="phieu-details">
-                    <h3>KIỂM TRA TỪNG PHIẾU</h3>
-                    <div class="phieu-table-container" id="phieuTableContainer">
-                        <!-- Bảng kiểm tra từng phiếu sẽ được tạo ở đây -->
+                <!-- Cột 3: Thông tin ứng cử -->
+                <div class="stat-card">
+                    <h3>THÔNG TIN ỨNG CỬ</h3>
+                    <div class="stat-row">
+                        <span class="stat-label">Số người ứng cử</span>
+                        <span class="stat-value" id="soNguoiUngCu">0</span>
                     </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Số người được bầu</span>
+                        <span class="stat-value" id="soNguoiDuocBau">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Số dư</span>
+                        <span class="stat-value" id="soDu">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kết quả ứng viên -->
+            <div class="candidate-results">
+                <h3>KẾT QUẢ ỨNG VIÊN</h3>
+                <table id="resultsTable">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Họ tên ứng viên</th>
+                            <th>Số phiếu</th>
+                            <th>Tỷ lệ %</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Kết quả sẽ được cập nhật ở đây -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Kiểm tra từng phiếu -->
+            <div class="phieu-details">
+                <h3>KIỂM TRA TỪNG PHIẾU</h3>
+                <div class="phieu-table-container" id="phieuTableContainer">
+                    <!-- Bảng kiểm tra từng phiếu sẽ được tạo ở đây -->
                 </div>
             </div>
         </div>
@@ -1159,35 +998,6 @@
         let phieuDetails = [];
         let currentEditPhieuIndex = -1;
 
-        // Mobile menu functionality
-        function initMobileMenu() {
-            const menuToggle = document.querySelector('.menu-toggle');
-            const closeMenu = document.querySelector('.close-menu');
-            const mobileSidebar = document.querySelector('.mobile-sidebar');
-            const overlay = document.querySelector('.overlay');
-
-            function openMenu() {
-                mobileSidebar.classList.add('active');
-                overlay.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
-
-            function closeMenuFunc() {
-                mobileSidebar.classList.remove('active');
-                overlay.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-
-            menuToggle.addEventListener('click', openMenu);
-            closeMenu.addEventListener('click', closeMenuFunc);
-            overlay.addEventListener('click', closeMenuFunc);
-
-            // Close menu when clicking on nav links
-            document.querySelectorAll('.mobile-sidebar .nav-links a').forEach(link => {
-                link.addEventListener('click', closeMenuFunc);
-            });
-        }
-
         // Simple user path function
         function getUserPath(path = '') {
             if (!currentUser || !currentUser.uid) {
@@ -1224,7 +1034,7 @@
                 }
                 document.getElementById('phanTramPhieu').textContent = phanTramPhieu.toFixed(1) + '%';
 
-                // THÊM DÒNG NÀY - Tự động lưu khi có thay đổi
+                // Tự động lưu khi có thay đổi
                 saveKiemPhieu();
                 
             } catch (error) {
@@ -1423,7 +1233,7 @@
             });
         }
 
-        // Cập nhật bảng kiểm tra từng phiếu - ĐÃ SỬA
+        // Cập nhật bảng kiểm tra từng phiếu
         function updatePhieuTable() {
             const container = document.getElementById('phieuTableContainer');
             
@@ -1489,28 +1299,28 @@
                 });
             }
 
-        // Thêm hàng tổng cộng
-if (phieuDetails.length > 0) {
-    tableHTML += `<tr style="background:#f1f3f5;font-weight:600;">
-        <td colspan="3" style="text-align:right;">TỔNG</td>`;
-    
-    // Tính tổng cho từng ứng viên (số phiếu không bị loại)
-    candidates.forEach(candidate => {
-        let total = 0;
-        phieuDetails.forEach(phieu => {
-            if (!phieu.selectedIds.includes(candidate.id)) total++;
-        });
-        tableHTML += `<td>${total}</td>`;
-    });
+            // Thêm hàng tổng cộng
+            if (phieuDetails.length > 0) {
+                tableHTML += `<tr style="background:#f1f3f5;font-weight:600;">
+                    <td colspan="3" style="text-align:right;">TỔNG</td>`;
+                
+                // Tính tổng cho từng ứng viên (số phiếu không bị loại)
+                candidates.forEach(candidate => {
+                    let total = 0;
+                    phieuDetails.forEach(phieu => {
+                        if (!phieu.selectedIds.includes(candidate.id)) total++;
+                    });
+                    tableHTML += `<td>${total}</td>`;
+                });
 
-    // Tổng tất cả (tổng số phiếu * số ứng viên không bị loại)
-    const totalPerColumn = candidates.map(candidate =>
-        phieuDetails.reduce((sum, phieu) => sum + (!phieu.selectedIds.includes(candidate.id) ? 1 : 0), 0)
-    );
-    const grandTotal = totalPerColumn.reduce((a, b) => a + b, 0);
+                // Tổng tất cả (tổng số phiếu * số ứng viên không bị loại)
+                const totalPerColumn = candidates.map(candidate =>
+                    phieuDetails.reduce((sum, phieu) => sum + (!phieu.selectedIds.includes(candidate.id) ? 1 : 0), 0)
+                );
+                const grandTotal = totalPerColumn.reduce((a, b) => a + b, 0);
 
-    tableHTML += `<td><strong>${grandTotal}</strong></td><td></td></tr>`;
-}
+                tableHTML += `<td><strong>${grandTotal}</strong></td><td></td></tr>`;
+            }
         
             tableHTML += `</tbody></table>`;
             container.innerHTML = tableHTML;
@@ -1676,99 +1486,97 @@ if (phieuDetails.length > 0) {
         }
 
         // Load thông tin kiểm phiếu
-        <!-- Bắt đầu phần đã chỉnh -->
-// Load thông tin kiểm phiếu - ĐÃ SỬA
-async function loadKiemPhieu() {
-    try {
-        // --- 1️⃣ Thông tin thống kê ---
-        const userPath = getUserPath('kiemPhieuData');
-        const snapshot = await db.ref(userPath).once('value');
+        async function loadKiemPhieu() {
+            try {
+                // 1️⃣ Thông tin thống kê
+                const userPath = getUserPath('kiemPhieuData');
+                const snapshot = await db.ref(userPath).once('value');
 
-        if (snapshot.exists()) {
-            const data = snapshot.val();
-            document.getElementById('tongSoCuTri').value = data.tongSoCuTri || 0;
-            document.getElementById('thamGiaBoPhieu').value = data.thamGiaBoPhieu || 0;
-            document.getElementById('soPhieuPhatRa').value = data.soPhieuPhatRa || 0;
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    document.getElementById('tongSoCuTri').value = data.tongSoCuTri || 0;
+                    document.getElementById('thamGiaBoPhieu').value = data.thamGiaBoPhieu || 0;
+                    document.getElementById('soPhieuPhatRa').value = data.soPhieuPhatRa || 0;
 
-            if (data.soPhieuThuVao) {
-                document.getElementById('soPhieuThuVao').textContent = data.soPhieuThuVao;
-                currentPhieu = parseInt(data.soPhieuThuVao) + 1 || 1;
-                document.getElementById('currentPhieu').textContent = currentPhieu;
-                document.getElementById('currentPhieuDisplay').textContent = currentPhieu;
-            }
-        }
-
-        // --- 2️⃣ Kết quả ứng viên ---
-        const resultsSnapshot = await db.ref(getUserPath('candidateResults')).once('value');
-        if (resultsSnapshot.exists()) {
-            const resultData = resultsSnapshot.val();
-            candidates.forEach(candidate => {
-                const c = resultData[candidate.id];
-                if (c) {
-                    candidate.votes = parseInt(c.votes) || 0;
-                    candidate.stt = parseInt(c.stt) || candidate.stt;
+                    if (data.soPhieuThuVao) {
+                        document.getElementById('soPhieuThuVao').textContent = data.soPhieuThuVao;
+                        currentPhieu = parseInt(data.soPhieuThuVao) + 1 || 1;
+                        document.getElementById('currentPhieu').textContent = currentPhieu;
+                        document.getElementById('currentPhieuDisplay').textContent = currentPhieu;
+                    }
                 }
-            });
-            updateResultsTable();
-        }
 
-        // --- 3️⃣ Dữ liệu phiếu đã kiểm ---
-        const phieuSnapshot = await db.ref(getUserPath('phieuDetails')).once('value');
-        if (phieuSnapshot.exists()) {
-            const rawData = phieuSnapshot.val();
-            if (Array.isArray(rawData)) {
-                // Nếu lưu dạng mảng
-                phieuDetails = rawData.filter(item => item !== null);
-            } else {
-                // Nếu lưu dạng object
-                phieuDetails = Object.values(rawData);
+                // 2️⃣ Kết quả ứng viên
+                const resultsSnapshot = await db.ref(getUserPath('candidateResults')).once('value');
+                if (resultsSnapshot.exists()) {
+                    const resultData = resultsSnapshot.val();
+                    candidates.forEach(candidate => {
+                        const c = resultData[candidate.id];
+                        if (c) {
+                            candidate.votes = parseInt(c.votes) || 0;
+                            candidate.stt = parseInt(c.stt) || candidate.stt;
+                        }
+                    });
+                    updateResultsTable();
+                }
+
+                // 3️⃣ Dữ liệu phiếu đã kiểm
+                const phieuSnapshot = await db.ref(getUserPath('phieuDetails')).once('value');
+                if (phieuSnapshot.exists()) {
+                    const rawData = phieuSnapshot.val();
+                    if (Array.isArray(rawData)) {
+                        // Nếu lưu dạng mảng
+                        phieuDetails = rawData.filter(item => item !== null);
+                    } else {
+                        // Nếu lưu dạng object
+                        phieuDetails = Object.values(rawData);
+                    }
+                    updatePhieuTable();
+                } else {
+                    phieuDetails = [];
+                    updatePhieuTable();
+                }
+
+                updatePercentages();
+                console.log('✅ Dữ liệu kiểm phiếu đã được tải!');
+            } catch (error) {
+                console.error('❌ Lỗi khi tải kiểm phiếu:', error);
             }
-            updatePhieuTable();
-        } else {
-            phieuDetails = [];
-            updatePhieuTable();
         }
 
-        updatePercentages();
-        console.log('✅ Dữ liệu kiểm phiếu đã được tải!');
-    } catch (error) {
-        console.error('❌ Lỗi khi tải kiểm phiếu:', error);
-    }
-}
-<!-- Kết thúc phần đã chỉnh -->
         // Lưu thông tin kiểm phiếu
         async function saveKiemPhieu() {
-    try {
-        // --- 1️⃣ Lưu thông tin chung ---
-        const userPath = getUserPath('kiemPhieuData');
-        const kiemPhieuData = {
-            tongSoCuTri: parseInt(document.getElementById('tongSoCuTri').value) || 0,
-            thamGiaBoPhieu: parseInt(document.getElementById('thamGiaBoPhieu').value) || 0,
-            soPhieuPhatRa: parseInt(document.getElementById('soPhieuPhatRa').value) || 0,
-            soPhieuThuVao: parseInt(document.getElementById('soPhieuThuVao').textContent) || 0
-        };
-        await db.ref(userPath).set(kiemPhieuData);
+            try {
+                // 1️⃣ Lưu thông tin chung
+                const userPath = getUserPath('kiemPhieuData');
+                const kiemPhieuData = {
+                    tongSoCuTri: parseInt(document.getElementById('tongSoCuTri').value) || 0,
+                    thamGiaBoPhieu: parseInt(document.getElementById('thamGiaBoPhieu').value) || 0,
+                    soPhieuPhatRa: parseInt(document.getElementById('soPhieuPhatRa').value) || 0,
+                    soPhieuThuVao: parseInt(document.getElementById('soPhieuThuVao').textContent) || 0
+                };
+                await db.ref(userPath).set(kiemPhieuData);
 
-        // --- 2️⃣ Lưu kết quả ứng viên ---
-        const resultsData = {};
-        candidates.forEach(candidate => {
-            resultsData[candidate.id] = {
-                votes: candidate.votes || 0,
-                name: candidate.name,
-                stt: candidate.stt
-            };
-        });
-        await db.ref(getUserPath('candidateResults')).set(resultsData);
+                // 2️⃣ Lưu kết quả ứng viên
+                const resultsData = {};
+                candidates.forEach(candidate => {
+                    resultsData[candidate.id] = {
+                        votes: candidate.votes || 0,
+                        name: candidate.name,
+                        stt: candidate.stt
+                    };
+                });
+                await db.ref(getUserPath('candidateResults')).set(resultsData);
 
-        // --- 3️⃣ Lưu chi tiết phiếu ---
-        const filteredPhieu = phieuDetails.filter(p => p && p.phieuSo);
-        await db.ref(getUserPath('phieuDetails')).set(filteredPhieu);
+                // 3️⃣ Lưu chi tiết phiếu
+                const filteredPhieu = phieuDetails.filter(p => p && p.phieuSo);
+                await db.ref(getUserPath('phieuDetails')).set(filteredPhieu);
 
-        console.log('💾 Đã lưu toàn bộ dữ liệu kiểm phiếu thành công!');
-    } catch (error) {
-        console.error('❌ Lỗi khi lưu kiểm phiếu:', error);
-    }
-}
+                console.log('💾 Đã lưu toàn bộ dữ liệu kiểm phiếu thành công!');
+            } catch (error) {
+                console.error('❌ Lỗi khi lưu kiểm phiếu:', error);
+            }
+        }
 
         // Reset selection
         function resetSelection() {
@@ -1800,9 +1608,6 @@ async function loadKiemPhieu() {
 
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('mainContent').style.display = 'block';
-
-                // Cập nhật tên user trên mobile
-                document.getElementById('mobileUserName').textContent = currentUser.email || 'Admin';
 
                 await loadThongTin();
                 await loadCandidates();
@@ -1861,41 +1666,9 @@ async function loadKiemPhieu() {
             }
         }
 
-        // Navigation
-        function initNavigation() {
-            document.querySelectorAll('.nav-links a[data-target]').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    document.querySelectorAll('.nav-links a').forEach(item => {
-                        item.classList.remove('active');
-                    });
-                    
-                    this.classList.add('active');
-                    
-                    const targetPage = this.getAttribute('data-target') + '.html';
-                    if (!window.location.href.includes(targetPage)) {
-                        window.location.href = targetPage;
-                    }
-                });
-            });
-        }
-
         // Logout
         function initLogout() {
-            document.getElementById('logout').addEventListener('click', function(e) {
-                e.preventDefault();
-                if (confirm('Bạn có chắc muốn đăng xuất?')) {
-                    auth.signOut().then(() => {
-                        alert('Đã đăng xuất!');
-                        window.location.href = 'index.html';
-                    }).catch(error => {
-                        console.error('Logout error:', error);
-                    });
-                }
-            });
-
-            document.getElementById('mobileLogout').addEventListener('click', function(e) {
+            document.getElementById('logoutBtn').addEventListener('click', function(e) {
                 e.preventDefault();
                 if (confirm('Bạn có chắc muốn đăng xuất?')) {
                     auth.signOut().then(() => {
@@ -1910,8 +1683,6 @@ async function loadKiemPhieu() {
 
         // Khởi chạy ứng dụng
         window.addEventListener('load', function() {
-            initMobileMenu();
-            initNavigation();
             initLogout();
             initApp();
         });
