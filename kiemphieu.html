@@ -956,7 +956,7 @@
             <div class="phieu-details">
                 <div class="phieu-details-header">
                     <h3>KIỂM TRA TỪNG PHIẾU</h3>
-                    <button id="btnExportEmail" class="btn btn-info">Gửi Email (Excel)</button>
+                    <button id="btnExportExcel" class="btn btn-info">Xuất Excel (CSV)</button>
                 </div>
                 <div class="phieu-table-container" id="phieuTableContainer">
                     </div>
@@ -1070,7 +1070,7 @@
                         candidates.push({
                             id: child.key,
                             stt: stt,
-                            name: candidateData.hoTen || '',
+                            name: candidateData.hoTen || `Ứng viên ${stt}`, // Dùng tên giả định nếu không có
                             votes: 0
                         });
                         stt++;
@@ -1104,7 +1104,15 @@
             });
 
             document.querySelectorAll('.candidate-checkbox').forEach(checkbox => {
-                checkbox.addEventListener('change', updateSelectedCount);
+                checkbox.addEventListener('change', (e) => {
+                    updateSelectedCount();
+                    const candidateItem = e.target.closest('.candidate-item');
+                    if (e.target.checked) {
+                        candidateItem.classList.add('selected');
+                    } else {
+                        candidateItem.classList.remove('selected');
+                    }
+                });
             });
         }
 
@@ -1134,7 +1142,7 @@
             }
 
             // Tách các số bằng dấu cách
-            const numbers = inputValue.split(' ').filter(num => num.trim() !== '');
+            const numbers = inputValue.split(/[,\s]+/).filter(num => num.trim() !== ''); // Hỗ trợ cả dấu cách và dấu phẩy
             
             
             // Tích chọn các số được nhập
@@ -1186,20 +1194,17 @@
             
             // Xác định trạng thái phiếu
             let trangThai = '';
-            const soUngVienDuocChon = selectedIds.length;
+            const soUngVienBiLoai = selectedIds.length;
+            const soUngVienDuocBauHopLe = candidates.length - soUngVienBiLoai; // Số người được bầu = số người không bị loại
 
-            // Đây là logic bầu loại. Người được chọn là người bị loại.
-            // Số người hợp lệ: Số người không bị loại = Tổng số UC - Số người bị loại (được chọn)
-            const soNguoiHopLe = candidates.length - soUngVienDuocChon;
-            
-            if (soUngVienDuocChon === candidates.length) {
-                trangThai = 'Không hợp lệ'; // Loại tất cả
-            } else if (soUngVienDuocChon === 0) {
-                trangThai = 'Không hợp lệ'; // Không loại ai
-            } else if (soNguoiHopLe === soNguoiDuocBau) {
+            if (soUngVienBiLoai === 0 || soUngVienBiLoai === candidates.length) {
+                trangThai = 'Không hợp lệ'; // Không loại ai hoặc loại tất cả
+            } else if (soUngVienBiLoai === soDu) {
                 trangThai = 'Hợp lệ';
-            } else if (soNguoiHopLe < soNguoiDuocBau && soNguoiHopLe > 0) {
-                trangThai = 'Bầu thiếu';
+            } else if (soUngVienBiLoai < soDu && soUngVienDuocBauHopLe > 0) {
+                 trangThai = 'Bầu thiếu'; // Bị loại ít hơn số dư, tức là số người được bầu nhiều hơn
+            } else if (soUngVienBiLoai > soDu) {
+                trangThai = 'Không hợp lệ'; // Bị loại nhiều hơn số dư, tức là số người được bầu ít hơn
             } else {
                 trangThai = 'Không hợp lệ';
             }
@@ -1275,7 +1280,9 @@
             
             // Thêm cột cho từng ứng viên với tên đầy đủ
             candidates.forEach(candidate => {
-                tableHTML += `<th class="candidate-col candidate-name-header">${candidate.name}<br>(N${candidate.stt})</th>`;
+                // Tên rút gọn (N1)
+                const shortName = candidate.name.split(' ').pop() || candidate.name;
+                tableHTML += `<th class="candidate-col candidate-name-header">${shortName}<br>(N${candidate.stt})</th>`;
             });
             
             tableHTML += `
@@ -1296,6 +1303,7 @@
                 `;
             } else {
                 phieuDetails.forEach((phieu, index) => {
+                    // Sắp xếp các số thứ tự được chọn (bị loại)
                     const docPhieu = phieu.selectedStt ? phieu.selectedStt.sort((a, b) => a - b).join(' ') : '';
                     
                     tableHTML += `
@@ -1306,12 +1314,14 @@
                     `;
                     
                     // Hiển thị kết quả cho từng ứng viên (1 nếu không bị loại, 0 nếu bị loại)
+                    let soNguoiKhongBiLoai = 0;
                     candidates.forEach(candidate => {
                         const isLoai = phieu.selectedIds.includes(candidate.id);
-                        tableHTML += `<td class="candidate-col">${isLoai ? '0' : '<strong>1</strong>'}</td>`;
+                        const voteValue = isLoai ? '0' : '<strong>1</strong>';
+                        tableHTML += `<td class="candidate-col">${voteValue}</td>`;
+                        if (!isLoai) soNguoiKhongBiLoai++;
                     });
                     
-                    const soNguoiKhongBiLoai = candidates.length - phieu.selectedIds.length;
                     tableHTML += `
                         <td class="action-col"><strong>${soNguoiKhongBiLoai}</strong></td>
                         <td class="action-col">
@@ -1327,19 +1337,15 @@
                     <td colspan="3" style="text-align:right;">TỔNG</td>`;
                 
                 // Tính tổng cho từng ứng viên (số phiếu không bị loại)
+                let grandTotal = 0;
                 candidates.forEach(candidate => {
                     let total = 0;
                     phieuDetails.forEach(phieu => {
                         if (!phieu.selectedIds.includes(candidate.id)) total++;
                     });
                     tableHTML += `<td>${total}</td>`;
+                    grandTotal += total;
                 });
-
-                // Tổng tất cả các phiếu hợp lệ (tổng số phiếu * số ứng viên không bị loại)
-                const totalPerColumn = candidates.map(candidate =>
-                    phieuDetails.reduce((sum, phieu) => sum + (!phieu.selectedIds.includes(candidate.id) ? 1 : 0), 0)
-                );
-                const grandTotal = totalPerColumn.reduce((a, b) => a + b, 0);
 
                 tableHTML += `<td><strong>${grandTotal}</strong></td><td></td></tr>`;
             }
@@ -1411,31 +1417,32 @@
             // Tính lại trạng thái
             const soNguoiDuocBau = parseInt(document.getElementById('soNguoiDuocBau').textContent) || 0;
             const soDu = parseInt(document.getElementById('soDu').textContent) || 0;
-            const soUngVienDuocChon = selectedIds.length; // Số người bị loại
+            const soUngVienBiLoai = selectedIds.length;
+            const soUngVienDuocBauHopLe = candidates.length - soUngVienBiLoai; 
 
-            // Số người hợp lệ: Số người không bị loại = Tổng số UC - Số người bị loại (được chọn)
-            const soNguoiHopLe = candidates.length - soUngVienDuocChon; 
-
-            if (soUngVienDuocChon === candidates.length) {
-                phieu.trangThai = 'Không hợp lệ'; // Loại tất cả
-            } else if (soUngVienDuocChon === 0) {
-                phieu.trangThai = 'Không hợp lệ'; // Không loại ai
-            } else if (soNguoiHopLe === soNguoiDuocBau) {
+            if (soUngVienBiLoai === 0 || soUngVienBiLoai === candidates.length) {
+                phieu.trangThai = 'Không hợp lệ'; 
+            } else if (soUngVienBiLoai === soDu) {
                 phieu.trangThai = 'Hợp lệ';
-            } else if (soNguoiHopLe < soNguoiDuocBau && soNguoiHopLe > 0) {
-                phieu.trangThai = 'Bầu thiếu';
+            } else if (soUngVienBiLoai < soDu && soUngVienDuocBauHopLe > 0) {
+                phieu.trangThai = 'Bầu thiếu'; 
+            } else if (soUngVienBiLoai > soDu) {
+                phieu.trangThai = 'Không hợp lệ'; 
             } else {
                 phieu.trangThai = 'Không hợp lệ';
             }
 
             // Cập nhật số phiếu của ứng viên
             candidates.forEach(candidate => {
-                // Giảm số phiếu của những người KHÔNG bị loại trước đó (tức là không có trong oldSelectedIds) mà nay lại bị loại (có trong selectedIds)
-                if (!oldSelectedIds.includes(candidate.id) && selectedIds.includes(candidate.id)) {
+                // Giảm số phiếu của những người KHÔNG bị loại trước đó (tức là nhận phiếu) mà nay lại bị loại
+                const wasVoted = !oldSelectedIds.includes(candidate.id);
+                const isLoai = selectedIds.includes(candidate.id);
+
+                if (wasVoted && isLoai) {
                     candidate.votes -= 1;
                 }
-                // Tăng số phiếu của những người bị loại trước đó (có trong oldSelectedIds) mà nay lại không bị loại (không có trong selectedIds)
-                if (oldSelectedIds.includes(candidate.id) && !selectedIds.includes(candidate.id)) {
+                // Tăng số phiếu của những người bị loại trước đó (tức là không nhận phiếu) mà nay lại không bị loại
+                if (!wasVoted && !isLoai) {
                     candidate.votes += 1;
                 }
             });
@@ -1540,7 +1547,7 @@
                     }
                 }
 
-                // 2️⃣ Dữ liệu phiếu đã kiểm
+                // 3️⃣ Dữ liệu phiếu đã kiểm
                 const phieuSnapshot = await db.ref(getUserPath('phieuDetails')).once('value');
                 if (phieuSnapshot.exists()) {
                     const rawData = phieuSnapshot.val();
@@ -1629,7 +1636,7 @@
             document.getElementById('numberInput').focus();
         }
         
-        // --- CHỨC NĂNG EXPORT EMAIL ---
+        // --- CHỨC NĂNG EXPORT EXCEL (CSV) ---
         function exportPhieuDetailsToExcel() {
             if (phieuDetails.length === 0) {
                 alert('Chưa có phiếu nào được kiểm để xuất dữ liệu.');
@@ -1637,9 +1644,13 @@
             }
 
             // 1. Chuẩn bị header
-            let header = "Phiếu số,Đọc phiếu (Loại),Trạng thái";
+            // Thay thế 'Đọc phiếu' thành 'Đọc phiếu (Loại)' như trong ảnh
+            let header = "Phiếu số,Đọc phiếu (Loại),Trạng thái"; 
+            
             candidates.forEach(c => {
-                header += `,${c.name} (N${c.stt})`;
+                // Lấy tên rút gọn cho header cột ứng viên
+                const shortName = c.name.split(' ').pop() || c.name;
+                header += `,"${shortName} (N${c.stt})"`;
             });
             header += ",Tổng\n"; // Thêm cột tổng cuối cùng
 
@@ -1650,7 +1661,7 @@
 
             phieuDetails.forEach(phieu => {
                 const docPhieu = phieu.selectedStt ? phieu.selectedStt.sort((a, b) => a - b).join(' ') : '';
-                // Bao quanh bằng dấu "" để đảm bảo dấu phẩy trong nội dung không làm hỏng định dạng CSV
+                // Bao quanh bằng dấu "" để đảm bảo dấu phẩy/khoảng trắng trong nội dung không làm hỏng định dạng CSV
                 let row = `${phieu.phieuSo},"${docPhieu}",${phieu.trangThai}`;
                 
                 let soNguoiKhongBiLoai = 0;
@@ -1669,31 +1680,30 @@
                 csv += row;
             });
             
-            // Tính tổng cho hàng cuối cùng
-            totalVotes.forEach(total => {
-                grandTotalVotes += total;
-            });
-
-
             // 3. Thêm hàng TỔNG
-            // Cột TỔNG phải căn chỉnh đúng cột: 3 cột đầu tiên (Phiếu số, Đọc phiếu, Trạng thái) trống
-            let totalRow = "TỔNG,,"; 
-            totalVotes.forEach(total => {
-                totalRow += `,${total}`;
+            // 3 cột đầu tiên (Phiếu số, Đọc phiếu, Trạng thái) trống, CỘT TỔNG bắt đầu từ cột thứ 4
+            let totalRow = ",,,TỔNG"; 
+            let totalColCount = 0;
+
+            candidates.forEach(total => {
+                totalRow += `,${totalVotes[totalColCount]}`;
+                grandTotalVotes += totalVotes[totalColCount];
+                totalColCount++;
             });
+            
             totalRow += `,${grandTotalVotes}\n`;
             csv += totalRow;
-
+            
 
             // 4. Tạo Blob và link tải về
             const filename = `KiemPhieu_ChiTiet_${new Date().toISOString().slice(0, 10)}.csv`;
             // Thêm BOM (Byte Order Mark) để đảm bảo hiển thị tiếng Việt có dấu trong Excel
             const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csv], { type: 'text/csv;charset=utf-8;' }); 
-            const link = document.createElement('a');
             
-            
-            // Tải file về
-            if (link.download !== undefined) { 
+            if (window.navigator.msSaveOrOpenBlob) { // Dành cho IE 10+
+                window.navigator.msSaveOrOpenBlob(blob, filename);
+            } else {
+                const link = document.createElement('a');
                 const url = URL.createObjectURL(blob);
                 link.setAttribute('href', url);
                 link.setAttribute('download', filename);
@@ -1701,19 +1711,9 @@
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
-                
-                // Mở mail client để người dùng đính kèm file vừa tải
-                setTimeout(() => {
-                    const emailSubject = encodeURIComponent(`Báo cáo chi tiết kiểm phiếu (File đính kèm: ${filename})`);
-                    const emailBody = encodeURIComponent("Kính gửi,\n\nĐây là báo cáo chi tiết kết quả kiểm phiếu. Vui lòng đính kèm file CSV/Excel vừa tải xuống để hoàn tất việc gửi báo cáo.\n\nTrân trọng!");
-                    window.location.href = `mailto:?subject=${emailSubject}&body=${emailBody}`;
-                }, 500); // Chờ 0.5s để file tải về
-                
-            } else {
-                alert('Trình duyệt của bạn không hỗ trợ tải file tự động. Vui lòng thử lại với trình duyệt khác.');
             }
         }
-        // --- HẾT CHỨC NĂNG EXPORT EMAIL ---
+        // --- HẾT CHỨC NĂNG EXPORT EXCEL (CSV) ---
 
 
         // Khởi tạo ứng dụng
@@ -1758,8 +1758,8 @@
                 document.getElementById('thamGiaBoPhieu').addEventListener('input', updatePercentages);
                 document.getElementById('soPhieuPhatRa').addEventListener('input', updatePercentages);
                 
-                // Sự kiện cho nút Gửi Email
-                document.getElementById('btnExportEmail').addEventListener('click', exportPhieuDetailsToExcel);
+                // Sự kiện cho nút Xuất Excel đã được gán vào đây
+                document.getElementById('btnExportExcel').addEventListener('click', exportPhieuDetailsToExcel);
 
                 // Thêm event listeners cho modal
                 document.querySelector('.close').addEventListener('click', closeEditModal);
