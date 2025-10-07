@@ -592,16 +592,118 @@
 
         ::-webkit-scrollbar-track {
             background: #f1f1f1;
-            border-radius: 3px;
+@media (max-width: 768px) {
+            .main-content {
+                padding: 0 15px;
+            }
+            
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .user-info {
+                align-self: flex-end;
+            }
+            
+            .tabs {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+            }
+            
+            .tab {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+            
+            .tab-content {
+                padding: 15px;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            table {
+                font-size: 12px;
+            }
+            
+            table th, table td {
+                padding: 8px 10px;
+            }
+            
+            .btn {
+                padding: 7px 12px;
+                font-size: 12px;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            h2 {
+                font-size: 1.1rem;
+                text-align: center;
+            }
+            
+            .tab-content {
+                padding: 12px;
+            }
         }
 
-        ::-webkit-scrollbar-thumb {
-            background: #c1c1c1;
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #a8a8a8;
+        @media (max-width: 480px) {
+            body {
+                font-size: 12px;
+            }
+            
+            .main-content {
+                padding: 0 10px;
+            }
+            
+            .page-header h2 {
+                font-size: 18px;
+            }
+            
+            .user-info {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+            
+            .user-info img {
+                width: 28px;
+                height: 28px;
+            }
+            
+            .tab-content {
+                padding: 12px;
+            }
+            
+            .form-control {
+                padding: 6px 10px;
+                font-size: 12px;
+            }
+            
+            .btn {
+                padding: 6px 10px;
+                font-size: 12px;
+            }
+            
+            .header-title {
+                font-size: 0.9rem;
+                max-width: 40%;
+            }
+            
+            .btn {
+                padding: 0.4rem 0.7rem;
+                font-size: 0.75rem;
+            }
+            
+            .header-buttons {
+                gap: 5px;
+            }
         }
     </style>
 </head>
