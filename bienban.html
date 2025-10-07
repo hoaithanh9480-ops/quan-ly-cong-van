@@ -23,7 +23,7 @@
         header {
             background: linear-gradient(135deg, #1e3c72, #2a5298);
             color: white;
-            padding: 12px 20px;
+            padding: 8px 16px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             position: fixed;
             top: 0;
@@ -43,15 +43,18 @@
         .header-title {
             font-size: 18px;
             font-weight: bold;
+            display: flex;
+            align-items: center;
         }
         
         .header-buttons {
             display: flex;
-            gap: 10px;
+            gap: 8px;
+            align-items: center;
         }
         
         .btn {
-            padding: 8px 16px;
+            padding: 6px 12px;
             background: rgba(255, 255, 255, 0.2);
             color: white;
             border: none;
@@ -59,14 +62,13 @@
             cursor: pointer;
             font-size: 13px;
             transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .btn:hover {
             background: rgba(255, 255, 255, 0.3);
-        }
-        
-        .logout-btn {
-            background: rgba(255, 255, 255, 0.1);
         }
         
         .back-btn {
@@ -90,7 +92,7 @@
             padding: 20px; 
             max-width: 1200px;
             margin: 0 auto;
-            margin-top: 80px;
+            margin-top: 60px;
         }
         
         .page-header { 
@@ -285,17 +287,17 @@
             }
             
             .header-buttons {
-                gap: 8px;
+                gap: 6px;
             }
             
             .btn {
-                padding: 6px 12px;
+                padding: 5px 10px;
                 font-size: 12px;
             }
             
             .main-content {
                 padding: 10px;
-                margin-top: 70px;
+                margin-top: 55px;
             }
             
             .bien-ban-wrapper {
@@ -333,16 +335,16 @@
             }
             
             header {
-                padding: 10px 15px;
+                padding: 6px 12px;
             }
             
             .header-content {
                 flex-wrap: wrap;
-                gap: 10px;
+                gap: 8px;
             }
             
             .header-title {
-                font-size: 14px;
+                font-size: 15px;
                 width: 100%;
                 text-align: center;
             }
@@ -352,8 +354,13 @@
                 justify-content: center;
             }
             
+            .btn {
+                padding: 4px 8px;
+                font-size: 11px;
+            }
+            
             .main-content {
-                margin-top: 90px;
+                margin-top: 70px;
             }
             
             .page-header {
@@ -410,12 +417,12 @@
             }
             
             .header-title {
-                font-size: 13px;
+                font-size: 14px;
             }
             
             .btn {
-                padding: 5px 10px;
-                font-size: 11px;
+                padding: 3px 6px;
+                font-size: 10px;
             }
             
             .page-header h2 {
@@ -451,6 +458,8 @@
             </div>
         </div>
     </header>
+    
+    <!-- Phần còn lại của mã HTML giữ nguyên -->
     <div class="main-content">
         <div class="page-header">
             <h2>Biên bản kết quả kiểm phiếu</h2>
@@ -469,6 +478,7 @@
             </div>
 
             <div id="bienBanContent" class="bien-ban-wrapper">
+                <!-- Nội dung biên bản giữ nguyên -->
                 <div class="bb-header-top">
                     <p>Tỉnh/Thành phố: <span id="tinhThanhBb" class="placeholder">...</span><br>Xã/Phường/Thị trấn: <span id="phuongXaBb" class="placeholder">...</span></p>
                     <p style="text-align: center;">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br>Độc lập - Tự do - Hạnh phúc</p>
@@ -548,6 +558,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
     <script>
+        // JavaScript giữ nguyên
         const firebaseConfig = { 
             apiKey: "AIzaSyAt-OooTscmthbJXNcvy80RgPDA9T46-0w", 
             authDomain: "kiemphieu-45823.firebaseapp.com", 
