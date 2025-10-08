@@ -234,6 +234,15 @@
             background: #218838; 
         }
         
+        .btn-warning { 
+            background: #ffc107; 
+            color: #212529;
+        }
+        
+        .btn-warning:hover { 
+            background: #e0a800; 
+        }
+        
         .loading { 
             text-align: center; 
             padding: 20px; 
@@ -475,6 +484,7 @@
             <div class="action-buttons">
                 <button id="btnInBienBan" class="action-btn">In biên bản</button>
                 <button id="btnTaiXuongWord" class="action-btn btn-success">Tải xuống Word (.doc)</button>
+                <button id="btnTaiXuongExcel" class="action-btn btn-warning">Tải xuống Excel - Kiểm tra từng phiếu</button>
             </div>
 
             <div id="bienBanContent" class="bien-ban-wrapper">
@@ -557,6 +567,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script>
         // JavaScript giữ nguyên
         const firebaseConfig = { 
@@ -710,29 +721,121 @@
             document.body.removeChild(fileDownload);
         }
 
-        document.getElementById('btnInBienBan').addEventListener('click', () => window.print());
-        document.getElementById('btnTaiXuongWord').addEventListener('click', exportToWord);
+        // Hàm xuất file Excel "KIỂM TRA TỪNG PHIẾU"
+        async function exportToExcel() {
+            try {
+                // Lấy dữ liệu từ Firebase
+                const [donViSnap, kiemPhieuDataSnap, ungCuSnap, candidateResultsSnap] = await Promise.all([
+                    db.ref(getUserPath('donVi')).once('value'),
+                    db.ref(getUserPath('kiemPhieuData')).once('value'),
+                    db.ref(getUserPath('ungCu')).once('value'),
+                    db.ref(getUserPath('candidateResults')).once('value')
+                ]);
 
-        auth.onAuthStateChanged(async (user) => {
-            const loadingElement = document.getElementById('loading');
-            const mainContentElement = document.getElementById('mainContent');
-            if (user) {
-                currentUser = user;
-                document.getElementById('userName').textContent = user.email || 'Quản trị viên';
-                await loadBienBanData();
-                loadingElement.style.display = 'none';
-                mainContentElement.style.display = 'block';
-            } else {
-                loadingElement.innerHTML = 'Chưa đăng nhập. Đang chuyển hướng...';
-                setTimeout(() => { window.location.href = 'index.html'; }, 2000);
+                // Tạo workbook và worksheet
+                const wb = XLSX.utils.book_new();
+                
+                // Tạo sheet "KIỂM TRA TỪNG PHIẾU"
+                const wsData = [];
+                
+                // Tiêu đề chính
+                wsData.push(["BIÊN BẢN KIỂM TRA TỪNG PHIẾU"]);
+                wsData.push([]);
+                
+                // Thông tin đơn vị bầu cử
+                if (donViSnap.exists()) {
+                    const donViData = donViSnap.val();
+                    wsData.push(["Tỉnh/Thành phố:", donViData.tinhThanh || ""]);
+                    wsData.push(["Xã/Phường/Thị trấn:", donViData.phuongXa || ""]);
+                    wsData.push(["Khu vực bỏ phiếu số:", donViData.khuVucBoPhieu || ""]);
+                    wsData.push(["Đơn vị bầu cử số:", donViData.donViBauCu || ""]);
+                    wsData.push([]);
+                }
+                
+                // Thông tin kết quả kiểm phiếu
+                if (kiemPhieuDataSnap.exists()) {
+                    const kiemPhieuData = kiemPhieuDataSnap.val();
+                    wsData.push(["Tổng số cử tri:", kiemPhieuData.tongSoCuTri || 0]);
+                    wsData.push(["Số cử tri tham gia bỏ phiếu:", kiemPhieuData.thamGiaBoPhieu || 0]);
+                    wsData.push(["Tỷ lệ tham gia:", kiemPhieuData.phanTramThamGia || "0%"]);
+                    wsData.push(["Số phiếu phát ra:", kiemPhieuData.soPhieuPhatRa || 0]);
+                    wsData.push(["Số phiếu thu vào:", kiemPhieuData.soPhieuThuVao || 0]);
+                    wsData.push([]);
+                }
+                
+                // Tiêu đề bảng kết quả
+                wsData.push(["STT", "HỌ VÀ TÊN ỨNG CỬ VIÊN", "SỐ PHIẾU", "TỶ LỆ (%)"]);
+                
+                // Dữ liệu ứng cử viên
+                const ungCuData = ungCuSnap.exists() ? ungCuSnap.val() : {};
+                const candidateResultsData = candidateResultsSnap.exists() ? candidateResultsSnap.val() : {};
+                const tongPhieuHopLe = kiemPhieuDataSnap.exists() ? parseInt(kiemPhieuDataSnap.val().soPhieuThuVao) || 0 : 0;
+                
+                let stt = 1;
+                Object.keys(ungCuData).forEach(key => {
+                    const hoTen = ungCuData[key].hoTen || "";
+                    const soPhieu = candidateResultsData[key] ? candidateResultsData[key].votes || 0 : 0;
+                    const tyLe = tongPhieuHopLe > 0 ? ((soPhieu / tongPhieuHopLe) * 100).toFixed(2) + "%" : "0%";
+                    
+                    wsData.push([stt, hoTen, soPhieu, tyLe]);
+                    stt++;
+                });
+                
+                // Tổng kết
+                wsData.push([]);
+                wsData.push(["Tổng số phiếu hợp lệ:", tongPhieuHopLe]);
+                wsData.push(["Tổng số phiếu không hợp lệ:", 0]); // Có thể thêm dữ liệu thực tế
+                
+                // Tạo worksheet từ dữ liệu
+                const ws = XLSX.utils.aoa_to_sheet(wsData);
+                
+                // Định dạng worksheet
+                if (ws['!merges'] === undefined) ws['!merges'] = [];
+                ws['!merges'].push({ s: { r: 0, c: 0 }, e: { r: 0, c: 3 } }); // Merge tiêu đề chính
+                
+                // Thêm worksheet vào workbook
+                XLSX.utils.book_append_sheet(wb, ws, "KIỂM TRA TỪNG PHIẾU");
+                
+                // Xuất file Excel
+                const khuVucSo = donViSnap.exists() ? donViSnap.val().khuVucBoPhieu || 'X' : 'X';
+                XLSX.writeFile(wb, `Kiem_tra_tung_phieu_khu_vuc_${khuVucSo}.xlsx`);
+                
+            } catch (error) {
+                console.error('Lỗi khi xuất Excel:', error);
+                alert('Lỗi khi xuất file Excel: ' + error.message);
             }
-        });
-        
-        document.getElementById('logoutBtn').addEventListener('click', (e) => {
-            e.preventDefault();
-            if (confirm('Bạn có chắc muốn đăng xuất?')) {
-                auth.signOut().then(() => { window.location.href = 'index.html'; });
-            }
+        }
+
+        // Hàm in biên bản
+        function printBienBan() {
+            const printContent = document.getElementById('bienBanContent').innerHTML;
+            const originalContent = document.body.innerHTML;
+            
+            document.body.innerHTML = printContent;
+            window.print();
+            document.body.innerHTML = originalContent;
+            location.reload();
+        }
+
+        // Khởi tạo sự kiện
+        document.addEventListener('DOMContentLoaded', function() {
+            auth.onAuthStateChanged(user => {
+                if (user) {
+                    currentUser = user;
+                    document.getElementById('userName').textContent = user.displayName || 'Quản trị viên';
+                    loadBienBanData().then(() => {
+                        document.getElementById('loading').style.display = 'none';
+                        document.getElementById('mainContent').style.display = 'block';
+                    });
+                } else {
+                    window.location.href = 'login.html';
+                }
+            });
+
+            document.getElementById('btnInBienBan').addEventListener('click', printBienBan);
+            document.getElementById('btnTaiXuongWord').addEventListener('click', exportToWord);
+            document.getElementById('btnTaiXuongExcel').addEventListener('click', exportToExcel);
+            document.getElementById('logoutBtn').addEventListener('click', () => auth.signOut());
         });
     </script>
 </body>
