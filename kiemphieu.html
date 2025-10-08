@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kiểm phiếu - Quản lý Phiếu bầu</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- Thêm thư viện EmailJS -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -1138,13 +1141,16 @@ Trân trọng!</textarea>
         // EmailJS config - BẠN CẦN THAY THẾ BẰNG THÔNG TIN CỦA BẠN
         // EmailJS config - BẠN CẦN THAY THẾ BẰNG THÔNG TIN CỦA BẠN
         const EMAILJS_CONFIG = {
-            SERVICE_ID: "Yservice_bwkzhgq", // Thay bằng Service ID của bạn
+            SERVICE_ID: "service_bwkzhgq", // Thay bằng Service ID của bạn
             TEMPLATE_ID: "template_3qwmmks", // Thay bằng Template ID của bạn
             USER_ID: "hAXDSwD49GBY7NlAh" // Thay bằng User ID của bạn
         };
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
+
+        // Khởi tạo EmailJS
+        emailjs.init(EMAILJS_CONFIG.USER_ID);
 
         const db = firebase.database();
         const auth = firebase.auth();
@@ -1887,7 +1893,7 @@ Trân trọng!</textarea>
             });
         }
 
-        // Hàm gửi email với file đính kèm
+        // Hàm gửi email với file đính kèm - SỬA LỖI
         async function sendEmailWithAttachment() {
             const emailTo = document.getElementById('emailTo').value;
             const subject = document.getElementById('emailSubject').value;
@@ -1906,43 +1912,61 @@ Trân trọng!</textarea>
                 spinner.style.display = 'inline-block';
                 sendBtn.innerHTML = '<span class="spinner"></span> Đang gửi...';
 
-                // Tạo file Excel dưới dạng Blob
+                // Tạo file Excel
                 const excelBlob = generateExcelBlob();
                 
-                // Tạo FormData để gửi file
-                const formData = new FormData();
-                formData.append('file', excelBlob, `Kiem_phieu_${new Date().toISOString().split('T')[0]}.xlsx`);
+                // Chuyển Blob sang base64 để gửi qua EmailJS
+                const reader = new FileReader();
+                reader.readAsDataURL(excelBlob);
                 
-                // Trong thực tế, bạn cần upload file lên server trước
-                // Ở đây tôi sẽ demo cách gửi qua EmailJS (cần cấu hình template phù hợp)
-                
-                // Gửi email qua EmailJS
-                const templateParams = {
-                    to_email: emailTo,
-                    subject: subject,
-                    message: message,
-                    date: new Date().toLocaleDateString('vi-VN'),
-                    total_phieu: document.getElementById('soPhieuThuVao').textContent,
-                    total_candidates: candidates.length
+                reader.onload = async function() {
+                    const base64Data = reader.result.split(',')[1];
+                    
+                    try {
+                        // Gửi email qua EmailJS
+                        const templateParams = {
+                            to_email: emailTo,
+                            subject: subject,
+                            message: message,
+                            date: new Date().toLocaleDateString('vi-VN'),
+                            total_phieu: document.getElementById('soPhieuThuVao').textContent,
+                            total_candidates: candidates.length,
+                            attachment: base64Data,
+                            attachment_name: `Kiem_phieu_${new Date().toISOString().split('T')[0]}.xlsx`
+                        };
+
+                        const response = await emailjs.send(
+                            EMAILJS_CONFIG.SERVICE_ID,
+                            EMAILJS_CONFIG.TEMPLATE_ID,
+                            templateParams
+                        );
+
+                        // Ẩn loading
+                        sendBtn.disabled = false;
+                        spinner.style.display = 'none';
+                        sendBtn.innerHTML = 'Gửi Email';
+
+                        if (response.status === 200) {
+                            alert('✅ Email đã được gửi thành công!');
+                            closeEmailConfigModal();
+                        } else {
+                            throw new Error('Gửi email thất bại');
+                        }
+                    } catch (emailError) {
+                        console.error('Lỗi gửi email:', emailError);
+                        
+                        // Ẩn loading
+                        sendBtn.disabled = false;
+                        spinner.style.display = 'none';
+                        sendBtn.innerHTML = 'Gửi Email';
+                        
+                        alert('❌ Lỗi gửi email: ' + emailError.message);
+                    }
                 };
 
-                const response = await emailjs.send(
-                    EMAILJS_CONFIG.SERVICE_ID,
-                    EMAILJS_CONFIG.TEMPLATE_ID,
-                    templateParams
-                );
-
-                // Ẩn loading
-                sendBtn.disabled = false;
-                spinner.style.display = 'none';
-                sendBtn.innerHTML = 'Gửi Email';
-
-                if (response.status === 200) {
-                    alert('✅ Email đã được gửi thành công!');
-                    closeEmailConfigModal();
-                } else {
-                    throw new Error('Gửi email thất bại');
-                }
+                reader.onerror = function() {
+                    throw new Error('Không thể đọc file Excel');
+                };
 
             } catch (error) {
                 console.error('Lỗi gửi email:', error);
@@ -1990,7 +2014,7 @@ Trân trọng!`;
             document.getElementById('emailConfigModal').style.display = 'none';
         }
 
-        // Xuất file Excel (giữ nguyên)
+        // Xuất file Excel - SỬA LỖI
         function exportToExcel() {
             if (phieuDetails.length === 0) {
                 alert('Không có dữ liệu phiếu để xuất Excel!');
@@ -2020,9 +2044,8 @@ Trân trọng!`;
         }
 
         // Khởi tạo sự kiện
+        
         function initEvents() {
-            // ... (giữ nguyên các sự kiện hiện có) ...
-
             // Sự kiện xuất Excel
             document.getElementById('exportExcelBtn').addEventListener('click', exportToExcel);
             
@@ -2063,6 +2086,7 @@ Trân trọng!`;
                 await loadThongTin();
                 await loadCandidates();
                 await loadKiemPhieu();
+                initEvents();
 
                 // Xóa nút kiểm phiếu cũ và thêm sự kiện cho textbox
                 document.getElementById('btnResetSelection').addEventListener('click', resetSelection);
