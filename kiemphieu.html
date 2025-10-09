@@ -1894,92 +1894,124 @@ Trân trọng!</textarea>
         }
 
         // Hàm gửi email với file đính kèm - SỬA LỖI
-        async function sendEmailWithAttachment() {
-            const emailTo = document.getElementById('emailTo').value;
-            const subject = document.getElementById('emailSubject').value;
-            const message = document.getElementById('emailMessage').value;
+        // Hàm gửi email với file đính kèm - PHIÊN BẢN HOÀN CHỈNH
+async function sendEmailWithAttachment() {
+    const emailTo = document.getElementById('emailTo').value;
+    const subject = document.getElementById('emailSubject').value;
+    const message = document.getElementById('emailMessage').value;
 
-            if (!emailTo) {
-                alert('Vui lòng nhập email người nhận!');
-                return;
-            }
+    if (!emailTo) {
+        alert('Vui lòng nhập email người nhận!');
+        return;
+    }
 
-            try {
-                // Hiển thị loading
-                const sendBtn = document.getElementById('btnSendEmail');
-                const spinner = sendBtn.querySelector('.spinner');
-                sendBtn.disabled = true;
-                spinner.style.display = 'inline-block';
-                sendBtn.innerHTML = '<span class="spinner"></span> Đang gửi...';
+    // Validate email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(emailTo)) {
+        alert('Vui lòng nhập địa chỉ email hợp lệ!');
+        return;
+    }
 
-                // Tạo file Excel
-                const excelBlob = generateExcelBlob();
-                
-                // Chuyển Blob sang base64 để gửi qua EmailJS
-                const reader = new FileReader();
-                reader.readAsDataURL(excelBlob);
-                
-                reader.onload = async function() {
-                    const base64Data = reader.result.split(',')[1];
-                    
-                    try {
-                        // Gửi email qua EmailJS
-                        const templateParams = {
-                            to_email: emailTo,
-                            subject: subject,
-                            message: message,
-                            date: new Date().toLocaleDateString('vi-VN'),
-                            total_phieu: document.getElementById('soPhieuThuVao').textContent,
-                            total_candidates: candidates.length,
-                            attachment: base64Data,
-                            attachment_name: `Kiem_phieu_${new Date().toISOString().split('T')[0]}.xlsx`
-                        };
+    // Hiển thị loading
+    const sendBtn = document.getElementById('btnSendEmail');
+    const spinner = sendBtn.querySelector('.spinner');
+    const originalText = sendBtn.innerHTML;
+    
+    sendBtn.disabled = true;
+    spinner.style.display = 'inline-block';
+    sendBtn.innerHTML = '<span class="spinner"></span> Đang gửi...';
 
-                        const response = await emailjs.send(
-                            EMAILJS_CONFIG.SERVICE_ID,
-                            EMAILJS_CONFIG.TEMPLATE_ID,
-                            templateParams
-                        );
+    try {
+        console.log('🔄 Đang tạo file Excel...');
+        const excelBlob = generateExcelBlob();
+        console.log('✅ File Excel đã được tạo thành công');
 
-                        // Ẩn loading
-                        sendBtn.disabled = false;
-                        spinner.style.display = 'none';
-                        sendBtn.innerHTML = 'Gửi Email';
+        // Tạo tên file với ngày tháng
+        const currentDate = new Date().toISOString().split('T')[0];
+        const fileName = `Bao_cao_kiem_phieu_${currentDate}.xlsx`;
 
-                        if (response.status === 200) {
-                            alert('✅ Email đã được gửi thành công!');
-                            closeEmailConfigModal();
-                        } else {
-                            throw new Error('Gửi email thất bại');
-                        }
-                    } catch (emailError) {
-                        console.error('Lỗi gửi email:', emailError);
-                        
-                        // Ẩn loading
-                        sendBtn.disabled = false;
-                        spinner.style.display = 'none';
-                        sendBtn.innerHTML = 'Gửi Email';
-                        
-                        alert('❌ Lỗi gửi email: ' + emailError.message);
-                    }
-                };
+        // Chuyển Blob sang base64
+        console.log('🔄 Đang chuyển đổi file sang base64...');
+        const base64Data = await blobToBase64(excelBlob);
+        console.log('✅ File đã được chuyển đổi sang base64');
 
-                reader.onerror = function() {
-                    throw new Error('Không thể đọc file Excel');
-                };
+        // Chuẩn bị dữ liệu cho template
+        const currentTime = new Date().toLocaleString('vi-VN');
+        const soPhieuThuVao = parseInt(document.getElementById('soPhieuThuVao').textContent) || 0;
 
-            } catch (error) {
-                console.error('Lỗi gửi email:', error);
-                
-                // Ẩn loading
-                const sendBtn = document.getElementById('btnSendEmail');
-                sendBtn.disabled = false;
-                sendBtn.querySelector('.spinner').style.display = 'none';
-                sendBtn.innerHTML = 'Gửi Email';
-                
-                alert('❌ Lỗi gửi email: ' + error.message);
-            }
+        // Gửi email qua EmailJS
+        console.log('🔄 Đang gửi email...');
+        const templateParams = {
+            to_email: emailTo,
+            name: 'Hệ thống bầu cử',
+            subject: subject,
+            message: message,
+            date: new Date().toLocaleDateString('vi-VN'),
+            time: currentTime,
+            total_phieu: soPhieuThuVao,
+            total_candidates: candidates.length,
+            attachment: base64Data,
+            attachment_name: fileName,
+            reply_to: emailTo
+        };
+
+        const response = await emailjs.send(
+            EMAILJS_CONFIG.SERVICE_ID,
+            EMAILJS_CONFIG.TEMPLATE_ID,
+            templateParams
+        );
+
+        console.log('✅ Email đã được gửi thành công:', response);
+
+        // Khôi phục trạng thái nút
+        sendBtn.disabled = false;
+        spinner.style.display = 'none';
+        sendBtn.innerHTML = originalText;
+
+        if (response.status === 200) {
+            alert('✅ Email đã được gửi thành công với file đính kèm!');
+            closeEmailConfigModal();
+        } else {
+            throw new Error('Gửi email thất bại với status: ' + response.status);
         }
+
+    } catch (error) {
+        console.error('❌ Lỗi gửi email:', error);
+        
+        // Khôi phục trạng thái nút
+        sendBtn.disabled = false;
+        spinner.style.display = 'none';
+        sendBtn.innerHTML = originalText;
+        
+        // Hiển thị thông báo lỗi chi tiết hơn
+        let errorMessage = 'Lỗi gửi email: ';
+        if (error.text) {
+            errorMessage += error.text;
+        } else if (error.message) {
+            errorMessage += error.message;
+        } else {
+            errorMessage += 'Không xác định được lỗi';
+        }
+        
+        alert('❌ ' + errorMessage);
+    }
+}
+
+// Hàm chuyển đổi Blob sang Base64
+function blobToBase64(blob) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+            // Chỉ lấy phần base64 (bỏ phần data URL prefix)
+            const base64 = reader.result.split(',')[1];
+            resolve(base64);
+        };
+        reader.onerror = (error) => {
+            reject(new Error('Không thể chuyển đổi file sang base64: ' + error));
+        };
+        reader.readAsDataURL(blob);
+    });
+}
 
         // Mở modal cấu hình email
         function openEmailConfigModal() {
