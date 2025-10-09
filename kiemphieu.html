@@ -750,6 +750,35 @@
             .phieu-table th, .phieu-table td {
                 padding: 4px 6px;
             }
+            /* Style cho phần file đính kèm trong modal */
+.file-attachment-info {
+    background: #e8f5e8;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #28a745;
+    margin: 10px 0;
+}
+
+.file-attachment-info .file-name {
+    font-weight: 600;
+    color: #28a745;
+}
+
+.file-attachment-info .file-size {
+    color: #666;
+    font-size: 12px;
+}
+
+.attachment-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.attachment-buttons .btn {
+    font-size: 11px;
+    padding: 4px 8px;
+}            
         }
 
         /* Very Small Mobile */
@@ -1066,42 +1095,62 @@
         </div>
     </div>
     <!-- Modal cấu hình Email -->
-    <div id="emailConfigModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>CẤU HÌNH GỬI EMAIL</h3>
-                <span class="close">&times;</span>
+    <!-- Modal cấu hình Email -->
+<div id="emailConfigModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>CẤU HÌNH GỬI EMAIL</h3>
+            <span class="close">&times;</span>
+        </div>
+        <div style="padding: 20px;">
+            <div class="input-group" style="margin-bottom: 15px;">
+                <label for="emailTo">Email nhận:</label>
+                <input type="email" id="emailTo" class="form-control" value="thanh941980@gmail.com" placeholder="Nhập email người nhận">
             </div>
-            <div style="padding: 20px;">
-                <div class="input-group" style="margin-bottom: 15px;">
-                    <label for="emailTo">Email nhận:</label>
-                    <input type="email" id="emailTo" class="form-control" value="thanh941980@gmail.com" placeholder="Nhập email người nhận">
-                </div>
-                
-                <div class="input-group" style="margin-bottom: 15px;">
-                    <label for="emailSubject">Tiêu đề:</label>
-                    <input type="text" id="emailSubject" class="form-control" value="BÁO CÁO KIỂM PHIẾU" placeholder="Nhập tiêu đề email">
-                </div>
-                
-                <div class="input-group" style="margin-bottom: 20px;">
-                    <label for="emailMessage">Nội dung:</label>
-                    <textarea id="emailMessage" class="form-control" rows="4" placeholder="Nhập nội dung email">Kính gửi,
+            
+            <div class="input-group" style="margin-bottom: 15px;">
+                <label for="emailSubject">Tiêu đề:</label>
+                <input type="text" id="emailSubject" class="form-control" value="BÁO CÁO KIỂM PHIẾU" placeholder="Nhập tiêu đề email">
+            </div>
+            
+            <div class="input-group" style="margin-bottom: 15px;">
+                <label for="emailMessage">Nội dung:</label>
+                <textarea id="emailMessage" class="form-control" rows="4" placeholder="Nhập nội dung email">Kính gửi,
 
 Đính kèm báo cáo kiểm phiếu mới nhất.
 
 Trân trọng!</textarea>
+            </div>
+
+            <!-- Phần thông tin file đính kèm -->
+            <div class="input-group" style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 6px; border: 1px solid #e9ecef;">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                    <span style="font-size: 18px;">📎</span>
+                    <strong style="color: #2a5298;">FILE ĐÍNH KÈM</strong>
                 </div>
-                
-                <div style="display: flex; gap: 10px; justify-content: flex-end;">
-                    <button id="btnCancelEmail" class="btn btn-warning">Hủy</button>
-                    <button id="btnSendEmail" class="btn btn-success">
-                        <span class="spinner" style="display: none;"></span>
-                        Gửi Email
+                <div id="fileAttachmentInfo" style="font-size: 13px; color: #666;">
+                    <!-- Thông tin file sẽ được cập nhật ở đây -->
+                </div>
+                <div style="margin-top: 10px; display: flex; gap: 10px;">
+                    <button type="button" id="btnPreviewExcel" class="btn btn-warning" style="font-size: 12px; padding: 6px 12px;">
+                        👁️ Xem trước Excel
+                    </button>
+                    <button type="button" id="btnTestExcel" class="btn btn-success" style="font-size: 12px; padding: 6px 12px;">
+                        📥 Tải thử Excel
                     </button>
                 </div>
             </div>
+            
+            <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                <button id="btnCancelEmail" class="btn btn-warning">Hủy</button>
+                <button id="btnSendEmail" class="btn btn-success">
+                    <span class="spinner" style="display: none;"></span>
+                    📧 Gửi Email với File Đính Kèm
+                </button>
+            </div>
         </div>
     </div>
+</div>
 
     <!-- Modal sửa phiếu -->
     <div id="editModal" class="modal">
@@ -1895,123 +1944,62 @@ Trân trọng!</textarea>
 
         // Hàm gửi email với file đính kèm - SỬA LỖI
         // Hàm gửi email với file đính kèm - PHIÊN BẢN HOÀN CHỈNH
-async function sendEmailWithAttachment() {
-    const emailTo = document.getElementById('emailTo').value;
-    const subject = document.getElementById('emailSubject').value;
-    const message = document.getElementById('emailMessage').value;
+<!-- Modal cấu hình Email -->
+<div id="emailConfigModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>CẤU HÌNH GỬI EMAIL</h3>
+            <span class="close">&times;</span>
+        </div>
+        <div style="padding: 20px;">
+            <div class="input-group" style="margin-bottom: 15px;">
+                <label for="emailTo">Email nhận:</label>
+                <input type="email" id="emailTo" class="form-control" value="thanh941980@gmail.com" placeholder="Nhập email người nhận">
+            </div>
+            
+            <div class="input-group" style="margin-bottom: 15px;">
+                <label for="emailSubject">Tiêu đề:</label>
+                <input type="text" id="emailSubject" class="form-control" value="BÁO CÁO KIỂM PHIẾU" placeholder="Nhập tiêu đề email">
+            </div>
+            
+            <div class="input-group" style="margin-bottom: 15px;">
+                <label for="emailMessage">Nội dung:</label>
+                <textarea id="emailMessage" class="form-control" rows="4" placeholder="Nhập nội dung email">Kính gửi,
 
-    if (!emailTo) {
-        alert('Vui lòng nhập email người nhận!');
-        return;
-    }
+Đính kèm báo cáo kiểm phiếu mới nhất.
 
-    // Validate email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(emailTo)) {
-        alert('Vui lòng nhập địa chỉ email hợp lệ!');
-        return;
-    }
+Trân trọng!</textarea>
+            </div>
 
-    // Hiển thị loading
-    const sendBtn = document.getElementById('btnSendEmail');
-    const spinner = sendBtn.querySelector('.spinner');
-    const originalText = sendBtn.innerHTML;
-    
-    sendBtn.disabled = true;
-    spinner.style.display = 'inline-block';
-    sendBtn.innerHTML = '<span class="spinner"></span> Đang gửi...';
-
-    try {
-        console.log('🔄 Đang tạo file Excel...');
-        const excelBlob = generateExcelBlob();
-        console.log('✅ File Excel đã được tạo thành công');
-
-        // Tạo tên file với ngày tháng
-        const currentDate = new Date().toISOString().split('T')[0];
-        const fileName = `Bao_cao_kiem_phieu_${currentDate}.xlsx`;
-
-        // Chuyển Blob sang base64
-        console.log('🔄 Đang chuyển đổi file sang base64...');
-        const base64Data = await blobToBase64(excelBlob);
-        console.log('✅ File đã được chuyển đổi sang base64');
-
-        // Chuẩn bị dữ liệu cho template
-        const currentTime = new Date().toLocaleString('vi-VN');
-        const soPhieuThuVao = parseInt(document.getElementById('soPhieuThuVao').textContent) || 0;
-
-        // Gửi email qua EmailJS
-        console.log('🔄 Đang gửi email...');
-        const templateParams = {
-            to_email: emailTo,
-            name: 'Hệ thống bầu cử',
-            subject: subject,
-            message: message,
-            date: new Date().toLocaleDateString('vi-VN'),
-            time: currentTime,
-            total_phieu: soPhieuThuVao,
-            total_candidates: candidates.length,
-            attachment: base64Data,
-            attachment_name: fileName,
-            reply_to: emailTo
-        };
-
-        const response = await emailjs.send(
-            EMAILJS_CONFIG.SERVICE_ID,
-            EMAILJS_CONFIG.TEMPLATE_ID,
-            templateParams
-        );
-
-        console.log('✅ Email đã được gửi thành công:', response);
-
-        // Khôi phục trạng thái nút
-        sendBtn.disabled = false;
-        spinner.style.display = 'none';
-        sendBtn.innerHTML = originalText;
-
-        if (response.status === 200) {
-            alert('✅ Email đã được gửi thành công với file đính kèm!');
-            closeEmailConfigModal();
-        } else {
-            throw new Error('Gửi email thất bại với status: ' + response.status);
-        }
-
-    } catch (error) {
-        console.error('❌ Lỗi gửi email:', error);
-        
-        // Khôi phục trạng thái nút
-        sendBtn.disabled = false;
-        spinner.style.display = 'none';
-        sendBtn.innerHTML = originalText;
-        
-        // Hiển thị thông báo lỗi chi tiết hơn
-        let errorMessage = 'Lỗi gửi email: ';
-        if (error.text) {
-            errorMessage += error.text;
-        } else if (error.message) {
-            errorMessage += error.message;
-        } else {
-            errorMessage += 'Không xác định được lỗi';
-        }
-        
-        alert('❌ ' + errorMessage);
-    }
-}
-
-// Hàm chuyển đổi Blob sang Base64
-function blobToBase64(blob) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => {
-            // Chỉ lấy phần base64 (bỏ phần data URL prefix)
-            const base64 = reader.result.split(',')[1];
-            resolve(base64);
-        };
-        reader.onerror = (error) => {
-            reject(new Error('Không thể chuyển đổi file sang base64: ' + error));
-        };
-        reader.readAsDataURL(blob);
-    });
-}
+            <!-- Phần thông tin file đính kèm -->
+            <div class="input-group" style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 6px; border: 1px solid #e9ecef;">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                    <span style="font-size: 18px;">📎</span>
+                    <strong style="color: #2a5298;">FILE ĐÍNH KÈM</strong>
+                </div>
+                <div id="fileAttachmentInfo" style="font-size: 13px; color: #666;">
+                    <!-- Thông tin file sẽ được cập nhật ở đây -->
+                </div>
+                <div style="margin-top: 10px; display: flex; gap: 10px;">
+                    <button type="button" id="btnPreviewExcel" class="btn btn-warning" style="font-size: 12px; padding: 6px 12px;">
+                        👁️ Xem trước Excel
+                    </button>
+                    <button type="button" id="btnTestExcel" class="btn btn-success" style="font-size: 12px; padding: 6px 12px;">
+                        📥 Tải thử Excel
+                    </button>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                <button id="btnCancelEmail" class="btn btn-warning">Hủy</button>
+                <button id="btnSendEmail" class="btn btn-success">
+                    <span class="spinner" style="display: none;"></span>
+                    📧 Gửi Email với File Đính Kèm
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
         // Mở modal cấu hình email
         function openEmailConfigModal() {
@@ -2087,6 +2075,10 @@ Trân trọng!`;
             // Sự kiện modal email
             document.getElementById('btnCancelEmail').addEventListener('click', closeEmailConfigModal);
             document.getElementById('btnSendEmail').addEventListener('click', sendEmailWithAttachment);
+            
+            // Sự kiện cho các nút file đính kèm
+    document.getElementById('btnPreviewExcel').addEventListener('click', previewExcelFile);
+    document.getElementById('btnTestExcel').addEventListener('click', testDownloadExcel);
             
             // Đóng modal khi click ngoài
             window.addEventListener('click', function(e) {
