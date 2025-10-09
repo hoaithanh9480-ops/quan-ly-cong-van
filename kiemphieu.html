@@ -4,9 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kiểm phiếu - Quản lý Phiếu bầu</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <!-- Thêm thư viện EmailJS -->
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -28,11 +25,6 @@
             color: white;
             padding: 12px 20px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
         }
 
         .header-content {
@@ -58,7 +50,6 @@
             max-width: 1200px;
             margin: 20px auto;
             padding: 0 20px;
-            margin-top: 80px;
         }
 
         .page-header {
@@ -820,104 +811,6 @@
         .phieu-table-container::-webkit-scrollbar-thumb:hover {
             background: #a8a8a8;
         }
-
-        /* Thêm style cho nút xuất Excel và email */
-        .export-excel-btn {
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 13px;
-            transition: background 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            margin-top: 10px;
-        }
-        
-        .export-excel-btn:hover {
-            background: #218838;
-        }
-        
-        .export-email-btn {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 13px;
-            transition: background 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            margin-top: 10px;
-        }
-        
-        .export-email-btn:hover {
-            background: #c82333;
-        }
-        
-        .export-email-btn:disabled {
-            background: #6c757d;
-            cursor: not-allowed;
-        }
-        
-        .phieu-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        
-        .phieu-header h3 {
-            margin: 0;
-        }
-        
-        .export-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        
-        @media (max-width: 768px) {
-            .phieu-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .export-buttons {
-                flex-direction: column;
-                width: 100%;
-            }
-            
-            .export-excel-btn,
-            .export-email-btn {
-                align-self: stretch;
-                justify-content: center;
-            }
-        }
-
-        /* Loading spinner */
-        .spinner {
-            border: 2px solid #f3f3f3;
-            border-top: 2px solid #3498db;
-            border-radius: 50%;
-            width: 16px;
-            height: 16px;
-            animation: spin 1s linear infinite;
-            display: inline-block;
-            margin-right: 5px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
     </style>
 </head>
 <body>
@@ -1048,56 +941,9 @@
 
             <!-- Kiểm tra từng phiếu -->
             <div class="phieu-details">
-                <div class="phieu-header">
-                    <h3>KIỂM TRA TỪNG PHIẾU</h3>
-                    <div class="export-buttons">
-                        <button id="exportExcelBtn" class="export-excel-btn">
-                            <i>📊</i> Xuất Excel
-                        </button>
-                        <button id="exportEmailBtn" class="export-email-btn">
-                            <i>📧</i> Gửi Email
-                        </button>
-                    </div>
-                </div>
+                <h3>KIỂM TRA TỪNG PHIẾU</h3>
                 <div class="phieu-table-container" id="phieuTableContainer">
                     <!-- Bảng kiểm tra từng phiếu sẽ được tạo ở đây -->
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Modal cấu hình Email -->
-    <div id="emailConfigModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>CẤU HÌNH GỬI EMAIL</h3>
-                <span class="close">&times;</span>
-            </div>
-            <div style="padding: 20px;">
-                <div class="input-group" style="margin-bottom: 15px;">
-                    <label for="emailTo">Email nhận:</label>
-                    <input type="email" id="emailTo" class="form-control" value="thanh941980@gmail.com" placeholder="Nhập email người nhận">
-                </div>
-                
-                <div class="input-group" style="margin-bottom: 15px;">
-                    <label for="emailSubject">Tiêu đề:</label>
-                    <input type="text" id="emailSubject" class="form-control" value="BÁO CÁO KIỂM PHIẾU" placeholder="Nhập tiêu đề email">
-                </div>
-                
-                <div class="input-group" style="margin-bottom: 20px;">
-                    <label for="emailMessage">Nội dung:</label>
-                    <textarea id="emailMessage" class="form-control" rows="4" placeholder="Nhập nội dung email">Kính gửi,
-
-Đính kèm báo cáo kiểm phiếu mới nhất.
-
-Trân trọng!</textarea>
-                </div>
-                
-                <div style="display: flex; gap: 10px; justify-content: flex-end;">
-                    <button id="btnCancelEmail" class="btn btn-warning">Hủy</button>
-                    <button id="btnSendEmail" class="btn btn-success">
-                        <span class="spinner" style="display: none;"></span>
-                        Gửi Email
-                    </button>
                 </div>
             </div>
         </div>
@@ -1138,19 +984,9 @@ Trân trọng!</textarea>
             messagingSenderId: "908329514571", 
             appId: "1:908329514571:web:16b43df5b795e4de06bfce" 
         };
-        // EmailJS config - BẠN CẦN THAY THẾ BẰNG THÔNG TIN CỦA BẠN
-        // EmailJS config - BẠN CẦN THAY THẾ BẰNG THÔNG TIN CỦA BẠN
-        const EMAILJS_CONFIG = {
-            SERVICE_ID: "service_bwkzhgq", // Thay bằng Service ID của bạn
-            TEMPLATE_ID: "template_3qwmmks", // Thay bằng Template ID của bạn
-            USER_ID: "hAXDSwD49GBY7NlAh" // Thay bằng User ID của bạn
-        };
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
-
-        // Khởi tạo EmailJS
-        emailjs.init(EMAILJS_CONFIG.USER_ID);
 
         const db = firebase.database();
         const auth = firebase.auth();
@@ -1753,317 +1589,7 @@ Trân trọng!</textarea>
             });
             updateSelectedCount();
         }
-        
-        // Hàm tạo file Excel dưới dạng Blob
-        function generateExcelBlob() {
-            if (phieuDetails.length === 0) {
-                throw new Error('Không có dữ liệu phiếu để xuất Excel!');
-            }
 
-            // Tạo workbook và worksheet
-            const wb = XLSX.utils.book_new();
-            
-            // 1. Tạo sheet "KIỂM TRA TỪNG PHIẾU"
-            const phieuData = [];
-            
-            // Tiêu đề
-            const headerRow = ['Phiếu số', 'Đọc phiếu', 'Trạng thái'];
-            candidates.forEach(candidate => {
-                headerRow.push(`${candidate.name} (N${candidate.stt})`);
-            });
-            headerRow.push('Tổng');
-            phieuData.push(headerRow);
-            
-            // Dữ liệu phiếu
-            phieuDetails.forEach(phieu => {
-                const docPhieu = phieu.selectedStt ? phieu.selectedStt.sort((a, b) => a - b).join(' ') : '';
-                const row = [phieu.phieuSo, docPhieu, phieu.trangThai];
-                
-                // Kết quả từng ứng viên
-                candidates.forEach(candidate => {
-                    const isLoai = phieu.selectedIds.includes(candidate.id);
-                    row.push(isLoai ? '0' : '1');
-                });
-                
-                // Tổng số người không bị loại
-                const soNguoiKhongBiLoai = candidates.length - phieu.selectedIds.length;
-                row.push(soNguoiKhongBiLoai);
-                
-                phieuData.push(row);
-            });
-            
-            // Dòng tổng cộng
-            const totalRow = ['TỔNG', '', ''];
-            let grandTotal = 0;
-            
-            candidates.forEach(candidate => {
-                let total = 0;
-                phieuDetails.forEach(phieu => {
-                    if (!phieu.selectedIds.includes(candidate.id)) total++;
-                });
-                totalRow.push(total);
-                grandTotal += total;
-            });
-            
-            totalRow.push(grandTotal);
-            phieuData.push(totalRow);
-            
-            // Tạo worksheet
-            const ws = XLSX.utils.aoa_to_sheet(phieuData);
-            
-            // Định dạng cột
-            const colWidths = [
-                { wch: 10 }, // Phiếu số
-                { wch: 20 }, // Đọc phiếu
-                { wch: 12 }  // Trạng thái
-            ];
-            
-            // Thêm độ rộng cho các cột ứng viên
-            candidates.forEach(() => {
-                colWidths.push({ wch: 8 });
-            });
-            
-            colWidths.push({ wch: 8 }); // Cột Tổng
-            
-            ws['!cols'] = colWidths;
-            
-            // Thêm worksheet vào workbook
-            XLSX.utils.book_append_sheet(wb, ws, "KIỂM TRA TỪNG PHIẾU");
-            
-            // 2. Tạo sheet "KẾT QUẢ TỔNG HỢP"
-            const resultData = [
-                ['STT', 'Họ tên ứng viên', 'Số phiếu', 'Tỷ lệ %']
-            ];
-            
-            const soPhieuThuVao = parseInt(document.getElementById('soPhieuThuVao').textContent) || 0;
-            
-            candidates.forEach(candidate => {
-                const percent = calculatePercent(candidate.votes, soPhieuThuVao);
-                resultData.push([
-                    candidate.stt,
-                    candidate.name,
-                    candidate.votes,
-                    `${percent}%`
-                ]);
-            });
-            
-            const ws2 = XLSX.utils.aoa_to_sheet(resultData);
-            ws2['!cols'] = [
-                { wch: 6 },  // STT
-                { wch: 30 }, // Họ tên
-                { wch: 10 }, // Số phiếu
-                { wch: 10 }  // Tỷ lệ
-            ];
-            
-            XLSX.utils.book_append_sheet(wb, ws2, "KẾT QUẢ TỔNG HỢP");
-            
-            // 3. Tạo sheet "THỐNG KÊ"
-            const statsData = [
-                ['THÔNG TIN CỬ TRI', '', ''],
-                ['Tổng số cử tri', document.getElementById('tongSoCuTri').value, ''],
-                ['Tham gia bỏ phiếu', document.getElementById('thamGiaBoPhieu').value, ''],
-                ['Đạt %', document.getElementById('phanTramThamGia').textContent, ''],
-                ['', '', ''],
-                ['THÔNG TIN PHIẾU', '', ''],
-                ['Số phiếu phát ra', document.getElementById('soPhieuPhatRa').value, ''],
-                ['Số phiếu thu vào', document.getElementById('soPhieuThuVao').textContent, ''],
-                ['Đạt %', document.getElementById('phanTramPhieu').textContent, ''],
-                ['', '', ''],
-                ['THÔNG TIN ỨNG CỬ', '', ''],
-                ['Số người ứng cử', document.getElementById('soNguoiUngCu').textContent, ''],
-                ['Số người được bầu', document.getElementById('soNguoiDuocBau').textContent, ''],
-                ['Số dư', document.getElementById('soDu').textContent, '']
-            ];
-            
-            const ws3 = XLSX.utils.aoa_to_sheet(statsData);
-            ws3['!cols'] = [
-                { wch: 25 },
-                { wch: 15 },
-                { wch: 10 }
-            ];
-            
-            XLSX.utils.book_append_sheet(wb, ws3, "THỐNG KÊ");
-            
-            // Chuyển workbook sang ArrayBuffer
-            const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-            
-            // Tạo Blob từ ArrayBuffer
-            return new Blob([excelBuffer], { 
-                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
-            });
-        }
-
-        // Hàm gửi email với file đính kèm - SỬA LỖI
-        async function sendEmailWithAttachment() {
-            const emailTo = document.getElementById('emailTo').value;
-            const subject = document.getElementById('emailSubject').value;
-            const message = document.getElementById('emailMessage').value;
-
-            if (!emailTo) {
-                alert('Vui lòng nhập email người nhận!');
-                return;
-            }
-
-            try {
-                // Hiển thị loading
-                const sendBtn = document.getElementById('btnSendEmail');
-                const spinner = sendBtn.querySelector('.spinner');
-                sendBtn.disabled = true;
-                spinner.style.display = 'inline-block';
-                sendBtn.innerHTML = '<span class="spinner"></span> Đang gửi...';
-
-                // Tạo file Excel
-                const excelBlob = generateExcelBlob();
-                
-                // Chuyển Blob sang base64 để gửi qua EmailJS
-                const reader = new FileReader();
-                reader.readAsDataURL(excelBlob);
-                
-                reader.onload = async function() {
-                    const base64Data = reader.result.split(',')[1];
-                    
-                    try {
-                        // Gửi email qua EmailJS
-                        const templateParams = {
-                            to_email: emailTo,
-                            subject: subject,
-                            message: message,
-                            date: new Date().toLocaleDateString('vi-VN'),
-                            total_phieu: document.getElementById('soPhieuThuVao').textContent,
-                            total_candidates: candidates.length,
-                            attachment: base64Data,
-                            attachment_name: `Kiem_phieu_${new Date().toISOString().split('T')[0]}.xlsx`
-                        };
-
-                        const response = await emailjs.send(
-                            EMAILJS_CONFIG.SERVICE_ID,
-                            EMAILJS_CONFIG.TEMPLATE_ID,
-                            templateParams
-                        );
-
-                        // Ẩn loading
-                        sendBtn.disabled = false;
-                        spinner.style.display = 'none';
-                        sendBtn.innerHTML = 'Gửi Email';
-
-                        if (response.status === 200) {
-                            alert('✅ Email đã được gửi thành công!');
-                            closeEmailConfigModal();
-                        } else {
-                            throw new Error('Gửi email thất bại');
-                        }
-                    } catch (emailError) {
-                        console.error('Lỗi gửi email:', emailError);
-                        
-                        // Ẩn loading
-                        sendBtn.disabled = false;
-                        spinner.style.display = 'none';
-                        sendBtn.innerHTML = 'Gửi Email';
-                        
-                        alert('❌ Lỗi gửi email: ' + emailError.message);
-                    }
-                };
-
-                reader.onerror = function() {
-                    throw new Error('Không thể đọc file Excel');
-                };
-
-            } catch (error) {
-                console.error('Lỗi gửi email:', error);
-                
-                // Ẩn loading
-                const sendBtn = document.getElementById('btnSendEmail');
-                sendBtn.disabled = false;
-                sendBtn.querySelector('.spinner').style.display = 'none';
-                sendBtn.innerHTML = 'Gửi Email';
-                
-                alert('❌ Lỗi gửi email: ' + error.message);
-            }
-        }
-
-        // Mở modal cấu hình email
-        function openEmailConfigModal() {
-            if (phieuDetails.length === 0) {
-                alert('Không có dữ liệu phiếu để gửi email!');
-                return;
-            }
-
-            // Cập nhật thông tin mặc định
-            const currentDate = new Date().toLocaleDateString('vi-VN');
-            document.getElementById('emailSubject').value = `BÁO CÁO KIỂM PHIẾU ${currentDate}`;
-            
-            const soPhieuThuVao = parseInt(document.getElementById('soPhieuThuVao').textContent) || 0;
-            const message = `Kính gửi,
-
-Đính kèm báo cáo kiểm phiếu ngày ${currentDate}:
-
-- Tổng số phiếu: ${soPhieuThuVao}
-- Tổng số ứng viên: ${candidates.length}
-- Thời gian xuất báo cáo: ${new Date().toLocaleString('vi-VN')}
-
-Vui lòng xem file đính kèm để biết chi tiết.
-
-Trân trọng!`;
-            
-            document.getElementById('emailMessage').value = message;
-            document.getElementById('emailConfigModal').style.display = 'block';
-        }
-
-        // Đóng modal cấu hình email
-        function closeEmailConfigModal() {
-            document.getElementById('emailConfigModal').style.display = 'none';
-        }
-
-        // Xuất file Excel - SỬA LỖI
-        function exportToExcel() {
-            if (phieuDetails.length === 0) {
-                alert('Không có dữ liệu phiếu để xuất Excel!');
-                return;
-            }
-
-            try {
-                const excelBlob = generateExcelBlob();
-                const fileName = `Kiem_phieu_${new Date().toISOString().split('T')[0]}.xlsx`;
-                
-                // Tạo URL tải về
-                const url = URL.createObjectURL(excelBlob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = fileName;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                
-                console.log('✅ Đã xuất Excel thành công!');
-                
-            } catch (error) {
-                console.error('❌ Lỗi khi xuất Excel:', error);
-                alert('Có lỗi xảy ra khi xuất file Excel: ' + error.message);
-            }
-        }
-
-        // Khởi tạo sự kiện
-        
-        function initEvents() {
-            // Sự kiện xuất Excel
-            document.getElementById('exportExcelBtn').addEventListener('click', exportToExcel);
-            
-            // Sự kiện gửi Email
-            document.getElementById('exportEmailBtn').addEventListener('click', openEmailConfigModal);
-            
-            // Sự kiện modal email
-            document.getElementById('btnCancelEmail').addEventListener('click', closeEmailConfigModal);
-            document.getElementById('btnSendEmail').addEventListener('click', sendEmailWithAttachment);
-            
-            // Đóng modal khi click ngoài
-            window.addEventListener('click', function(e) {
-                const modal = document.getElementById('emailConfigModal');
-                if (e.target === modal) {
-                    closeEmailConfigModal();
-                }
-            });
-        }
         // Khởi tạo ứng dụng
         async function initApp() {
             try {
@@ -2086,7 +1612,6 @@ Trân trọng!`;
                 await loadThongTin();
                 await loadCandidates();
                 await loadKiemPhieu();
-                initEvents();
 
                 // Xóa nút kiểm phiếu cũ và thêm sự kiện cho textbox
                 document.getElementById('btnResetSelection').addEventListener('click', resetSelection);
