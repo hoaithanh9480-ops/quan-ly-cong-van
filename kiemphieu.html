@@ -942,6 +942,10 @@
             <!-- Kiểm tra từng phiếu -->
             <div class="phieu-details">
                 <h3>KIỂM TRA TỪNG PHIẾU</h3>
+                <div style="display:flex; justify-content: flex-end; gap:10px; margin-bottom:10px;">
+                    <button class="btn btn-success" onclick="downloadExcelFile()">📊 Xuất Excel</button>
+                    <button class="btn btn-warning" onclick="openGmail()">📧 Mở Gmail</button>
+                </div>
                 <div class="phieu-table-container" id="phieuTableContainer">
                     <!-- Bảng kiểm tra từng phiếu sẽ được tạo ở đây -->
                 </div>
@@ -973,6 +977,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script>
         // Firebase config
         const firebaseConfig = { 
@@ -1589,6 +1594,112 @@
             });
             updateSelectedCount();
         }
+        
+        // =================== TẠO FILE EXCEL KIỂM PHIẾU ===================
+function generateExcelFile() {
+    try {
+        if (candidates.length === 0 || phieuDetails.length === 0) {
+            alert("❗ Chưa có dữ liệu để xuất file Excel!");
+            return null;
+        }
+
+        // Chuẩn bị dữ liệu cho bảng Excel
+        const wsData = [];
+
+        // Hàng tiêu đề
+        const header = ["Phiếu số", "Đọc phiếu", "Trạng thái"];
+        candidates.forEach(c => header.push(`${c.name} (N${c.stt})`));
+        header.push("Tổng");
+        wsData.push(header);
+
+        // Các dòng dữ liệu từng phiếu
+        phieuDetails.forEach(p => {
+            const docPhieu = p.selectedStt ? p.selectedStt.sort((a, b) => a - b).join(" ") : "";
+            const row = [p.phieuSo, docPhieu, p.trangThai];
+            candidates.forEach(c => {
+                const isLoai = p.selectedIds.includes(c.id);
+                row.push(isLoai ? 0 : 1);
+            });
+            const soNguoiKhongBiLoai = candidates.length - p.selectedIds.length;
+            row.push(soNguoiKhongBiLoai);
+            wsData.push(row);
+        });
+
+        // Thêm hàng tổng
+        const totalRow = ["", "TỔNG", ""];
+        candidates.forEach(c => {
+            const total = phieuDetails.reduce((sum, p) => sum + (!p.selectedIds.includes(c.id) ? 1 : 0), 0);
+            totalRow.push(total);
+        });
+        const grandTotal = totalRow.slice(3).reduce((a, b) => a + b, 0);
+        totalRow.push(grandTotal);
+        wsData.push(totalRow);
+
+        // Tạo worksheet và workbook
+        const ws = XLSX.utils.aoa_to_sheet(wsData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Kiem_tra_phieu");
+
+        return wb;
+    } catch (error) {
+        console.error("❌ Lỗi khi tạo dữ liệu Excel:", error);
+        alert("Lỗi khi tạo dữ liệu Excel: " + error.message);
+        return null;
+    }
+}
+
+// =================== TẢI FILE EXCEL ===================
+function downloadExcelFile() {
+    try {
+        const wb = generateExcelFile();
+        if (!wb) return false;
+
+        const fileName = `Kiem_tra_tung_phieu_${new Date().toISOString().split('T')[0]}.xlsx`;
+
+        // Chuyển workbook sang mảng nhị phân
+        const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+        const blob = new Blob([excelBuffer], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        });
+
+        // Tạo link tải
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        alert(`✅ Đã tạo file Excel thành công:\n${fileName}`);
+        console.log("✅ File Excel đã tạo:", fileName);
+        return true;
+    } catch (error) {
+        console.error("❌ Lỗi khi tải file Excel:", error);
+        alert("Có lỗi xảy ra khi tải file: " + error.message);
+        return false;
+    }
+}
+
+// =================== MỞ GMAIL GỬI FILE ===================
+function openGmail() {
+    try {
+        const subject = `BÁO CÁO KIỂM PHIẾU - ${new Date().toLocaleDateString('vi-VN')}`;
+        const body = `Kính gửi,\n\nĐính kèm file báo cáo kiểm phiếu chi tiết.\n\nTrân trọng,\nBan kiểm phiếu`;
+        const emailTo = "thanh941980@gmail.com";
+
+        const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(emailTo)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        window.open(gmailUrl, "_blank");
+
+        alert("📧 Gmail đang được mở.\nHãy đính kèm file Excel vừa tải để gửi đi!");
+        return true;
+    } catch (error) {
+        console.error("❌ Lỗi khi mở Gmail:", error);
+        alert("Lỗi khi mở Gmail: " + error.message);
+        return false;
+    }
+}    
 
         // Khởi tạo ứng dụng
         async function initApp() {
