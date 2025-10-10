@@ -1142,11 +1142,11 @@ Ban kiểm phiếu</textarea>
 
         // Tính phần trăm
         function calculatePercent(value, total) {
-            if (total === 0) return 0;
+            if (total === 0) return '0.0';
             return ((value / total) * 100).toFixed(1);
         }
 
-        // Cập nhật phần trăm tự động
+        // Cập nhật phần trăm tự động - ĐÃ SỬA
         function updatePercentages() {
             try {
                 const tongSoCuTri = parseInt(document.getElementById('tongSoCuTri').value) || 0;
@@ -1154,15 +1154,15 @@ Ban kiểm phiếu</textarea>
                 const soPhieuPhatRa = parseInt(document.getElementById('soPhieuPhatRa').value) || 0;
                 const soPhieuThuVao = parseInt(document.getElementById('soPhieuThuVao').textContent) || 0;
 
-                // Tính số phiếu hợp lệ và không hợp lệ
+                // ✅ TÍNH LẠI: Số phiếu hợp lệ = Hợp lệ + Bầu thiếu
                 let soPhieuHopLe = 0;
                 let soPhieuKhongHopLe = 0;
                 
                 phieuDetails.forEach(phieu => {
-                    if (phieu.trangThai === 'Hợp lệ') {
-                        soPhieuHopLe++;
+                    if (phieu.trangThai === 'Hợp lệ' || phieu.trangThai === 'Bầu thiếu') {
+                        soPhieuHopLe++;  // ✅ Cả 2 loại đều là hợp lệ
                     } else {
-                        soPhieuKhongHopLe++;
+                        soPhieuKhongHopLe++;  // ✅ Chỉ "Không hợp lệ" thực sự
                     }
                 });
         
@@ -1298,7 +1298,7 @@ Ban kiểm phiếu</textarea>
             updateSelectedCount();
         }
 
-        // Kiểm phiếu tự động khi nhấn Enter
+        // Kiểm phiếu tự động khi nhấn Enter - ĐÃ SỬA LOGIC
         function kiemPhieuTuDong() {
             const selectedCheckboxes = document.querySelectorAll('.candidate-checkbox:checked');
             const selectedIds = Array.from(selectedCheckboxes).map(cb => cb.getAttribute('data-id'));
@@ -1326,17 +1326,13 @@ Ban kiểm phiếu</textarea>
             const soNguoiDuocBau = parseInt(document.getElementById('soNguoiDuocBau').textContent) || 0;
             const soDu = parseInt(document.getElementById('soDu').textContent) || 0;
             
-            // Xác định trạng thái phiếu
+            // ✅ LOGIC XÁC ĐỊNH TRẠNG THÁI MỚI
             let trangThai = '';
             const soUngVienDuocChon = selectedIds.length;
 
-            if (soUngVienDuocChon === 0 || soUngVienDuocChon === candidates.length) {
-                trangThai = 'Không hợp lệ';
-            } else if (soUngVienDuocChon === soDu) {
+            if (soUngVienDuocChon === soDu) {
                 trangThai = 'Hợp lệ';
-            } else if (soUngVienDuocChon < soDu) {
-                trangThai = 'Không hợp lệ';
-            } else if (soUngVienDuocChon < soNguoiDuocBau) {
+            } else if (soUngVienDuocChon > soDu && soUngVienDuocChon <= soNguoiDuocBau) {
                 trangThai = 'Bầu thiếu';
             } else {
                 trangThai = 'Không hợp lệ';
@@ -1393,7 +1389,7 @@ Ban kiểm phiếu</textarea>
             });
         }
 
-        // Cập nhật bảng kiểm tra từng phiếu
+        // Cập nhật bảng kiểm tra từng phiếu - ĐÃ THÊM TỔNG HỢP
         function updatePhieuTable() {
             const container = document.getElementById('phieuTableContainer');
             
@@ -1401,6 +1397,21 @@ Ban kiểm phiếu</textarea>
                 container.innerHTML = '<p style="font-size: 11px; text-align: center; color: #666; padding: 20px;">Chưa có dữ liệu ứng cử viên</p>';
                 return;
             }
+
+            // ✅ TÍNH TỔNG HỢP CÁC LOẠI PHIẾU
+            let tongHopLe = 0;
+            let tongBauThieu = 0;
+            let tongKhongHopLe = 0;
+            
+            phieuDetails.forEach(phieu => {
+                if (phieu.trangThai === 'Hợp lệ') {
+                    tongHopLe++;
+                } else if (phieu.trangThai === 'Bầu thiếu') {
+                    tongBauThieu++;
+                } else if (phieu.trangThai === 'Không hợp lệ') {
+                    tongKhongHopLe++;
+                }
+            });
 
             let tableHTML = `
                 <table class="phieu-table">
@@ -1481,9 +1492,45 @@ Ban kiểm phiếu</textarea>
 
                 tableHTML += `<td><strong>${grandTotal}</strong></td><td></td></tr>`;
             }
+
+            // ✅ THÊM DÒNG TỔNG HỢP CÁC LOẠI PHIẾU
+            tableHTML += `
+                <tr style="background:#e8f4fd;font-weight:600;">
+                    <td colspan="3" style="text-align:right;">TỔNG HỢP</td>
+                    <td colspan="${candidates.length + 1}" style="text-align:left; padding-left:15px;">
+                        Hợp lệ: <span class="valid">${tongHopLe}</span> | 
+                        Bầu thiếu: <span class="insufficient">${tongBauThieu}</span> | 
+                        Không hợp lệ: <span class="invalid">${tongKhongHopLe}</span> |
+                        Tổng phiếu hợp lệ (HL + BT): <span class="valid">${tongHopLe + tongBauThieu}</span> |
+                        Tổng phiếu không hợp lệ: <span class="invalid">${tongKhongHopLe}</span>
+                    </td>
+                    <td></td>
+                </tr>
+            `;
         
             tableHTML += `</tbody></table>`;
             container.innerHTML = tableHTML;
+
+            // ✅ CẬP NHẬT THỐNG KÊ TỔNG HỢP
+            updateTongHopThongKe(tongHopLe, tongBauThieu, tongKhongHopLe);
+        }
+
+        // ✅ Hàm cập nhật thống kê tổng hợp
+        function updateTongHopThongKe(tongHopLe, tongBauThieu, tongKhongHopLe) {
+            const tongPhieuHopLe = tongHopLe + tongBauThieu;
+            const tongPhieuKhongHopLe = tongKhongHopLe;
+            const tongSoPhieu = tongPhieuHopLe + tongPhieuKhongHopLe;
+
+            // Cập nhật các thống kê
+            document.getElementById('soPhieuHopLe').textContent = tongPhieuHopLe;
+            document.getElementById('soPhieuKhongHopLe').textContent = tongPhieuKhongHopLe;
+            
+            // Tính phần trăm
+            const phanTramHopLe = calculatePercent(tongPhieuHopLe, tongSoPhieu);
+            const phanTramKhongHopLe = calculatePercent(tongPhieuKhongHopLe, tongSoPhieu);
+            
+            document.getElementById('phanTramHopLe').textContent = phanTramHopLe + '%';
+            document.getElementById('phanTramKhongHopLe').textContent = phanTramKhongHopLe + '%';
         }
 
         // Hàm trả về class CSS cho trạng thái
@@ -1530,7 +1577,7 @@ Ban kiểm phiếu</textarea>
             document.getElementById('editSelectedCount').textContent = selectedCount;
         }
 
-        // Lưu thay đổi phiếu
+        // Lưu thay đổi phiếu - ĐÃ SỬA LOGIC
         function saveEditedPhieu() {
             if (currentEditPhieuIndex === -1) return;
 
@@ -1545,18 +1592,14 @@ Ban kiểm phiếu</textarea>
             phieu.selectedIds = selectedIds;
             phieu.selectedStt = selectedStt;
 
-            // Tính lại trạng thái
+            // ✅ TÍNH LẠI TRẠNG THÁI THEO LOGIC MỚI
             const soNguoiDuocBau = parseInt(document.getElementById('soNguoiDuocBau').textContent) || 0;
             const soDu = parseInt(document.getElementById('soDu').textContent) || 0;
             const soUngVienDuocChon = selectedIds.length;
 
-            if (soUngVienDuocChon === 0 || soUngVienDuocChon === candidates.length) {
-                phieu.trangThai = 'Không hợp lệ';
-            } else if (soUngVienDuocChon === soDu) {
+            if (soUngVienDuocChon === soDu) {
                 phieu.trangThai = 'Hợp lệ';
-            } else if (soUngVienDuocChon < soDu) {
-                phieu.trangThai = 'Không hợp lệ';
-            } else if (soUngVienDuocChon < soNguoiDuocBau) {
+            } else if (soUngVienDuocChon > soDu && soUngVienDuocChon <= soNguoiDuocBau) {
                 phieu.trangThai = 'Bầu thiếu';
             } else {
                 phieu.trangThai = 'Không hợp lệ';
@@ -1707,20 +1750,21 @@ Ban kiểm phiếu</textarea>
             }
         }
 
-        // Lưu thông tin kiểm phiếu
+        // Lưu thông tin kiểm phiếu - ĐÃ SỬA
         async function saveKiemPhieu() {
             try {
-                // Tính số phiếu hợp lệ và không hợp lệ
+                // ✅ TÍNH LẠI: Số phiếu hợp lệ = Hợp lệ + Bầu thiếu
                 let soPhieuHopLe = 0;
                 let soPhieuKhongHopLe = 0;
                 
                 phieuDetails.forEach(phieu => {
-                    if (phieu.trangThai === 'Hợp lệ') {
+                    if (phieu.trangThai === 'Hợp lệ' || phieu.trangThai === 'Bầu thiếu') {
                         soPhieuHopLe++;
                     } else {
                         soPhieuKhongHopLe++;
                     }
                 });
+
                 // 1️⃣ Lưu thông tin chung
                 const userPath = getUserPath('kiemPhieuData');
                 const kiemPhieuData = {
