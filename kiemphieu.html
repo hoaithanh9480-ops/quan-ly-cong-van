@@ -280,11 +280,17 @@
             border-radius: 4px;
             font-size: 13px;
             transition: border-color 0.3s ease;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         .form-control:focus {
             border-color: #2a5298;
             outline: none;
+        }
+
+        textarea.form-control {
+            min-height: 80px;
+            resize: vertical;
         }
 
         .btn {
@@ -570,6 +576,30 @@
             gap: 10px;
         }
 
+        /* Email Modal */
+        .email-modal-content {
+            max-width: 500px;
+        }
+
+        .email-form-group {
+            margin-bottom: 15px;
+        }
+
+        .email-form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #2a5298;
+        }
+
+        .email-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
         /* Responsive Design */
         /* Tablet */
         @media (max-width: 1024px) {
@@ -668,6 +698,14 @@
             
             .edit-candidates-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .email-buttons {
+                flex-direction: column;
+            }
+            
+            .email-buttons .btn {
+                width: 100%;
             }
         }
 
@@ -863,6 +901,8 @@
                         <span>Số đã chọn: <strong id="selectedCount">0</strong></span>
                         <span>Phiếu hiện tại: <strong id="currentPhieuDisplay">1</strong></span>
                     </div>
+                    <button class="btn btn-success" onclick="downloadExcelFile()">📊 Xuất Excel</button>
+                    <button class="btn btn-warning" onclick="openGmailModal()">📧 Gửi Email</button>
                     <button id="btnResetSelection" class="btn btn-warning">Bỏ chọn tất cả</button>
                 </div>
             </div>
@@ -943,8 +983,7 @@
             <div class="phieu-details">
                 <h3>KIỂM TRA TỪNG PHIẾU</h3>
                 <div style="display:flex; justify-content: flex-end; gap:10px; margin-bottom:10px;">
-                    <button class="btn btn-success" onclick="downloadExcelFile()">📊 Xuất Excel</button>
-                    <button class="btn btn-warning" onclick="openGmail()">📧 Mở Gmail</button>
+                    
                 </div>
                 <div class="phieu-table-container" id="phieuTableContainer">
                     <!-- Bảng kiểm tra từng phiếu sẽ được tạo ở đây -->
@@ -969,6 +1008,43 @@
                     <button id="btnSaveEdit" class="btn btn-success">Lưu thay đổi</button>
                     <button id="btnDeletePhieu" class="btn btn-danger">Xóa phiếu</button>
                     <span>Số đã chọn: <strong id="editSelectedCount">0</strong></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Gmail -->
+    <div id="gmailModal" class="modal">
+        <div class="modal-content email-modal-content">
+            <div class="modal-header">
+                <h3>GỬI BÁO CÁO QUA EMAIL</h3>
+                <span class="close" onclick="closeGmailModal()">&times;</span>
+            </div>
+            <div>
+                <div class="email-form-group">
+                    <label for="emailTo">Email người nhận:</label>
+                    <input type="email" id="emailTo" class="form-control" value="thanh941980@gmail.com">
+                </div>
+                
+                <div class="email-form-group">
+                    <label for="emailSubject">Tiêu đề:</label>
+                    <input type="text" id="emailSubject" class="form-control" value="BÁO CÁO KIỂM PHIẾU">
+                </div>
+                
+                <div class="email-form-group">
+                    <label for="emailBody">Nội dung:</label>
+                    <textarea id="emailBody" class="form-control" rows="5">Kính gửi,
+
+Đính kèm file báo cáo kiểm phiếu chi tiết.
+
+Trân trọng,
+Ban kiểm phiếu</textarea>
+                </div>
+                
+                <div class="email-buttons">
+                    <button class="btn btn-warning" onclick="closeGmailModal()">Hủy</button>
+                    <button class="btn btn-success" onclick="sendViaGmail()">📧 Mở Gmail</button>
+                    <button class="btn" onclick="downloadAndSendEmail()">💾 Tải file & Mở Gmail</button>
                 </div>
             </div>
         </div>
@@ -1596,110 +1672,162 @@
         }
         
         // =================== TẠO FILE EXCEL KIỂM PHIẾU ===================
-function generateExcelFile() {
-    try {
-        if (candidates.length === 0 || phieuDetails.length === 0) {
-            alert("❗ Chưa có dữ liệu để xuất file Excel!");
-            return null;
+        function generateExcelFile() {
+            try {
+                if (candidates.length === 0 || phieuDetails.length === 0) {
+                    alert("❗ Chưa có dữ liệu để xuất file Excel!");
+                    return null;
+                }
+
+                // Chuẩn bị dữ liệu cho bảng Excel
+                const wsData = [];
+
+                // Hàng tiêu đề
+                const header = ["Phiếu số", "Đọc phiếu", "Trạng thái"];
+                candidates.forEach(c => header.push(`${c.name} (N${c.stt})`));
+                header.push("Tổng");
+                wsData.push(header);
+
+                // Các dòng dữ liệu từng phiếu
+                phieuDetails.forEach(p => {
+                    const docPhieu = p.selectedStt ? p.selectedStt.sort((a, b) => a - b).join(" ") : "";
+                    const row = [p.phieuSo, docPhieu, p.trangThai];
+                    candidates.forEach(c => {
+                        const isLoai = p.selectedIds.includes(c.id);
+                        row.push(isLoai ? 0 : 1);
+                    });
+                    const soNguoiKhongBiLoai = candidates.length - p.selectedIds.length;
+                    row.push(soNguoiKhongBiLoai);
+                    wsData.push(row);
+                });
+
+                // Thêm hàng tổng
+                const totalRow = ["", "TỔNG", ""];
+                candidates.forEach(c => {
+                    const total = phieuDetails.reduce((sum, p) => sum + (!p.selectedIds.includes(c.id) ? 1 : 0), 0);
+                    totalRow.push(total);
+                });
+                const grandTotal = totalRow.slice(3).reduce((a, b) => a + b, 0);
+                totalRow.push(grandTotal);
+                wsData.push(totalRow);
+
+                // Tạo worksheet và workbook
+                const ws = XLSX.utils.aoa_to_sheet(wsData);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "Kiem_tra_phieu");
+
+                return wb;
+            } catch (error) {
+                console.error("❌ Lỗi khi tạo dữ liệu Excel:", error);
+                alert("Lỗi khi tạo dữ liệu Excel: " + error.message);
+                return null;
+            }
         }
 
-        // Chuẩn bị dữ liệu cho bảng Excel
-        const wsData = [];
+        // =================== TẢI FILE EXCEL ===================
+        function downloadExcelFile() {
+            try {
+                const wb = generateExcelFile();
+                if (!wb) return false;
 
-        // Hàng tiêu đề
-        const header = ["Phiếu số", "Đọc phiếu", "Trạng thái"];
-        candidates.forEach(c => header.push(`${c.name} (N${c.stt})`));
-        header.push("Tổng");
-        wsData.push(header);
+                const fileName = `Kiem_tra_tung_phieu_${new Date().toISOString().split('T')[0]}.xlsx`;
 
-        // Các dòng dữ liệu từng phiếu
-        phieuDetails.forEach(p => {
-            const docPhieu = p.selectedStt ? p.selectedStt.sort((a, b) => a - b).join(" ") : "";
-            const row = [p.phieuSo, docPhieu, p.trangThai];
-            candidates.forEach(c => {
-                const isLoai = p.selectedIds.includes(c.id);
-                row.push(isLoai ? 0 : 1);
-            });
-            const soNguoiKhongBiLoai = candidates.length - p.selectedIds.length;
-            row.push(soNguoiKhongBiLoai);
-            wsData.push(row);
-        });
+                // Chuyển workbook sang mảng nhị phân
+                const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+                const blob = new Blob([excelBuffer], {
+                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                });
 
-        // Thêm hàng tổng
-        const totalRow = ["", "TỔNG", ""];
-        candidates.forEach(c => {
-            const total = phieuDetails.reduce((sum, p) => sum + (!p.selectedIds.includes(c.id) ? 1 : 0), 0);
-            totalRow.push(total);
-        });
-        const grandTotal = totalRow.slice(3).reduce((a, b) => a + b, 0);
-        totalRow.push(grandTotal);
-        wsData.push(totalRow);
+                // Tạo link tải
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
 
-        // Tạo worksheet và workbook
-        const ws = XLSX.utils.aoa_to_sheet(wsData);
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "Kiem_tra_phieu");
+                alert(`✅ Đã tạo file Excel thành công:\n${fileName}`);
+                console.log("✅ File Excel đã tạo:", fileName);
+                return true;
+            } catch (error) {
+                console.error("❌ Lỗi khi tải file Excel:", error);
+                alert("Có lỗi xảy ra khi tải file: " + error.message);
+                return false;
+            }
+        }
 
-        return wb;
-    } catch (error) {
-        console.error("❌ Lỗi khi tạo dữ liệu Excel:", error);
-        alert("Lỗi khi tạo dữ liệu Excel: " + error.message);
-        return null;
-    }
-}
+        // =================== MODAL GMAIL ===================
+        function openGmailModal() {
+            try {
+                // Đặt giá trị mặc định
+                const currentDate = new Date().toLocaleDateString('vi-VN');
+                document.getElementById('emailSubject').value = `BÁO CÁO KIỂM PHIẾU - ${currentDate}`;
+                
+                // Hiển thị modal
+                document.getElementById('gmailModal').style.display = 'block';
+                
+                return true;
+            } catch (error) {
+                console.error("❌ Lỗi khi mở modal Gmail:", error);
+                alert("Lỗi khi mở form gửi email: " + error.message);
+                return false;
+            }
+        }
 
-// =================== TẢI FILE EXCEL ===================
-function downloadExcelFile() {
-    try {
-        const wb = generateExcelFile();
-        if (!wb) return false;
+        function closeGmailModal() {
+            document.getElementById('gmailModal').style.display = 'none';
+        }
 
-        const fileName = `Kiem_tra_tung_phieu_${new Date().toISOString().split('T')[0]}.xlsx`;
+        function sendViaGmail() {
+            try {
+                const emailTo = document.getElementById('emailTo').value;
+                const subject = document.getElementById('emailSubject').value;
+                const body = document.getElementById('emailBody').value;
 
-        // Chuyển workbook sang mảng nhị phân
-        const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-        const blob = new Blob([excelBuffer], {
-            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        });
+                if (!emailTo) {
+                    alert("Vui lòng nhập email người nhận!");
+                    return false;
+                }
 
-        // Tạo link tải
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = fileName;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+                const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(emailTo)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                
+                // Mở trong cửa sổ popup
+                const windowFeatures = "width=800,height=600,resizable=yes,scrollbars=yes";
+                window.open(gmailUrl, "GmailCompose", windowFeatures);
+                
+                // Đóng modal
+                closeGmailModal();
+                
+                alert("📧 Gmail đang được mở trong cửa sổ mới.\nHãy đính kèm file Excel để gửi đi!");
+                return true;
+            } catch (error) {
+                console.error("❌ Lỗi khi mở Gmail:", error);
+                alert("Lỗi khi mở Gmail: " + error.message);
+                return false;
+            }
+        }
 
-        alert(`✅ Đã tạo file Excel thành công:\n${fileName}`);
-        console.log("✅ File Excel đã tạo:", fileName);
-        return true;
-    } catch (error) {
-        console.error("❌ Lỗi khi tải file Excel:", error);
-        alert("Có lỗi xảy ra khi tải file: " + error.message);
-        return false;
-    }
-}
-
-// =================== MỞ GMAIL GỬI FILE ===================
-function openGmail() {
-    try {
-        const subject = `BÁO CÁO KIỂM PHIẾU - ${new Date().toLocaleDateString('vi-VN')}`;
-        const body = `Kính gửi,\n\nĐính kèm file báo cáo kiểm phiếu chi tiết.\n\nTrân trọng,\nBan kiểm phiếu`;
-        const emailTo = "thanh941980@gmail.com";
-
-        const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(emailTo)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        window.open(gmailUrl, "_blank");
-
-        alert("📧 Gmail đang được mở.\nHãy đính kèm file Excel vừa tải để gửi đi!");
-        return true;
-    } catch (error) {
-        console.error("❌ Lỗi khi mở Gmail:", error);
-        alert("Lỗi khi mở Gmail: " + error.message);
-        return false;
-    }
-}    
+        function downloadAndSendEmail() {
+            try {
+                // Tải file Excel trước
+                const excelSuccess = downloadExcelFile();
+                
+                if (excelSuccess) {
+                    // Sau đó mở Gmail
+                    setTimeout(() => {
+                        sendViaGmail();
+                    }, 1000);
+                }
+                
+                return excelSuccess;
+            } catch (error) {
+                console.error("❌ Lỗi trong downloadAndSendEmail:", error);
+                alert("Lỗi: " + error.message);
+                return false;
+            }
+        }
 
         // Khởi tạo ứng dụng
         async function initApp() {
@@ -1764,8 +1892,12 @@ function openGmail() {
                 // Đóng modal khi click bên ngoài
                 window.addEventListener('click', function(e) {
                     const modal = document.getElementById('editModal');
+                    const gmailModal = document.getElementById('gmailModal');
                     if (e.target === modal) {
                         closeEditModal();
+                    }
+                    if (e.target === gmailModal) {
+                        closeGmailModal();
                     }
                 });
 
